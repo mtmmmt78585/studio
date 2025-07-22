@@ -169,15 +169,15 @@ export default function LoginPage() {
                                 </ul>
                                 <p>Once qualified:</p>
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>You’ll become a Monetized Creator.</li>
-                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your wallet.</li>
-                                    <li>You’ll unlock exclusive tools, analytics, and a verified badge.</li>
+                                    <li>You’ll become a <span className="text-primary">Monetized Creator</span>.</li>
+                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-primary">wallet</span>.</li>
+                                    <li>You’ll unlock exclusive tools, analytics, and a <span className="text-primary">verified badge</span>.</li>
                                 </ul>
                             </HelpInfoItem>
 
                             <HelpInfoItem icon={Shield} title="Security & Admin Controls">
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Protected by Indian laws (IT Act 2000 & Digital Data Protection Act 2023)</li>
+                                    <li>Protected by Indian laws (<span className="text-primary">IT Act 2000 & Digital Data Protection Act 2023</span>)</li>
                                     <li>Real-time monitoring by AI agents and admin control panel</li>
                                     <li>Fake views, bots, or fraudulent activity are strictly blocked</li>
                                     <li>Live bug tracking and automatic system fixes</li>
@@ -185,6 +185,15 @@ export default function LoginPage() {
                             </HelpInfoItem>
                              <HelpInfoItem icon={Award} title="Built for Bharat">
                                  <p>Yappzy is more than an app — it’s part of the Digital India mission. We believe in empowering local talent, building India-first technology, and giving every voice a stage.</p>
+                            </HelpInfoItem>
+                            
+                             <HelpInfoItem icon={HelpCircle} title="Need Help?">
+                                <p>If you face any issue:</p>
+                                 <ul className="list-disc list-inside space-y-1">
+                                    <li>Visit <span className="text-primary">Settings > Help</span></li>
+                                    <li>Contact our <span className="text-primary">Support Team</span></li>
+                                    <li>Browse the <span className="text-primary">in-app FAQs</span> for quick answers</li>
+                                 </ul>
                             </HelpInfoItem>
                         </div>
                         
