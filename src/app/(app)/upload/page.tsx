@@ -23,7 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(isUploading);
   const [description, setDescription] = useState("");
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
@@ -109,39 +109,30 @@ export default function UploadPage() {
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
-  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
-  const [currentDeviceIndex, setCurrentDeviceIndex] = useState(0);
   const [isMirrored, setIsMirrored] = useState(true);
 
   useEffect(() => {
     let stream: MediaStream;
-
     const getCameraPermission = async () => {
-      if (!navigator.mediaDevices?.getUserMedia) {
-        setHasCameraPermission(false);
-        return;
-      }
-
       try {
-        // Only get the list of devices first, without starting a stream yet
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputs = devices.filter((d) => d.kind === 'videoinput');
-        
-        if (videoInputs.length === 0) {
-            setHasCameraPermission(false);
-            return;
+        if (!navigator.mediaDevices?.getUserMedia) {
+           throw new Error("Camera not supported");
         }
-
-        setVideoDevices(videoInputs);
-        const frontCameraIndex = videoInputs.findIndex((d) =>
-          d.label.toLowerCase().includes('front')
-        );
-        setCurrentDeviceIndex(frontCameraIndex !== -1 ? frontCameraIndex : 0);
+        stream = await navigator.mediaDevices.getUserMedia({ video: true });
         setHasCameraPermission(true);
-
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
       } catch (error) {
-        console.error('Error enumerating devices:', error);
+        console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
+        if (error instanceof Error && error.name === 'NotAllowedError') {
+            toast({
+              variant: 'destructive',
+              title: 'Camera Access Denied',
+              description: 'Please enable camera permissions in your browser settings to use this feature.',
+            });
+        }
       }
     };
 
@@ -149,63 +140,14 @@ export default function UploadPage() {
 
     return () => {
       if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
+        stream.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
-
-  useEffect(() => {
-    if (hasCameraPermission === false || videoDevices.length === 0) return;
-
-    let isCancelled = false;
-    let stream: MediaStream;
-
-    const startStream = async () => {
-      const currentDeviceId = videoDevices[currentDeviceIndex]?.deviceId;
-      // We must have a deviceId to continue
-      if (!currentDeviceId) return;
-
-      const constraints = { video: { deviceId: { exact: currentDeviceId } } };
-      try {
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
-        if (!isCancelled && videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error('Error switching camera', err);
-        setHasCameraPermission(false);
-        if (err instanceof Error && err.name === 'NotAllowedError') {
-             toast({
-                variant: 'destructive',
-                title: 'Camera Access Denied',
-                description: 'Please enable camera permissions in your browser settings to use this app.',
-            });
-        }
-      }
-    };
-
-    startStream();
-
-    return () => {
-      isCancelled = true;
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, [currentDeviceIndex, hasCameraPermission, videoDevices, toast]);
-
-  const switchCamera = () => {
-    if(videoDevices.length > 1) {
-        const nextIndex = (currentDeviceIndex + 1) % videoDevices.length;
-        setCurrentDeviceIndex(nextIndex);
-        setIsMirrored(videoDevices[nextIndex].label.toLowerCase().includes('front') || videoDevices.length === 1);
-    }
-  };
+  }, [toast]);
   
   const toggleMirror = () => {
       setIsMirrored(prev => !prev);
   }
-
 
   if (videoFile) {
     const effectClass = selectedEffect ? `filter-${selectedEffect.split(/_[0-9]+/)[0]}` : "";
@@ -361,14 +303,19 @@ export default function UploadPage() {
                      <video ref={videoRef} className={cn("w-full aspect-[9/16] object-cover bg-black", isMirrored && "scale-x-[-1]")} autoPlay muted playsInline />
                 </CardContent>
                  <div className="absolute top-4 right-4 flex flex-col gap-4">
-                    <Button size="icon" variant="ghost" className="bg-black/30 text-white hover:bg-black/50" onClick={switchCamera} disabled={videoDevices.length < 2}>
+                    <Button size="icon" variant="ghost" className="bg-black/30 text-white hover:bg-black/50" onClick={() => {}} disabled={true}>
                         <SwitchCamera />
                     </Button>
                      <Button size="icon" variant="ghost" className="bg-black/30 text-white hover:bg-black/50" onClick={toggleMirror}>
                         <FlipHorizontal />
                     </Button>
                 </div>
-                 {(hasCameraPermission === false) && (
+                {hasCameraPermission === null && (
+                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                         <Skeleton className="w-full h-full" />
+                     </div>
+                 )}
+                {hasCameraPermission === false && (
                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-4">
                         <Alert variant="destructive">
                             <Camera className="h-4 w-4" />
@@ -379,11 +326,6 @@ export default function UploadPage() {
                         </Alert>
                     </div>
                 )}
-                 {(hasCameraPermission === null) && (
-                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                         <Skeleton className="w-full h-full" />
-                     </div>
-                 )}
             </Card>
 
              <div className="flex items-center gap-4">
@@ -426,3 +368,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
