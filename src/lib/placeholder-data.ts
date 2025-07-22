@@ -66,6 +66,21 @@ export const generateVideos = (count: number): Video[] => {
     if (videoUrls.length === 0) return [];
     
     const generatedVideos: Video[] = [
+        {
+            id: `video_yappzy_demo`,
+            user: mainUser,
+            videoUrl: videoUrls[0],
+            thumbnailUrl: `https://placehold.co/600x400.png`,
+            caption: "Welcome to Yappzy! The best short video app in India!",
+            audioName: "Corporate Uplifting - Yappzy Anthem",
+            likes: 999000,
+            comments: [],
+            shares: 50000,
+            category: 'tech',
+            duration: 61,
+            viewCount: 2_300_000,
+            uploadTimestamp: "1 day ago",
+        },
          {
             id: `video_veo_3`,
             user: users[7],
