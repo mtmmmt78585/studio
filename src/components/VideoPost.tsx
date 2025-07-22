@@ -148,7 +148,6 @@ export function VideoPost({ video }: VideoPostProps) {
         src={video.videoUrl}
         loop
         playsInline
-        muted // Start muted, unmute via custom controls or on interaction
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       
