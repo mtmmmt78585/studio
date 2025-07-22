@@ -1,5 +1,5 @@
 // src/lib/data.ts
-import { mainUser, users, stories, videos, chats, effects, notifications } from './placeholder-data';
+import { mainUser, users, stories, chats, effects, notifications, generateVideos } from './placeholder-data';
 
 export type User = {
   id: string;
@@ -63,4 +63,4 @@ export type Notification = {
 }
 
 // Re-exporting the data so other files don't need to change their imports.
-export { mainUser, users, stories, videos, chats, effects, notifications };
+export { mainUser, users, stories, chats, effects, notifications, generateVideos };

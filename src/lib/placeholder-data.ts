@@ -54,7 +54,7 @@ const captions = [
     'Epic fail or win? 🤔', 'Travel goals!', 'Foodie life.', 'Art in motion.', 'Unboxing happiness.'
 ];
 
-const generateVideos = (count: number): Video[] => {
+export const generateVideos = (count: number): Video[] => {
     const generatedVideos: Video[] = [];
     for (let i = 0; i < count; i++) {
         const user = users[Math.floor(Math.random() * users.length)];
@@ -73,9 +73,6 @@ const generateVideos = (count: number): Video[] => {
     }
     return generatedVideos;
 };
-
-export const videos: Video[] = generateVideos(50);
-
 
 export const chats: Chat[] = [
     {
