@@ -223,7 +223,7 @@ export function VideoPost({ video }: VideoPostProps) {
                     <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
                         <MessageCircle className="h-7 w-7" />
                     </div>
-                    <span className="text-xs font-semibold">{comments.length.toLocaleString()}</span>
+                    <span className="text-xs font-semibold">{formatCount(comments.length)}</span>
                 </button>
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-background/90 backdrop-blur-sm h-3/4 flex flex-col">
@@ -273,10 +273,11 @@ export function VideoPost({ video }: VideoPostProps) {
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
                 <Share2 className="h-7 w-7" />
             </div>
-            <span className="text-xs font-semibold">{video.shares.toLocaleString()}</span>
+            <span className="text-xs font-semibold">{formatCount(video.shares)}</span>
         </button>
 
       </div>
     </div>
   );
 }
+
