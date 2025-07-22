@@ -51,6 +51,15 @@ export type Effect = {
     isPremium: boolean;
 };
 
+export type Notification = {
+    id: string;
+    user: User;
+    type: 'like' | 'comment' | 'follow' | 'mention';
+    timestamp: string;
+    postImageUrl?: string;
+    read: boolean;
+}
+
 export const mainUser: User = {
     id: 'user_main',
     username: 'CodeNinja',
@@ -226,5 +235,47 @@ export const effects: Effect[] = allEffects.slice(0, 1000).map((name, index) => 
     id: `${name.toLowerCase().replace(/\s/g, '_')}_${index}`,
     name: name,
     thumbnailUrl: `https://placehold.co/100x100.png?text=${name.charAt(0)}`,
-    isPremium: true,
+    isPremium: Math.random() > 0.5,
 }));
+
+export const notifications: Notification[] = [
+    {
+        id: 'notif1',
+        user: users[1],
+        type: 'like',
+        timestamp: '2m ago',
+        postImageUrl: 'https://placehold.co/50x50.png?text=Post',
+        read: false,
+    },
+    {
+        id: 'notif2',
+        user: users[2],
+        type: 'comment',
+        timestamp: '1h ago',
+        postImageUrl: 'https://placehold.co/50x50.png?text=Post',
+        read: false,
+    },
+    {
+        id: 'notif3',
+        user: users[3],
+        type: 'follow',
+        timestamp: '3h ago',
+        read: true,
+    },
+    {
+        id: 'notif4',
+        user: users[4],
+        type: 'like',
+        timestamp: '1d ago',
+        postImageUrl: 'https://placehold.co/50x50.png?text=Post',
+        read: true,
+    },
+    {
+        id: 'notif5',
+        user: users[5],
+        type: 'mention',
+        timestamp: '2d ago',
+        postImageUrl: 'https://placehold.co/50x50.png?text=Post',
+        read: true,
+    },
+];

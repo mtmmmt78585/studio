@@ -10,10 +10,12 @@ export function AppHeader() {
         <Logo className="text-2xl" />
       </Link>
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon">
-          <Bell className="h-6 w-6" />
-          <span className="sr-only">Notifications</span>
-        </Button>
+        <Link href="/notifications">
+          <Button variant="ghost" size="icon">
+            <Bell className="h-6 w-6" />
+            <span className="sr-only">Notifications</span>
+          </Button>
+        </Link>
         <Link href="/dm">
           <Button variant="ghost" size="icon">
             <Send className="h-6 w-6" />
