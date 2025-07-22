@@ -186,15 +186,27 @@ export const chats: Chat[] = [
     },
 ];
 
-export const effects: Effect[] = [
-    { id: 'cyber', name: 'Cyberpunk', thumbnailUrl: 'https://placehold.co/100x100/7C3AED/FFFFFF.png?text=Cyber', isPremium: true },
-    { id: 'glitch', name: 'Glitch', thumbnailUrl: 'https://placehold.co/100x100/EC4899/FFFFFF.png?text=Glitch', isPremium: false },
-    { id: 'retro', name: 'Retro', thumbnailUrl: 'https://placehold.co/100x100/F97316/FFFFFF.png?text=Retro', isPremium: false },
-    { id: 'neon', name: 'Neon', thumbnailUrl: 'https://placehold.co/100x100/22C55E/FFFFFF.png?text=Neon', isPremium: true },
-    { id: 'vintage', name: 'Vintage', thumbnailUrl: 'https://placehold.co/100x100/8B5CF6/FFFFFF.png?text=Vintage', isPremium: false },
-    { id: 'lomo', name: 'Lomo', thumbnailUrl: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=Lomo', isPremium: true },
-    { id: 'dreamy', name: 'Dreamy', thumbnailUrl: 'https://placehold.co/100x100/F472B6/FFFFFF.png?text=Dreamy', isPremium: true },
-    { id: 'noir', name: 'Noir', thumbnailUrl: 'https://placehold.co/100x100/6B7280/FFFFFF.png?text=Noir', isPremium: false },
-]
+const effectNames = [
+    "Cyberpunk", "Glitch", "Retro", "Neon", "Vintage", "Lomo", "Dreamy", "Noir",
+    "Stardust", "Cosmic", "Galaxy", "Nebula", "Aurora", "Solaris", "Lunar", "Chromatic",
+    "Kaleido", "Prism", "Hologram", "Infrared", "X-Ray", "Pixelate", "ASCII", "Scanlines",
+    "VHS", "8mm", "Cinematic", "Technicolor", "Sepia", "Monochrome", "Invert", "Solarize",
+    "Pop Art", "Comic Book", "Watercolor", "Oil Painting", "Sketch", "Charcoal", "Blueprint", "Engrave",
+    "Glow", "Bloom", "Shine", "Sparkle", "Lens Flare", "Light Leak", "Bokeh", "Vignette",
+    "Duotone", "Tritone", "Gradient", "Colorama", "Thermal", "Psychedelic", "Trippy", "Warp",
+    "Fisheye", "Mirror", "Fractal", "Mosaic", "Tiles", "Crosshatch", "Halftone", "Dot Matrix",
+    "Glitter", "Confetti", "Bubbles", "Rain", "Snow", "Fire", "Smoke", "Fog",
+    "Anaglyph", "3D", "Stereo", "Glitchwave", "Vaporwave", "Synthwave", "Retrowave", "Outrun",
+    "Ghosting", "Motion Blur", "Zoom Blur", "Radial Blur", "Soft Focus", "Sharpen", "Clarity", "HDR",
+    "Golden Hour", "Twilight", "Midnight", "Daydream", "Fantasy", "Mystic", "Enchanted", "Surreal"
+];
+
+
+export const effects: Effect[] = effectNames.map((name, index) => ({
+    id: name.toLowerCase().replace(/\s/g, '_'),
+    name: name,
+    thumbnailUrl: `https://placehold.co/100x100.png?text=${name.charAt(0)}`,
+    isPremium: true,
+}));
 
     
