@@ -186,9 +186,9 @@ export function VideoPost({ video }: VideoPostProps) {
                 <AvatarFallback>{video.user.username.charAt(0)}</AvatarFallback>
             </Avatar>
             {!isFollowing && (
-                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                 <button onClick={handleFollow} className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                     <PlusCircle className="h-5 w-5 text-primary-foreground" strokeWidth={3}/>
-                 </div>
+                 </button>
             )}
         </Link>
         
@@ -269,5 +269,3 @@ export function VideoPost({ video }: VideoPostProps) {
     </div>
   );
 }
-
-    
