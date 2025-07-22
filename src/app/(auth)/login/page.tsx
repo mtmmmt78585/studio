@@ -172,7 +172,7 @@ export default function LoginPage() {
                                     <li>You’ll become a <span className="text-destructive">Monetized Creator</span>.</li>
                                     <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-destructive">wallet</span>.</li>
                                     <li>You’ll unlock exclusive tools, analytics, and a <span className="text-destructive">verified badge</span>.</li>
-                                </ul>
+                                 </ul>
                             </HelpInfoItem>
 
                             <HelpInfoItem icon={Shield} title="Security & Admin Controls">
