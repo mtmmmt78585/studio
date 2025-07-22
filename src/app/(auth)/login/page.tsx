@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Loader2, X, KeyRound, Smartphone, Mail, HelpCircle, FileText, Shield, Award, IndianRupee, Rocket } from 'lucide-react';
+import { Loader2, X, KeyRound, Smartphone, Mail, HelpCircle, FileText, Shield, Award, IndianRupee, Rocket, MessageSquareWarning, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/lib/firebase';
@@ -55,6 +55,31 @@ const HelpInfoItem = ({ icon, title, children, iconClassName, titleClassName }: 
         </div>
     </div>
 );
+
+const SettingsSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
+  <div className="space-y-4">
+    <h2 className="text-lg font-headline font-semibold text-primary">{title}</h2>
+    <div className="space-y-2 divide-y divide-border rounded-lg border bg-card/50 shadow-sm">
+      {children}
+    </div>
+  </div>
+);
+
+const SettingsItem = ({ icon, title, subtitle, action, onClick }: { icon: React.ElementType, title: string, subtitle?: string, action: React.ReactNode, onClick?: () => void }) => (
+  <div className="flex items-center p-4" onClick={onClick} role={onClick ? 'button' : undefined}>
+    <div className="flex items-center gap-4 flex-1">
+        <div className="bg-card p-2 rounded-lg">
+           {React.createElement(icon, { className: "h-5 w-5 text-primary" })}
+        </div>
+        <div className="flex-1">
+            <p className="font-medium">{title}</p>
+            {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+        </div>
+    </div>
+    <div>{action}</div>
+  </div>
+);
+const NavAction = () => <ChevronRight className="h-5 w-5 text-muted-foreground" />;
 
 
 export default function LoginPage() {
@@ -142,7 +167,7 @@ export default function LoginPage() {
                          <div className="text-center bg-card p-4 rounded-lg">
                             <p className="text-muted-foreground">For any assistance, contact our Support Team:</p>
                             <a href="mailto:support@yappzy.com" className="font-semibold text-accent hover:underline">
-                                support@yappzy.com
+                                <span className="text-accent">support@yappzy.com</span>
                             </a>
                         </div>
                         
@@ -199,6 +224,12 @@ export default function LoginPage() {
                             </HelpInfoItem>
                         </div>
                         
+                         <SettingsSection title="Support & About">
+                            <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => router.push('/support')} />
+                            <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => router.push('/support')} />
+                            <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => router.push('/terms')} />
+                        </SettingsSection>
+
                          <div className="text-center font-bold text-lg text-destructive">
                             <p>Create. Share. Earn. Repeat.</p>
                         </div>
@@ -291,3 +322,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+    
