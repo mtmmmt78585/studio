@@ -1,4 +1,4 @@
-// src/app/(app)/settings/page.tsx
+
 "use client";
 
 import {
@@ -34,7 +34,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const SettingsSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
   <div className="space-y-4">
@@ -61,9 +63,51 @@ const SettingsItem = ({ icon, title, subtitle, action }: { icon: React.ElementTy
 );
 
 const NavAction = () => <ChevronRight className="h-5 w-5 text-muted-foreground" />;
-const ToggleAction = ({ id }: { id: string }) => <Switch id={id} />;
+const ToggleAction = ({ id, checked, onCheckedChange }: { id: string, checked: boolean, onCheckedChange: (checked: boolean) => void }) => (
+    <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
+);
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const [settings, setSettings] = useState({
+      privateAccount: false,
+      twoFactorAuth: false,
+      appTheme: "dark",
+      muteSounds: false,
+      language: "en",
+      aiSuggestions: true,
+      pushNotifications: true,
+      adNotifications: false,
+      experimentalFeatures: false,
+  });
+
+  const handleToggle = (id: keyof typeof settings) => (checked: boolean) => {
+      setSettings(prev => ({ ...prev, [id]: checked }));
+      toast({
+          title: "Settings Updated",
+          description: `${id.replace(/([A-Z])/g, ' $1').trim()} has been ${checked ? "enabled" : "disabled"}.`
+      });
+  };
+
+  const handleSelectChange = (id: keyof typeof settings) => (value: string) => {
+      setSettings(prev => ({ ...prev, [id]: value }));
+      toast({
+          title: "Settings Updated",
+          description: `${id.replace(/([A-Z])/g, ' $1').trim()} has been set to ${value}.`
+      });
+  };
+  
+  const handleAction = (title: string, description?: string) => {
+      toast({ title, description });
+  }
+  
+  const handleLogout = () => {
+      handleAction("Logged Out", "You have been successfully logged out.");
+      router.push('/login');
+  }
+
   return (
     <div className="h-full overflow-y-auto p-4 space-y-8">
       <div className="text-center">
@@ -77,14 +121,14 @@ export default function SettingsPage() {
       </SettingsSection>
 
       <SettingsSection title="Privacy & Security">
-        <SettingsItem icon={Shield} title="Private Account" action={<ToggleAction id="private-account"/>} />
+        <SettingsItem icon={Shield} title="Private Account" action={<ToggleAction id="privateAccount" checked={settings.privateAccount} onCheckedChange={handleToggle('privateAccount')}/>} />
         <SettingsItem icon={UserX} title="Blocked Users" subtitle="2 users" action={<NavAction />} />
-        <SettingsItem icon={Lock} title="Two-Factor Authentication" subtitle="Off" action={<NavAction />} />
+        <SettingsItem icon={Lock} title="Two-Factor Authentication" subtitle={settings.twoFactorAuth ? "On" : "Off"} action={<ToggleAction id="twoFactorAuth" checked={settings.twoFactorAuth} onCheckedChange={handleToggle('twoFactorAuth')} />} />
       </SettingsSection>
       
       <SettingsSection title="Content & Display">
         <SettingsItem icon={Palette} title="App Theme" action={
-            <Select defaultValue="dark">
+            <Select value={settings.appTheme} onValueChange={handleSelectChange('appTheme')}>
               <SelectTrigger className="w-[120px] bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -95,9 +139,9 @@ export default function SettingsPage() {
               </SelectContent>
             </Select>
         }/>
-        <SettingsItem icon={VolumeX} title="Mute All Sounds" action={<ToggleAction id="mute-sounds"/>} />
+        <SettingsItem icon={VolumeX} title="Mute All Sounds" action={<ToggleAction id="muteSounds" checked={settings.muteSounds} onCheckedChange={handleToggle('muteSounds')}/>} />
          <SettingsItem icon={Languages} title="Language" action={
-             <Select defaultValue="en">
+             <Select value={settings.language} onValueChange={handleSelectChange('language')}>
               <SelectTrigger className="w-[120px] bg-background">
                 <SelectValue />
               </SelectTrigger>
@@ -108,13 +152,13 @@ export default function SettingsPage() {
               </SelectContent>
             </Select>
         }/>
-        <SettingsItem icon={Bot} title="AI Content Suggestions" action={<ToggleAction id="ai-suggestions" defaultChecked />} />
+        <SettingsItem icon={Bot} title="AI Content Suggestions" action={<ToggleAction id="aiSuggestions" checked={settings.aiSuggestions} onCheckedChange={handleToggle('aiSuggestions')} />} />
       </SettingsSection>
 
 
       <SettingsSection title="Notifications">
-        <SettingsItem icon={Bell} title="Push Notifications" action={<ToggleAction id="push-notifs" defaultChecked />} />
-        <SettingsItem icon={BadgePercent} title="Ad Notifications" action={<ToggleAction id="ad-notifs" />} />
+        <SettingsItem icon={Bell} title="Push Notifications" action={<ToggleAction id="pushNotifications" checked={settings.pushNotifications} onCheckedChange={handleToggle('pushNotifications')} />} />
+        <SettingsItem icon={BadgePercent} title="Ad Notifications" action={<ToggleAction id="adNotifications" checked={settings.adNotifications} onCheckedChange={handleToggle('adNotifications')} />} />
       </SettingsSection>
       
       <SettingsSection title="Wallet & Ads">
@@ -123,9 +167,9 @@ export default function SettingsPage() {
       </SettingsSection>
 
       <SettingsSection title="History & Data">
-        <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm">Clear</Button>} />
-        <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm">Clear</Button>} />
-        <SettingsItem icon={Trash2} title="Clear Cache" subtitle="128 MB" action={<Button variant="secondary" size="sm">Clear</Button>} />
+        <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Watch History Cleared")}>Clear</Button>} />
+        <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Search History Cleared")}>Clear</Button>} />
+        <SettingsItem icon={Trash2} title="Clear Cache" subtitle="128 MB" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Cache Cleared", "128 MB of data was freed.")}>Clear</Button>} />
       </SettingsSection>
       
        <SettingsSection title="Connections">
@@ -139,12 +183,12 @@ export default function SettingsPage() {
       </SettingsSection>
       
        <SettingsSection title="Advanced">
-        <SettingsItem icon={FlaskConical} title="Experimental Features" subtitle="Access beta features" action={<ToggleAction id="beta-features"/>} />
+        <SettingsItem icon={FlaskConical} title="Experimental Features" subtitle="Access beta features" action={<ToggleAction id="experimentalFeatures" checked={settings.experimentalFeatures} onCheckedChange={handleToggle('experimentalFeatures')} />} />
       </SettingsSection>
 
 
       <div className="text-center pt-4">
-        <Button variant="destructive" className="w-full max-w-sm shadow-glow">
+        <Button variant="destructive" className="w-full max-w-sm shadow-glow" onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4"/>
             Log Out
         </Button>
