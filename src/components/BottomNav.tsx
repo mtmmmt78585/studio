@@ -3,13 +3,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, PlusSquare, User, Bell, MessageSquare } from "lucide-react";
+import { Home, Search, PlusSquare, User, Bell, MessageSquare, Video } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/feed", icon: Home, label: "Feed" },
   { href: "/explore", icon: Search, label: "Explore" },
-  { href: "/upload", icon: PlusSquare, label: "Upload" },
+  { href: "/shorts", icon: Video, label: "Shorts" },
   { href: "/dm", icon: MessageSquare, label: "Messages" },
   { href: "/profile", icon: User, label: "Profile" },
 ];
@@ -22,7 +22,7 @@ export function BottomNav() {
       <div className="flex h-16 items-center justify-around">
         {navItems.map((item, index) => {
           const isActive = pathname === item.href;
-          if (item.href === "/upload") {
+          if (item.href === "/shorts") {
             return (
                <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 text-xs -mt-2">
                  <div className="bg-primary text-primary-foreground p-3 rounded-full">
