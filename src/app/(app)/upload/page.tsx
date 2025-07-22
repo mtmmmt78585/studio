@@ -108,10 +108,10 @@ export default function UploadPage() {
   };
   
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isMirrored, setIsMirrored] = useState(true);
 
-  useEffect(() => {
+   useEffect(() => {
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({video: true});
@@ -123,11 +123,13 @@ export default function UploadPage() {
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Camera Access Denied',
-          description: 'Please enable camera permissions in your browser settings to use this app.',
-        });
+        if (error instanceof DOMException && error.name === 'NotAllowedError') {
+             toast({
+              variant: 'destructive',
+              title: 'Camera Access Denied',
+              description: 'Please enable camera permissions in your browser settings to use this app.',
+            });
+        }
       }
     };
 
@@ -299,15 +301,16 @@ export default function UploadPage() {
                         <FlipHorizontal />
                     </Button>
                 </div>
-                <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted />
 
-                { !(hasCameraPermission) && (
-                    <Alert variant="destructive">
-                              <AlertTitle>Camera Access Required</AlertTitle>
-                              <AlertDescription>
-                                Please allow camera access to use this feature.
-                              </AlertDescription>
-                      </Alert>
+                { !hasCameraPermission && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/70">
+                        <Alert variant="destructive" className="w-4/5">
+                            <AlertTitle>Camera Access Required</AlertTitle>
+                            <AlertDescription>
+                            Please allow camera access to use this feature.
+                            </AlertDescription>
+                        </Alert>
+                    </div>
                 )
                 }
             </Card>
