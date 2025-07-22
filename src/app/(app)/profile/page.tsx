@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import Link from "next/link";
 
 const earningsData = [
     { month: "Jan", earnings: 1200 },
@@ -52,7 +53,9 @@ export default function ProfilePage() {
         <div className="flex gap-2">
             <Button className="flex-1">Edit Profile</Button>
             <Button variant="secondary" className="flex-1">Share Profile</Button>
-            <Button variant="secondary" size="icon"><Settings className="h-4 w-4"/></Button>
+            <Link href="/settings" className="shrink-0">
+              <Button variant="secondary" size="icon"><Settings className="h-4 w-4"/></Button>
+            </Link>
         </div>
       </div>
         <Tabs defaultValue="posts" className="w-full">
