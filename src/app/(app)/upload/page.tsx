@@ -85,6 +85,7 @@ export default function UploadPage() {
       try {
         // Get initial stream to prompt for permissions
         const initialStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        setHasCameraPermission(true);
 
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoInputs = devices.filter(device => device.kind === 'videoinput');
@@ -169,7 +170,7 @@ export default function UploadPage() {
 
 
   if (videoFile) {
-    const effectClass = selectedEffect ? `filter-${selectedEffect}` : "";
+    const effectClass = selectedEffect ? `filter-${selectedEffect.split('_')[0]}` : "";
     return (
         <div className="h-full flex flex-col items-center justify-center p-4 bg-card text-white">
             <div className="w-full max-w-md space-y-4">
@@ -274,7 +275,7 @@ export default function UploadPage() {
                 </Button>
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="outline" className="flex-1 text-lg py-6">
+                    <Button variant="outline" className="flex-1 text-lg py-6" disabled={!hasCameraPermission}>
                         <Sparkles className="mr-2 h-5 w-5"/> Effects
                     </Button>
                   </SheetTrigger>
@@ -300,5 +301,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
