@@ -79,19 +79,14 @@ export const generateVideos = (count: number): Video[] => {
     if (videoUrls.length === 0) return [];
     
     const generatedVideos: Video[] = [];
-    let lastVideoUrl = '';
-
+    
     for (let i = 0; i < count; i++) {
         const category = categories[i % categories.length];
         const user = users[i % users.length];
         const caption = captionTemplates[category][Math.floor(Math.random() * captionTemplates[category].length)];
         const audioName = audioNames[Math.floor(Math.random() * audioNames.length)];
         
-        let videoUrl;
-        do {
-            videoUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
-        } while (videoUrl === lastVideoUrl && videoUrls.length > 1);
-        lastVideoUrl = videoUrl;
+        const videoUrl = videoUrls[i % videoUrls.length];
 
         const comments = Math.random() > 0.5 ? sampleComments.slice(0, Math.floor(Math.random() * sampleComments.length + 1)) : [];
         
