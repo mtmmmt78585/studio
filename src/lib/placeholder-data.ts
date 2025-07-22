@@ -37,13 +37,13 @@ const sampleComments: Comment[] = [
 ];
 
 const videoUrls = [
-    'https://assets.mixkit.co/videos/preview/mixkit-shelves-with-different-products-in-a-supermarket-50 shelves-with-products-in-a-supermarket.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-woman-doing-her-make-up-4848-large.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-woman-in-a-floral-dress-walking-in-a-field-of- poppies-45920-large.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-woman-walking-on-a-beach-at-sunset-4760-large.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-white-cat-with-blue-eyes-5421-large.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-a-summer-dress-45948-large.mp4',
-    'https://assets.mixkit.co/videos/preview/mixkit-blond-man-listening-to-music-with-headphones-4593-large.mp4'
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v1.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v2.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v3.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v4.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v5.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v6.mp4",
+    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v7.mp4",
 ];
 
 const audioNames = [
