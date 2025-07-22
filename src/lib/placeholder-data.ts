@@ -37,85 +37,45 @@ const sampleComments: Comment[] = [
     { id: 'comment4', user: users[5], text: 'I wish I was there!', timestamp: '15m ago' },
 ];
 
-export const videos: Video[] = [
-  {
-    id: 'video1',
-    user: users[1],
-    videoUrl: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'Chill vibes and coding sprints! 🔥 #developer #coding',
-    likes: 12300,
-    comments: sampleComments.slice(0, 2),
-    shares: 123,
-    category: 'tech'
-  },
-  {
-    id: 'video2',
-    user: users[2],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'New dance challenge! Can you do it? 💃 #dance #challenge',
-    likes: 45600,
-    comments: sampleComments,
-    shares: 567,
-    category: 'funny'
-  },
-  {
-    id: 'video3',
-    user: users[3],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'You won\'t believe what happened next... 😂 #comedy #funny',
-    likes: 78900,
-    comments: [],
-    shares: 890,
-    category: 'funny'
-  },
-  {
-    id: 'video4',
-    user: users[4],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'A tale of a lonely dragon. #sad #animation',
-    likes: 98700,
-    comments: sampleComments.slice(1, 3),
-    shares: 987,
-    category: 'sad'
-  },
-  {
-    id: 'video5',
-    user: users[5],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'Future of tech is here! #vfx #scifi',
-    likes: 150000,
-    comments: sampleComments,
-    shares: 1500,
-    category: 'tech'
-  },
-  {
-    id: 'video6',
-    user: users[0],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'This is so sweet! ❤️ #love #romance',
-    likes: 250000,
-    comments: [],
-    shares: 2500,
-    category: 'love'
-  },
-  {
-    id: 'video7',
-    user: users[3],
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
-    thumbnailUrl: 'https://placehold.co/400x700.png',
-    caption: 'My new ride! #comedy #cars',
-    likes: 50000,
-    comments: [sampleComments[0]],
-    shares: 400,
-    category: 'funny'
-  }
+const videoUrls = [
+    'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
 ];
+
+const categories: Video['category'][] = ['funny', 'romance', 'love', 'sad', 'cartoon', 'tech'];
+const captions = [
+    'This is amazing!', 'Check this out!', 'New challenge alert!', 'Coding vibes only 💻',
+    'Just for fun 😂', 'Wait for it...', 'Can you relate?', 'My daily routine.', 'Must watch!',
+    'Epic fail or win? 🤔', 'Travel goals!', 'Foodie life.', 'Art in motion.', 'Unboxing happiness.'
+];
+
+const generateVideos = (count: number): Video[] => {
+    const generatedVideos: Video[] = [];
+    for (let i = 0; i < count; i++) {
+        const user = users[Math.floor(Math.random() * users.length)];
+        const comments = Math.random() > 0.5 ? sampleComments.slice(0, Math.floor(Math.random() * sampleComments.length + 1)) : [];
+        generatedVideos.push({
+            id: `video_${Date.now()}_${i}`,
+            user,
+            videoUrl: videoUrls[Math.floor(Math.random() * videoUrls.length)],
+            thumbnailUrl: `https://placehold.co/400x700.png?text=Vid${i+1}`,
+            caption: captions[Math.floor(Math.random() * captions.length)],
+            likes: Math.floor(Math.random() * 250000),
+            comments,
+            shares: Math.floor(Math.random() * 2500),
+            category: categories[Math.floor(Math.random() * categories.length)],
+        });
+    }
+    return generatedVideos;
+};
+
+export const videos: Video[] = generateVideos(50);
+
 
 export const chats: Chat[] = [
     {
