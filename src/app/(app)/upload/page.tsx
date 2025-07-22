@@ -338,14 +338,18 @@ export default function UploadPage() {
                             onClick={() => setVideoCategory('short')}
                             className={cn(
                                 "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
-                                videoCategory === 'short' ? 'text-white -translate-x-1/2' : 'text-white/50 -translate-x-full scale-90'
+                                videoCategory === 'short' 
+                                    ? 'text-white -translate-x-1/2' 
+                                    : 'text-white/50 -translate-x-full scale-90'
                             )}
                         >Shorts</button>
                          <button 
                             onClick={() => setVideoCategory('video')}
                             className={cn(
                                 "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
-                                videoCategory === 'video' ? 'text-white -translate-x-1/2' : 'text-white/50 translate-x-0 scale-90'
+                                videoCategory === 'video' 
+                                    ? 'text-white -translate-x-1/2' 
+                                    : 'text-white/50 translate-x-0 scale-90'
                             )}
                         >Video</button>
                     </div>
@@ -369,3 +373,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
