@@ -37,6 +37,7 @@ import {
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SettingsSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
   <div className="space-y-4">
@@ -116,8 +117,8 @@ export default function SettingsPage() {
       </div>
 
       <SettingsSection title="Account">
-        <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => handleAction("Edit Profile")} />
-        <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password")} />
+        <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => router.push('/profile')} />
+        <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password", "Functionality to change password will be added soon.")} />
       </SettingsSection>
 
       <SettingsSection title="Privacy & Security">
@@ -162,7 +163,7 @@ export default function SettingsPage() {
       </SettingsSection>
       
       <SettingsSection title="Wallet & Ads">
-         <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} onClick={() => handleAction("Earnings & Wallet")}/>
+         <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} onClick={() => router.push('/profile')}/>
          <SettingsItem icon={BadgePercent} title="Ad Preferences" action={<NavAction />} onClick={() => handleAction("Ad Preferences")} />
       </SettingsSection>
 
