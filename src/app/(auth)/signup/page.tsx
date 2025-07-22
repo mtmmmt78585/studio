@@ -7,20 +7,35 @@ import { Input } from '@/components/ui/input';
 import { Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SignupPage() {
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      toast({
+        variant: 'destructive',
+        title: 'Passwords do not match',
+        description: 'Please make sure your passwords match.',
+      });
+      return;
+    }
     setIsLoading(true);
     // Simulate API signup
     setTimeout(() => {
       console.log('Creating account with:', { username, phone, password });
+      toast({
+        title: 'Account Created!',
+        description: `Welcome to Yappzy, ${username}!`,
+      });
       router.push('/feed');
     }, 1500);
   };
@@ -63,6 +78,15 @@ export default function SignupPage() {
                 placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
+                required
+                className="h-12 text-base"
+              />
+               <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
                 required
                 className="h-12 text-base"
               />
