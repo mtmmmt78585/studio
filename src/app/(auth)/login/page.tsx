@@ -101,10 +101,13 @@ export default function LoginPage() {
         </div>
       </main>
 
-      <footer className="p-8 text-center">
-          <Button variant="link" className="text-muted-foreground">
-              Retrieve Account
-          </Button>
+      <footer className="p-8 text-center text-sm text-muted-foreground">
+        <p>
+            Don&apos;t have an account?{' '}
+            <Link href="/signup" className="font-semibold text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
       </footer>
     </div>
   );
