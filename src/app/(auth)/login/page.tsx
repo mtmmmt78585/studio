@@ -139,7 +139,7 @@ export default function LoginPage() {
                     <div className="space-y-6 pb-8">
                          <div className="text-center bg-card p-4 rounded-lg">
                             <p className="text-muted-foreground">For any assistance, contact our Support Team:</p>
-                            <a href="mailto:support@yappzy.com" className="font-semibold text-primary hover:underline">
+                            <a href="mailto:support@yappzy.com" className="font-semibold text-destructive hover:underline">
                                 support@yappzy.com
                             </a>
                         </div>
@@ -169,15 +169,15 @@ export default function LoginPage() {
                                 </ul>
                                 <p>Once qualified:</p>
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>You’ll become a <span className="text-primary">Monetized Creator</span>.</li>
-                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-primary">wallet</span>.</li>
-                                    <li>You’ll unlock exclusive tools, analytics, and a <span className="text-primary">verified badge</span>.</li>
+                                    <li>You’ll become a <span className="text-destructive">Monetized Creator</span>.</li>
+                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-destructive">wallet</span>.</li>
+                                    <li>You’ll unlock exclusive tools, analytics, and a <span className="text-destructive">verified badge</span>.</li>
                                 </ul>
                             </HelpInfoItem>
 
                             <HelpInfoItem icon={Shield} title="Security & Admin Controls">
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Protected by Indian laws (<span className="text-primary">IT Act 2000 & Digital Data Protection Act 2023</span>)</li>
+                                    <li>Protected by Indian laws (<span className="text-destructive">IT Act 2000 & Digital Data Protection Act 2023</span>)</li>
                                     <li>Real-time monitoring by AI agents and admin control panel</li>
                                     <li>Fake views, bots, or fraudulent activity are strictly blocked</li>
                                     <li>Live bug tracking and automatic system fixes</li>
@@ -190,19 +190,19 @@ export default function LoginPage() {
                              <HelpInfoItem icon={HelpCircle} title="Need Help?">
                                 <p>If you face any issue:</p>
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Visit <span className="text-primary">Settings > Help</span></li>
-                                    <li>Contact our <span className="text-primary">Support Team</span></li>
-                                    <li>Browse the <span className="text-primary">in-app FAQs</span> for quick answers</li>
+                                    <li>Visit <span className="text-destructive">Settings > Help</span></li>
+                                    <li>Contact our <span className="text-destructive">Support Team</span></li>
+                                    <li>Browse the <span className="text-destructive">in-app FAQs</span> for quick answers</li>
                                  </ul>
                             </HelpInfoItem>
                         </div>
                         
-                         <div className="text-center font-bold text-lg text-primary">
+                         <div className="text-center font-bold text-lg text-destructive">
                             <p>Create. Share. Earn. Repeat.</p>
                         </div>
 
                         <div className="text-center text-muted-foreground text-xs">
-                             <p className="text-primary">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
+                             <p className="text-destructive">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
                         </div>
                     </div>
                 </ScrollArea>
