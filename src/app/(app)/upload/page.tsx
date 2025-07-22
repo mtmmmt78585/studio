@@ -111,7 +111,7 @@ export default function UploadPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isMirrored, setIsMirrored] = useState(true);
 
-   useEffect(() => {
+  useEffect(() => {
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({video: true});
@@ -123,13 +123,11 @@ export default function UploadPage() {
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        if (error instanceof DOMException && error.name === 'NotAllowedError') {
-             toast({
-              variant: 'destructive',
-              title: 'Camera Access Denied',
-              description: 'Please enable camera permissions in your browser settings to use this app.',
-            });
-        }
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
       }
     };
 
