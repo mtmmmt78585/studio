@@ -45,9 +45,9 @@ export default function UploadPage() {
   const getCameraPermission = useCallback(async () => {
     try {
         const videoConstraints = {
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            frameRate: { ideal: 30 },
+            width: { ideal: 1920, max: 1920 },
+            height: { ideal: 1080, max: 1080 },
+            frameRate: { ideal: 30, max: 30 },
             facingMode: 'user'
         };
       const stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true });
@@ -90,7 +90,10 @@ export default function UploadPage() {
   const startRecording = () => {
     if (videoRef.current?.srcObject && hasCameraPermission) {
       const stream = videoRef.current.srcObject as MediaStream;
-      const options = { mimeType: 'video/webm; codecs=vp9' };
+      const options = { 
+          mimeType: 'video/webm; codecs=vp9',
+          videoBitsPerSecond: 2500000, // 2.5 Mbps for better quality
+      };
       mediaRecorderRef.current = new MediaRecorder(stream, options);
       const chunks: Blob[] = [];
       
