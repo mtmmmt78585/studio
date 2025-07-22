@@ -18,7 +18,7 @@ body {
     --popover: 255 100% 100%;
     --popover-foreground: 0 0% 10%;
 
-    --primary: 345 100% 75%; /* Soft Pink */
+    --primary: 347 95% 58%; /* Vibrant Pink */
     --primary-foreground: 0 0% 100%; /* White */
 
     --secondary: 220 80% 60%; /* Soft Blue */
@@ -27,7 +27,7 @@ body {
     --muted: 0 0% 95%; /* Light Grey */
     --muted-foreground: 0 0% 45%; /* Grey */
 
-    --accent: 345 100% 75%; 
+    --accent: 347 95% 58%; 
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 84.2% 60.2%;
@@ -35,7 +35,7 @@ body {
 
     --border: 0 0% 90%; 
     --input: 0 0% 90%;
-    --ring: 345 100% 75%; 
+    --ring: 347 95% 58%; 
 
     --radius: 0.5rem;
   }
@@ -50,7 +50,7 @@ body {
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 345 100% 75%; /* Soft Pink */
+    --primary: 347 95% 58%; /* Vibrant Pink */
     --primary-foreground: 0 0% 10%;
 
     --secondary: 217 91% 60%;
@@ -59,7 +59,7 @@ body {
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63.9%;
 
-    --accent: 145 77% 40%;
+    --accent: 347 95% 58%;
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -67,7 +67,7 @@ body {
 
     --border: 0 0% 15%; 
     --input: 0 0% 15%;
-    --ring: 345 100% 75%;
+    --ring: 347 95% 58%;
   }
 }
 
