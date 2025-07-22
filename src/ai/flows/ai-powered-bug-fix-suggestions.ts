@@ -53,14 +53,14 @@ const prompt = ai.definePrompt({
 You will analyze the provided error logs and, if available, the codebase snippet to suggest a fix for the bug.
 
 Error Logs:
-```
+\`\`\`
 {{{errorLogs}}}
-```
+\`\`\`
 
 Codebase Snippet (if available):
-```
+\`\`\`
 {{{codebaseSnippet}}}
-```
+\`\`\`
 
 Programming Language: {{{programmingLanguage}}}
 
