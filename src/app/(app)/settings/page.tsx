@@ -47,8 +47,8 @@ const SettingsSection = ({ title, children }: { title: string, children: React.R
   </div>
 );
 
-const SettingsItem = ({ icon, title, subtitle, action }: { icon: React.ElementType, title: string, subtitle?: string, action: React.ReactNode }) => (
-  <div className="flex items-center p-4">
+const SettingsItem = ({ icon, title, subtitle, action, onClick }: { icon: React.ElementType, title: string, subtitle?: string, action: React.ReactNode, onClick?: () => void }) => (
+  <div className="flex items-center p-4" onClick={onClick} role={onClick ? 'button' : undefined}>
     <div className="flex items-center gap-4 flex-1">
         <div className="bg-card p-2 rounded-lg">
            {React.createElement(icon, { className: "h-5 w-5 text-primary" })}
@@ -100,11 +100,11 @@ export default function SettingsPage() {
   };
   
   const handleAction = (title: string, description?: string) => {
-      toast({ title, description });
+      toast({ title, description: description ?? "This feature is coming soon!" });
   }
   
   const handleLogout = () => {
-      handleAction("Logged Out", "You have been successfully logged out.");
+      toast({ title: "Logged Out", description: "You have been successfully logged out." });
       router.push('/login');
   }
 
@@ -116,13 +116,13 @@ export default function SettingsPage() {
       </div>
 
       <SettingsSection title="Account">
-        <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} />
-        <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} />
+        <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => handleAction("Edit Profile")} />
+        <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password")} />
       </SettingsSection>
 
       <SettingsSection title="Privacy & Security">
         <SettingsItem icon={Shield} title="Private Account" action={<ToggleAction id="privateAccount" checked={settings.privateAccount} onCheckedChange={handleToggle('privateAccount')}/>} />
-        <SettingsItem icon={UserX} title="Blocked Users" subtitle="2 users" action={<NavAction />} />
+        <SettingsItem icon={UserX} title="Blocked Users" subtitle="2 users" action={<NavAction />} onClick={() => handleAction("Blocked Users")} />
         <SettingsItem icon={Lock} title="Two-Factor Authentication" subtitle={settings.twoFactorAuth ? "On" : "Off"} action={<ToggleAction id="twoFactorAuth" checked={settings.twoFactorAuth} onCheckedChange={handleToggle('twoFactorAuth')} />} />
       </SettingsSection>
       
@@ -162,24 +162,24 @@ export default function SettingsPage() {
       </SettingsSection>
       
       <SettingsSection title="Wallet & Ads">
-         <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} />
-         <SettingsItem icon={BadgePercent} title="Ad Preferences" action={<NavAction />} />
+         <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} onClick={() => handleAction("Earnings & Wallet")}/>
+         <SettingsItem icon={BadgePercent} title="Ad Preferences" action={<NavAction />} onClick={() => handleAction("Ad Preferences")} />
       </SettingsSection>
 
       <SettingsSection title="History & Data">
-        <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Watch History Cleared")}>Clear</Button>} />
-        <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Search History Cleared")}>Clear</Button>} />
+        <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Watch History Cleared", "Your watch history has been cleared.")}>Clear</Button>} />
+        <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Search History Cleared", "Your search history has been cleared.")}>Clear</Button>} />
         <SettingsItem icon={Trash2} title="Clear Cache" subtitle="128 MB" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Cache Cleared", "128 MB of data was freed.")}>Clear</Button>} />
       </SettingsSection>
       
        <SettingsSection title="Connections">
-        <SettingsItem icon={Link2} title="Linked Accounts" action={<NavAction />} />
+        <SettingsItem icon={Link2} title="Linked Accounts" action={<NavAction />} onClick={() => handleAction("Linked Accounts")} />
       </SettingsSection>
 
       <SettingsSection title="Support & About">
-        <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} />
-        <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} />
-        <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} />
+        <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => handleAction("Report a Problem")} />
+        <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => handleAction("Help Center / FAQ")} />
+        <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => handleAction("Terms & Privacy Policy")} />
       </SettingsSection>
       
        <SettingsSection title="Advanced">
