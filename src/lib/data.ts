@@ -17,6 +17,7 @@ export type Video = {
   likes: number;
   comments: number;
   shares: number;
+  category: 'funny' | 'romance' | 'love' | 'sad' | 'cartoon' | 'tech';
 };
 
 export type Story = {
@@ -47,11 +48,14 @@ export const mainUser: User = {
 
 export const users: User[] = [
   mainUser,
-  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100.png', followers: 50200, following: 200, totalViews: 5_200_000, isVerified: true },
-  { id: 'user2', username: 'DanceMachine', avatar: 'https://placehold.co/100x100.png', followers: 1.2, following: 1200, totalViews: 120_000_000, isVerified: false },
-  { id: 'user3', username: 'FunnyDude', avatar: 'https://placehold.co/100x100.png', followers: 89000, following: 50, totalViews: 9_800_000, isVerified: false },
-  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100.png', followers: 250000, following: 1, totalViews: 28_000_000, isVerified: true },
+  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100/A855F7/FFFFFF.png?text=TG', followers: 50200, following: 200, totalViews: 5_200_000, isVerified: true },
+  { id: 'user2', username: 'DanceMachine', avatar: 'https://placehold.co/100x100/EC4899/FFFFFF.png?text=DM', followers: 1.2 * 1000000, following: 1200, totalViews: 120_000_000, isVerified: false },
+  { id: 'user3', username: 'FunnyDude', avatar: 'https://placehold.co/100x100/F97316/FFFFFF.png?text=FD', followers: 89000, following: 50, totalViews: 9_800_000, isVerified: false },
+  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/22C55E/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, isVerified: true },
+  { id: 'user5', username: 'TravelJunkie', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TJ', followers: 450000, following: 300, totalViews: 45_000_000, isVerified: true },
+  { id: 'user6', username: 'FoodLover', avatar: 'https://placehold.co/100x100/EF4444/FFFFFF.png?text=FL', followers: 75000, following: 500, totalViews: 8_000_000, isVerified: false },
 ];
+
 
 export const stories: Story[] = users.map((user, i) => ({
   id: `story${i}`,
@@ -70,6 +74,7 @@ export const videos: Video[] = [
     likes: 12300,
     comments: 456,
     shares: 123,
+    category: 'tech'
   },
   {
     id: 'video2',
@@ -80,6 +85,7 @@ export const videos: Video[] = [
     likes: 45600,
     comments: 1234,
     shares: 567,
+    category: 'funny'
   },
   {
     id: 'video3',
@@ -90,7 +96,52 @@ export const videos: Video[] = [
     likes: 78900,
     comments: 2345,
     shares: 890,
+    category: 'funny'
   },
+  {
+    id: 'video4',
+    user: users[4],
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    thumbnailUrl: 'https://placehold.co/400x700.png',
+    caption: 'A tale of a lonely dragon. #sad #animation',
+    likes: 98700,
+    comments: 3456,
+    shares: 987,
+    category: 'sad'
+  },
+  {
+    id: 'video5',
+    user: users[5],
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    thumbnailUrl: 'https://placehold.co/400x700.png',
+    caption: 'Future of tech is here! #vfx #scifi',
+    likes: 150000,
+    comments: 5678,
+    shares: 1500,
+    category: 'tech'
+  },
+  {
+    id: 'video6',
+    user: users[0],
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+    thumbnailUrl: 'https://placehold.co/400x700.png',
+    caption: 'This is so sweet! ❤️ #love #romance',
+    likes: 250000,
+    comments: 8910,
+    shares: 2500,
+    category: 'love'
+  },
+  {
+    id: 'video7',
+    user: users[3],
+    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
+    thumbnailUrl: 'https://placehold.co/400x700.png',
+    caption: 'My new ride! #comedy #cars',
+    likes: 50000,
+    comments: 1000,
+    shares: 400,
+    category: 'funny'
+  }
 ];
 
 export const chats: Chat[] = [
