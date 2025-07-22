@@ -39,20 +39,13 @@ const sampleComments: Comment[] = [
 ];
 
 const videoUrls = [
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-1.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-2.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-3.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-4.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-5.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-6.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-7.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-8.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-9.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-10.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-11.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-12.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-13.mp4',
-    'https://storage.googleapis.com/studio-assets-test/videos/vert-14.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
 ];
 
 
