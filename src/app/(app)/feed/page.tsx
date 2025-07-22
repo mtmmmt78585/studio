@@ -8,9 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { Bell, Search, Send } from "lucide-react";
 import { StoryCarousel } from "@/components/StoryCarousel";
 import dynamic from "next/dynamic";
+import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 
 const StoryViewer = dynamic(() => import('@/components/StoryViewer').then(mod => mod.StoryViewer));
 
@@ -39,11 +41,18 @@ export default function FeedPage() {
   return (
     <div className="h-full flex flex-col">
       <header className="flex items-center justify-between p-4 border-b">
-        <div className="flex items-center gap-4 text-sm font-semibold">
-          <Link href="/feed" className="text-primary border-b-2 border-primary pb-1">For You</Link>
-          <Link href="/feed" className="text-muted-foreground">Following</Link>
+         <Logo className="text-2xl" />
+        <div className="flex items-center gap-2">
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/search"><Search className="h-6 w-6" /></Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild>
+                <Link href="/notifications"><Bell className="h-6 w-6" /></Link>
+            </Button>
+             <Button variant="ghost" size="icon" asChild>
+                <Link href="/dm"><Send className="h-6 w-6" /></Link>
+            </Button>
         </div>
-        <Search className="h-6 w-6 text-muted-foreground" />
       </header>
        <StoryCarousel onStorySelect={handleStorySelect} />
        <Tabs defaultValue="for-you" className="w-full flex-1 flex flex-col">
