@@ -119,7 +119,6 @@ export function VideoPost({ video }: VideoPostProps) {
         loop
         autoPlay
         playsInline
-        muted // Muted by default to allow autoplay in most browsers
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       

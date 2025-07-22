@@ -38,37 +38,82 @@ const sampleComments: Comment[] = [
 ];
 
 const videoUrls = [
-    'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
     'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
 ];
 
+
 const categories: Video['category'][] = ['funny', 'romance', 'love', 'sad', 'cartoon', 'tech'];
-const captions = [
-    'This is amazing!', 'Check this out!', 'New challenge alert!', 'Coding vibes only 💻',
-    'Just for fun 😂', 'Wait for it...', 'Can you relate?', 'My daily routine.', 'Must watch!',
-    'Epic fail or win? 🤔', 'Travel goals!', 'Foodie life.', 'Art in motion.', 'Unboxing happiness.'
-];
+
+const captionTemplates = {
+    funny: [
+        "This is peak comedy 😂", "I can't stop laughing!", "Wait for the end... 🤣",
+        "Funny because it's true.", "My sense of humor is broken."
+    ],
+    romance: [
+        "Couple goals right here. ❤️", "This is what love looks like.", "My heart just melted.",
+        "So sweet and romantic.", "Tag your special someone."
+    ],
+    love: [
+        "All you need is love.", "Spreading a little bit of love today.", "Love this moment.",
+        "Love wins, always.", "This is pure love."
+    ],
+    sad: [
+        "Right in the feels... 😢", "It's okay to not be okay.", "This is heartbreaking.",
+        "Sending virtual hugs.", "Sometimes, you just need a good cry."
+    ],
+    cartoon: [
+        "Childhood memories unlocked!", "The best cartoons ever.", "Animation magic.",
+        "Just a little throwback.", "Cartoons are not just for kids."
+    ],
+    tech: [
+        "The future is now! 🤖", "Latest tech unboxing.", "This gadget is a game-changer.",
+        "Coding my life away... 💻", "Tech tips you need to know."
+    ],
+};
+
 
 export const generateVideos = (count: number): Video[] => {
     const generatedVideos: Video[] = [];
+    const usedVideoUrls = new Set<string>();
+
     for (let i = 0; i < count; i++) {
+        const category = categories[Math.floor(Math.random() * categories.length)];
         const user = users[Math.floor(Math.random() * users.length)];
+        const caption = captionTemplates[category][Math.floor(Math.random() * captionTemplates[category].length)];
+        
+        // Ensure a unique video URL if possible
+        let videoUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+        if (usedVideoUrls.size < videoUrls.length) {
+            while (usedVideoUrls.has(videoUrl)) {
+                videoUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+            }
+        }
+        usedVideoUrls.add(videoUrl);
+
         const comments = Math.random() > 0.5 ? sampleComments.slice(0, Math.floor(Math.random() * sampleComments.length + 1)) : [];
+        
         generatedVideos.push({
             id: `video_${Date.now()}_${i}`,
             user,
-            videoUrl: videoUrls[Math.floor(Math.random() * videoUrls.length)],
+            videoUrl,
             thumbnailUrl: `https://placehold.co/400x700.png?text=Vid${i+1}`,
-            caption: captions[Math.floor(Math.random() * captions.length)],
+            caption,
             likes: Math.floor(Math.random() * 250000),
             comments,
             shares: Math.floor(Math.random() * 2500),
-            category: categories[Math.floor(Math.random() * categories.length)],
+            category,
         });
     }
     return generatedVideos;
