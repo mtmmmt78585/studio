@@ -40,10 +40,20 @@ export function VideoPost({ video }: VideoPostProps) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          videoElement.play().catch(error => {
-            console.error("Video play failed:", error);
-            // Autoplay was prevented.
-          });
+          const playPromise = videoElement.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              // Auto-play was prevented
+              if (error.name === "NotAllowedError") {
+                console.error("Video autoplay was prevented.", error);
+              } else if (error.name === "AbortError") {
+                // This is a common error when the user scrolls quickly.
+                // It's safe to ignore.
+              } else {
+                 console.error("Video play failed:", error);
+              }
+            });
+          }
         } else {
           videoElement.pause();
           videoElement.currentTime = 0;
@@ -57,7 +67,9 @@ export function VideoPost({ video }: VideoPostProps) {
     observer.observe(videoElement);
 
     return () => {
-      observer.unobserve(videoElement);
+        if (videoElement) {
+            observer.unobserve(videoElement);
+        }
     };
   }, []);
 
