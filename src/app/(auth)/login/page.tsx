@@ -69,7 +69,7 @@ export default function LoginPage() {
         <div className="flex items-start space-x-3 mt-6 text-xs text-muted-foreground">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} className="mt-0.5" />
             <label htmlFor="terms">
-                I proudly accept all terms of Yappzy — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the IT Act 2000 & Digital Personal Data Protection Act 2023. Jai Hind!
+                I proudly accept all <span className="text-secondary">terms of Yappzy</span> — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the <span className="text-secondary">IT Act 2000</span> & <span className="text-secondary">Digital Personal Data Protection Act 2023</span>. Jai Hind!
             </label>
         </div>
 
