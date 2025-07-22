@@ -1,104 +1,94 @@
-
 // src/app/(auth)/signup/page.tsx
 'use client';
 
-import {useState} from 'react';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Logo} from '@/components/Logo';
-import {Loader2} from 'lucide-react';
-import {useRouter} from 'next/navigation';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Loader2, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function SignupPage() {
+  const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords don't match!");
-      return;
-    }
     setIsLoading(true);
-    // Simulate Firebase signup
+    // Simulate API signup
     setTimeout(() => {
-      // In a real app, you would use Firebase Auth here
-      // For example: createUserWithEmailAndPassword(auth, email, password)
-      console.log('Creating account with:', {phone, password});
+      console.log('Creating account with:', { username, phone, password });
       router.push('/feed');
     }, 1500);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
-      <div className="w-full max-w-sm mx-auto">
-        <div className="text-center mb-8">
-          <Logo className="text-4xl justify-center" />
-          <p className="text-muted-foreground mt-2">
-            Join the future of content.
-          </p>
-        </div>
+    <div className="flex flex-col min-h-screen bg-background text-foreground p-4">
+        <header className="flex items-center justify-between">
+            <Button variant="ghost" size="icon" onClick={() => router.back()}>
+              <X className="h-6 w-6" />
+            </Button>
+            <h1 className="text-lg font-semibold">Sign up</h1>
+            <div className="w-10"></div>
+        </header>
 
-        <div className="bg-card p-8 rounded-2xl border">
+      <main className="flex-1 flex flex-col justify-center px-4">
+          <h2 className="text-2xl font-bold mb-8">Create your account</h2>
+        
           <form onSubmit={handleSignup} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+             <Input
+                id="username"
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required
+                className="h-12 text-base"
+              />
               <Input
                 id="phone"
                 type="tel"
-                placeholder="+91 98765 43210"
+                placeholder="Phone Number"
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 required
-                className="bg-background"
+                className="h-12 text-base"
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="********"
+                placeholder="Password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="bg-background"
+                className="h-12 text-base"
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="********"
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                required
-                className="bg-background"
-              />
-            </div>
             <Button
               type="submit"
-              className="w-full font-bold shadow-glow"
+              className="w-full font-semibold h-12 rounded-full text-base"
               disabled={isLoading}
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              Sign up
             </Button>
           </form>
-        </div>
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Already have an account?{' '}
-          <Link href="/login" className="text-primary hover:underline">
-            Log in
-          </Link>
-        </p>
-      </div>
+          
+          <div className="text-center mt-6">
+            <p className="text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/login" className="font-semibold text-primary hover:underline">
+                Log in
+              </Link>
+            </p>
+          </div>
+      </main>
+
+      <footer className="text-center text-xs text-muted-foreground p-4">
+        By continuing, you agree to our Terms of Service and Privacy Policy.
+      </footer>
     </div>
   );
 }

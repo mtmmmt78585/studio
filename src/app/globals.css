@@ -9,33 +9,33 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 5%; /* Jet Black #0D0D0D */
-    --foreground: 0 0% 98%; /* Near White */
+    --background: 255 100% 100%; /* White */
+    --foreground: 0 0% 10%; /* Near Black */
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 255 100% 100%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 255 100% 100%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 51 100% 50%; /* Royal Gold #FFD700 */
-    --primary-foreground: 0 0% 5%; /* Jet Black for text on gold */
+    --primary: 345 100% 75%; /* Soft Pink */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 217 91% 60%; /* Soft Blue #3B82F6 */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 220 80% 60%; /* Soft Blue */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted: 0 0% 95%; /* Light Grey */
+    --muted-foreground: 0 0% 45%; /* Grey */
 
-    --accent: 145 77% 40%; /* Emerald Green #10B981 */
-    --accent-foreground: 0 0% 98%;
+    --accent: 345 100% 75%; 
+    --accent-foreground: 0 0% 100%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90%; /* Platinum Grey #E5E5E5 (lightened for visibility) */
-    --input: 0 0% 15%;
-    --ring: 51 100% 50%; /* Royal Gold */
+    --border: 0 0% 90%; 
+    --input: 0 0% 90%;
+    --ring: 345 100% 75%; 
 
     --radius: 0.5rem;
   }
@@ -50,8 +50,8 @@ body {
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 51 100% 50%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 345 100% 75%; /* Soft Pink */
+    --primary-foreground: 0 0% 10%;
 
     --secondary: 217 91% 60%;
     --secondary-foreground: 0 0% 98%;
@@ -65,9 +65,9 @@ body {
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 15%; /* Platinum Grey adjusted for dark mode */
+    --border: 0 0% 15%; 
     --input: 0 0% 15%;
-    --ring: 51 100% 50%;
+    --ring: 345 100% 75%;
   }
 }
 
