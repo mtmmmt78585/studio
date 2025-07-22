@@ -1,13 +1,20 @@
-import { stories } from "@/lib/data";
+
+"use client";
+
+import { stories, type User } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus } from "lucide-react";
 
-export function StoryCarousel() {
+interface StoryCarouselProps {
+    onStorySelect: (user: User) => void;
+}
+
+export function StoryCarousel({ onStorySelect }: StoryCarouselProps) {
   return (
     <div className="px-4 py-2">
       <div className="flex space-x-4 overflow-x-auto no-scrollbar">
         {/* Add Story */}
-        <div className="flex-shrink-0 flex flex-col items-center gap-1">
+        <div className="flex-shrink-0 flex flex-col items-center gap-1 cursor-pointer" onClick={() => onStorySelect(stories[0].user)}>
           <div className="relative">
             <Avatar className="h-16 w-16 border-2 border-muted-foreground">
                 <AvatarImage src={stories[0].user.avatar} />
@@ -22,7 +29,7 @@ export function StoryCarousel() {
 
         {/* Other stories */}
         {stories.map((story) => (
-          <div key={story.id} className="flex-shrink-0 flex flex-col items-center gap-1">
+          <div key={story.id} className="flex-shrink-0 flex flex-col items-center gap-1 cursor-pointer" onClick={() => onStorySelect(story.user)}>
             <div className={`p-0.5 rounded-full ${story.viewed ? 'bg-muted-foreground' : 'bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500'}`}>
                 <Avatar className="h-16 w-16 border-2 border-background">
                     <AvatarImage src={story.user.avatar} />
