@@ -8,6 +8,7 @@ export type User = {
   followers: number;
   following: number;
   totalViews: number;
+  uploads: number;
   isVerified: boolean;
 };
 
@@ -73,3 +74,5 @@ export type Song = {
 
 // Re-exporting the data so other files don't need to change their imports.
 export { mainUser, users, stories, chats, effects, notifications, generateVideos, songs };
+
+    

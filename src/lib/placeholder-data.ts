@@ -8,17 +8,18 @@ export const mainUser: User = {
     followers: 125000,
     following: 150,
     totalViews: 15_700_000,
+    uploads: 12,
     isVerified: true,
 };
 
 export const users: User[] = [
   mainUser,
-  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TG', followers: 50200, following: 200, totalViews: 5_200_000, isVerified: true },
-  { id: 'user2', username: 'DanceMachine', avatar: 'https://placehold.co/100x100/EC4899/FFFFFF.png?text=DM', followers: 1.2 * 1000000, following: 1200, totalViews: 120_000_000, isVerified: false },
-  { id: 'user3', username: 'FunnyDude', avatar: 'https://placehold.co/100x100/F97316/FFFFFF.png?text=FD', followers: 89000, following: 50, totalViews: 9_800_000, isVerified: false },
-  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/10B981/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, isVerified: true },
-  { id: 'user5', username: 'TravelJunkie', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TJ', followers: 450000, following: 300, totalViews: 45_000_000, isVerified: true },
-  { id: 'user6', username: 'FoodLover', avatar: 'https://placehold.co/100x100/EF4444/FFFFFF.png?text=FL', followers: 75000, following: 500, totalViews: 8_000_000, isVerified: false },
+  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TG', followers: 50200, following: 200, totalViews: 5_200_000, uploads: 50, isVerified: true },
+  { id: 'user2', username: 'DanceMachine', avatar: 'https://placehold.co/100x100/EC4899/FFFFFF.png?text=DM', followers: 1.2 * 1000000, following: 1200, totalViews: 120_000_000, uploads: 120, isVerified: false },
+  { id: 'user3', username: 'FunnyDude', avatar: 'https://placehold.co/100x100/F97316/FFFFFF.png?text=FD', followers: 89000, following: 50, totalViews: 9_800_000, uploads: 88, isVerified: false },
+  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/10B981/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, uploads: 15, isVerified: true },
+  { id: 'user5', username: 'TravelJunkie', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TJ', followers: 450000, following: 300, totalViews: 45_000_000, uploads: 200, isVerified: true },
+  { id: 'user6', username: 'FoodLover', avatar: 'https://placehold.co/100x100/EF4444/FFFFFF.png?text=FL', followers: 75000, following: 500, totalViews: 8_000_000, uploads: 75, isVerified: false },
 ];
 
 
@@ -236,3 +237,5 @@ export const songs: Song[] = Array.from({ length: 2000 }).map((_, i) => {
     duration: `${durationMinutes}:${durationSeconds}`,
   }
 });
+
+    

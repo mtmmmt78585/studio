@@ -4,7 +4,7 @@
 import { mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Grid3x3, Bookmark, Heart, UserPlus, Eye, Menu, Camera, Plus, ChevronDown, User, Shield, Bell, Link2, Languages, Wallet, BadgePercent, History, UserX, Palette, VolumeX, Lock, Search, MessageSquareWarning, HelpCircle, Bot, LogOut, Trash2, FileText, FlaskConical, ChevronRight, } from "lucide-react";
+import { Grid3x3, Bookmark, Heart, UserPlus, Eye, Menu, Camera, Plus, ChevronDown, User, Shield, Bell, Link2, Languages, Wallet, BadgePercent, History, UserX, Palette, VolumeX, Lock, Search, MessageSquareWarning, HelpCircle, Bot, LogOut, Trash2, FileText, FlaskConical, ChevronRight, UploadCloud, } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import Link from "next/link";
@@ -226,8 +226,8 @@ export default function ProfilePage() {
                     <p className="text-sm text-muted-foreground">Followers</p>
                 </div>
                 <div className="text-center">
-                    <p className="font-bold text-lg">{(mainUser.totalViews / 1000000).toFixed(1)}M</p>
-                    <p className="text-sm text-muted-foreground">Likes</p>
+                    <p className="font-bold text-lg">{mainUser.uploads}</p>
+                    <p className="text-sm text-muted-foreground">Uploads</p>
                 </div>
             </div>
 
@@ -250,7 +250,7 @@ export default function ProfilePage() {
             </TabsList>
             <TabsContent value="posts" className="mt-0">
                  <div className="grid grid-cols-3 gap-0.5">
-                    {Array.from({ length: 12 }).map((_, i) => (
+                    {Array.from({ length: mainUser.uploads }).map((_, i) => (
                         <div key={i} className="aspect-video bg-card relative">
                             <Image
                                 src={`https://placehold.co/300x500.png?text=Post${i+1}`}
@@ -261,20 +261,29 @@ export default function ProfilePage() {
                             />
                              <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
                                 <Heart className="h-3 w-3" />
-                                <span>1.2k</span>
+                                <span>{Math.floor(Math.random() * 5000) + 100}</span>
                             </div>
                         </div>
                     ))}
                 </div>
+                 {mainUser.uploads === 0 && (
+                    <div className="text-center text-muted-foreground p-8">
+                        <UploadCloud className="h-12 w-12 mx-auto mb-2"/>
+                        <h3 className="font-bold text-lg">No Posts Yet</h3>
+                        <p className="text-sm">Your posts will appear here.</p>
+                    </div>
+                )}
             </TabsContent>
             <TabsContent value="saved" className="mt-0">
                 <div className="text-center text-muted-foreground p-8">
+                    <Bookmark className="h-12 w-12 mx-auto mb-2"/>
                     <h3 className="font-bold text-lg">Your Saved Videos</h3>
                     <p className="text-sm">These videos are only visible to you.</p>
                 </div>
             </TabsContent>
             <TabsContent value="liked" className="mt-0">
                  <div className="text-center text-muted-foreground p-8">
+                    <Heart className="h-12 w-12 mx-auto mb-2"/>
                     <h3 className="font-bold text-lg">Your Liked Videos</h3>
                     <p className="text-sm">Your liked videos will appear here.</p>
                 </div>
@@ -284,3 +293,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
