@@ -40,7 +40,7 @@ export default function UploadPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
-  const [activeTab, setActiveTab] = useState("camera");
+  const [videoCategory, setVideoCategory] = useState("short");
 
   const getCameraPermission = useCallback(async () => {
     try {
@@ -75,9 +75,7 @@ export default function UploadPage() {
   }, [toast]);
 
   useEffect(() => {
-    if (activeTab === "camera") {
-        getCameraPermission();
-    }
+    getCameraPermission();
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
@@ -85,7 +83,7 @@ export default function UploadPage() {
       }
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [activeTab, getCameraPermission]);
+  }, [getCameraPermission]);
   
   const startRecording = () => {
     if (videoRef.current?.srcObject && hasCameraPermission) {
@@ -172,9 +170,9 @@ export default function UploadPage() {
           setIsUploading(false);
           toast({
             title: "Upload Complete!",
-            description: "Your video is ready to be published.",
+            description: `Your ${videoCategory} is ready to be published.`,
           });
-          router.push('/feed');
+          router.push(videoCategory === 'short' ? '/shorts' : '/feed');
           return 100;
         }
         return prev + 10;
@@ -192,7 +190,7 @@ export default function UploadPage() {
        <div className="h-full flex flex-col items-center justify-start p-4 space-y-4 bg-background">
             <div className="w-full max-w-lg">
                  <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-xl font-bold font-headline">Edit & Post</h1>
+                    <h1 className="text-xl font-bold font-headline">Edit & Post {videoCategory === 'short' ? 'Short' : 'Video'}</h1>
                     <Button variant="ghost" size="icon" onClick={() => setVideoFile(null)}><X className="h-5 w-5"/></Button>
                  </div>
 
@@ -213,7 +211,7 @@ export default function UploadPage() {
                 </div>
                 
                 <Button onClick={handleUpload} disabled={isUploading} className="w-full">
-                    {isUploading ? "Uploading..." : "Post Video"}
+                    {isUploading ? "Uploading..." : `Post ${videoCategory === 'short' ? 'Short' : 'Video'}`}
                 </Button>
             </div>
        </div>
@@ -276,8 +274,7 @@ export default function UploadPage() {
             </button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col justify-end">
-        <TabsContent value="camera" className="flex-1 relative w-full h-full m-0">
+        <div className="flex-1 relative w-full h-full m-0">
             {/* Camera View */}
             <div className="relative flex-1 w-full h-full">
                 <video 
@@ -287,7 +284,7 @@ export default function UploadPage() {
                     muted 
                     playsInline 
                 />
-                {!hasCameraPermission && activeTab === 'camera' && (
+                {!hasCameraPermission && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/70 p-4">
                         <Alert variant="destructive" className="w-full max-w-sm">
                         <AlertTitle>Camera Access Required</AlertTitle>
@@ -308,12 +305,7 @@ export default function UploadPage() {
                     </div>
                 </div>
             )}
-        </TabsContent>
-        <TabsContent value="gallery" className="flex-1 bg-card/50 m-0">
-             <div className="flex flex-col items-center justify-center h-full">
-                 <p className="text-muted-foreground">Gallery Coming Soon</p>
-             </div>
-        </TabsContent>
+        </div>
         
         {/* Bottom Controls Overlay */}
         <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/50 to-transparent pt-12">
@@ -322,27 +314,42 @@ export default function UploadPage() {
                     <p>🎵 {selectedSong.title} - {selectedSong.artist}</p>
                 </div>
             )}
-            <div className="flex items-end justify-center relative">
-                 <TabsList className="grid grid-cols-2 w-max mx-auto bg-black/30 border border-white/20 text-white mb-4">
-                    <TabsTrigger value="camera" className="data-[state=active]:bg-white/20 data-[state=active]:text-white">Camera</TabsTrigger>
-                    <TabsTrigger value="gallery" className="data-[state=active]:bg-white/20 data-[state=active]:text-white" onClick={() => fileInputRef.current?.click()}>Gallery</TabsTrigger>
-                </TabsList>
-            </div>
             
-            <div className="flex items-center justify-center pb-8">
-                <button
-                    className={cn(
-                        "w-16 h-16 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
-                        isRecording && "animate-pulse"
-                    )}
-                    disabled={!hasCameraPermission}
-                    onClick={handleRecordButtonClick}
-                >
-                    <div className={cn("w-[58px] h-[58px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
-                        isRecording && "w-12 h-12"
-                    )}>
-                        {isRecording && <div className="w-6 h-6 bg-red-700 rounded-lg" />}
+            <div className="flex items-end justify-around pb-8">
+                <div className="w-16 h-16" />
+                
+                <div className="flex flex-col items-center">
+                    <button
+                        className={cn(
+                            "w-16 h-16 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
+                            isRecording && "animate-pulse"
+                        )}
+                        disabled={!hasCameraPermission}
+                        onClick={handleRecordButtonClick}
+                    >
+                        <div className={cn("w-[58px] h-[58px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
+                            isRecording && "w-12 h-12"
+                        )}>
+                            {isRecording && <div className="w-6 h-6 bg-red-700 rounded-lg" />}
+                        </div>
+                    </button>
+                    <div className="flex items-center gap-4 mt-2">
+                        <button 
+                            onClick={() => setVideoCategory('short')}
+                            className={cn("font-semibold text-sm", videoCategory === 'short' ? 'text-white' : 'text-white/50')}
+                        >Shorts</button>
+                         <button 
+                            onClick={() => setVideoCategory('video')}
+                            className={cn("font-semibold text-sm", videoCategory === 'video' ? 'text-white' : 'text-white/50')}
+                        >Video</button>
                     </div>
+                </div>
+
+                <button className="flex flex-col items-center justify-center w-16 h-16" onClick={() => fileInputRef.current?.click()}>
+                    <div className="bg-black/40 p-3 rounded-lg backdrop-blur-sm">
+                        <GalleryHorizontal className="h-6 w-6" />
+                    </div>
+                     <p className="text-xs mt-1">Upload</p>
                 </button>
             </div>
             <input
@@ -353,7 +360,8 @@ export default function UploadPage() {
                 onChange={handleFileSelect}
             />
         </div>
-      </Tabs>
     </div>
   );
 }
+
+    
