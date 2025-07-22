@@ -5,7 +5,7 @@ import { chats, mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck } from "lucide-react";
+import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck, Camera } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useRouter, useParams } from "next/navigation";
@@ -83,6 +83,7 @@ export default function ChatDetailPage() {
                         <Input placeholder="Message" className="pl-10 pr-24 h-12 rounded-full bg-background shadow-md" />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                             <Button variant="ghost" size="icon" className="rounded-full"><Paperclip className="text-muted-foreground"/></Button>
+                            <Button variant="ghost" size="icon" className="rounded-full"><Camera className="text-muted-foreground"/></Button>
                         </div>
                     </div>
                     <Button size="icon" className="rounded-full h-12 w-12 bg-green-600 hover:bg-green-700">
