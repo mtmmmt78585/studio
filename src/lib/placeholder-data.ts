@@ -1,7 +1,7 @@
 
 // src/lib/placeholder-data.ts
 
-import type { User, Comment, Video, Story, Chat, Effect, Notification } from './data';
+import type { User, Comment, Video, Story, Chat, Effect, Notification, Song } from './data';
 
 export const mainUser: User = {
     id: 'user_main',
@@ -222,3 +222,29 @@ export const notifications: Notification[] = [
         read: true,
     },
 ];
+
+// Vast Music Library
+const songTitles = [
+  "Cosmic Drift", "Neon Pulse", "Future Echo", "Retrograde", "Starlight", "Data Stream", "System Shock", "Grid Runner", "Night Drive",
+  "Ocean Bloom", "Forest Lullaby", "Desert Mirage", "Mountain Hymn", "River Flow", "Island Dream", "City Lights", "Subway Groove", "Rooftop Jam",
+  "First Kiss", "Last Dance", "Broken Heart", "Summer Fling", "Winter's Tale", "Autumn Leaves", "Spring Awakening", "Midnight Mood", "Sunrise Serenade",
+];
+const artists = [
+  "Vector Seven", "Scandroid", "Mega Drive", "Pylot", "Lazerhawk", "Com Truise", "Mitch Murder", "Waveshaper", "Timecop1983", "The Midnight",
+  "Tycho", "Bonobo", "Emancipator", "ODESZA", "Lane 8", "Four Tet", "Caribou", "Boards of Canada", "Aphex Twin", "deadmau5",
+];
+
+export const songs: Song[] = Array.from({ length: 2000 }).map((_, i) => {
+  const title = songTitles[i % songTitles.length];
+  const artist = artists[i % artists.length];
+  const durationMinutes = Math.floor(Math.random() * 3) + 2; // 2-4 minutes
+  const durationSeconds = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+  
+  return {
+    id: `song_${i}_${title.toLowerCase().replace(/\s/g, '_')}`,
+    title: `${title} #${Math.floor(i / songTitles.length) + 1}`,
+    artist: artist,
+    coverArtUrl: `https://placehold.co/100x100.png?text=${title.charAt(0)}${title.split(' ')[1] ? title.split(' ')[1].charAt(0) : ''}`,
+    duration: `${durationMinutes}:${durationSeconds}`,
+  }
+});

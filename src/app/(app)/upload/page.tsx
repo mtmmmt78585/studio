@@ -1,8 +1,8 @@
 
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Music, Settings2, Video, FileUp, X, Camera, Sparkles, SwitchCamera, FlipHorizontal, Bot } from "lucide-react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { Music, Settings2, Video, FileUp, X, Camera, Sparkles, SwitchCamera, FlipHorizontal, Bot, Search, PlayCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,13 +11,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { effects } from "@/lib/data";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
+import { effects, songs, type Song } from "@/lib/data";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { generateCaptionsAndTags, type GenerateCaptionsAndTagsOutput } from "@/ai/flows/ai-content-generation-captions";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -30,6 +31,17 @@ export default function UploadPage() {
   const [selectedEffect, setSelectedEffect] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [aiSuggestions, setAiSuggestions] = useState<GenerateCaptionsAndTagsOutput | null>(null);
+
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
+  const [musicSearch, setMusicSearch] = useState("");
+  
+  const filteredSongs = useMemo(() => {
+      if (!musicSearch) return songs;
+      return songs.filter(song => 
+          song.title.toLowerCase().includes(musicSearch.toLowerCase()) ||
+          song.artist.toLowerCase().includes(musicSearch.toLowerCase())
+      );
+  }, [musicSearch]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -87,6 +99,7 @@ export default function UploadPage() {
           setDescription("");
           setAiSuggestions(null);
           setSelectedEffect(null);
+          setSelectedSong(null);
           return 100;
         }
         return prev + 10;
@@ -211,6 +224,17 @@ export default function UploadPage() {
                  </div>
                  
                  {isUploading && <Progress value={uploadProgress} className="w-full" />}
+
+                 {selectedSong && (
+                    <Card className="p-2 bg-background flex items-center gap-2">
+                      <Image src={selectedSong.coverArtUrl} alt={selectedSong.title} width={40} height={40} className="rounded-md" />
+                      <div className="flex-1">
+                        <p className="text-sm font-bold truncate">{selectedSong.title}</p>
+                        <p className="text-xs text-muted-foreground truncate">{selectedSong.artist}</p>
+                      </div>
+                      <Button variant="ghost" size="icon" onClick={() => setSelectedSong(null)}><X className="h-4 w-4" /></Button>
+                    </Card>
+                  )}
                 
                 <div className="space-y-2">
                     <Label htmlFor="description">Video Description</Label>
@@ -264,7 +288,36 @@ export default function UploadPage() {
                 </div>
 
                 <div className="flex justify-between items-center">
-                    <Button variant="outline" disabled={isUploading}><Music className="mr-2 h-4 w-4"/> Add Music</Button>
+                    <Sheet>
+                      <SheetTrigger asChild>
+                         <Button variant="outline" disabled={isUploading}><Music className="mr-2 h-4 w-4"/> Add Music</Button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="bg-background/90 backdrop-blur-sm h-[80vh] flex flex-col">
+                        <SheetHeader>
+                          <SheetTitle className="text-primary font-headline">Add Sound</SheetTitle>
+                          <SheetDescription>Browse or search for music to add to your video.</SheetDescription>
+                        </SheetHeader>
+                        <div className="relative">
+                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                           <Input placeholder="Search songs or artists..." className="pl-10" value={musicSearch} onChange={e => setMusicSearch(e.target.value)} />
+                        </div>
+                        <ScrollArea className="flex-1">
+                          <div className="space-y-1 py-4">
+                            {filteredSongs.map((song) => (
+                              <div key={song.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-card/50 cursor-pointer" onClick={() => setSelectedSong(song)}>
+                                <Image src={song.coverArtUrl} alt={song.title} width={40} height={40} className="rounded-md" />
+                                <div className="flex-1">
+                                  <p className="font-semibold text-sm truncate">{song.title}</p>
+                                  <p className="text-xs text-muted-foreground truncate">{song.artist}</p>
+                                </div>
+                                <p className="text-sm text-muted-foreground">{song.duration}</p>
+                                <Button variant="ghost" size="icon"><PlayCircle className="h-5 w-5 text-primary"/></Button>
+                              </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </SheetContent>
+                    </Sheet>
                     <Sheet>
                       <SheetTrigger asChild>
                          <Button variant="outline" disabled={isUploading}><Settings2 className="mr-2 h-4 w-4"/> Effects</Button>
