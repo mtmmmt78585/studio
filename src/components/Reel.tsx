@@ -29,7 +29,6 @@ export function Reel({ video }: ReelProps) {
         className="h-full w-full object-cover"
         autoPlay
         loop
-        muted
         playsInline
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />

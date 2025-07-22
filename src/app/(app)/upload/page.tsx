@@ -281,7 +281,6 @@ export default function UploadPage() {
                     ref={videoRef} 
                     className={cn("w-full h-full object-cover", isMirrored && "scale-x-[-1]")} 
                     autoPlay 
-                    muted 
                     playsInline 
                 />
                 {!hasCameraPermission && (
@@ -340,7 +339,7 @@ export default function UploadPage() {
                                 "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
                                 videoCategory === 'short' 
                                     ? 'text-white -translate-x-1/2' 
-                                    : 'text-white/50 -translate-x-full scale-90'
+                                    : 'text-white/50 -translate-x-[150%] scale-90'
                             )}
                         >Shorts</button>
                          <button 
@@ -349,7 +348,7 @@ export default function UploadPage() {
                                 "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
                                 videoCategory === 'video' 
                                     ? 'text-white -translate-x-1/2' 
-                                    : 'text-white/50 translate-x-0 scale-90'
+                                    : 'text-white/50 translate-x-[50%] scale-90'
                             )}
                         >Video</button>
                     </div>
@@ -373,5 +372,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
