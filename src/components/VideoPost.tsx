@@ -32,6 +32,7 @@ export function VideoPost({ video }: VideoPostProps) {
   const [newComment, setNewComment] = useState("");
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     const videoElement = videoRef.current;
@@ -150,6 +151,19 @@ export function VideoPost({ video }: VideoPostProps) {
       setComments(prev => prev.filter(c => c.id !== commentId));
   }
 
+  const handleLike = () => {
+      setIsLiked(!isLiked);
+  }
+
+  const formatCount = (count: number) => {
+      if (count >= 1000) {
+          return `${(count / 1000).toFixed(1)}k`;
+      }
+      return count.toLocaleString();
+  }
+  
+  const likeCount = video.likes + (isLiked ? 1 : 0);
+
   return (
     <div className="relative h-full w-full bg-black">
       <video
@@ -189,11 +203,18 @@ export function VideoPost({ video }: VideoPostProps) {
             )}
         </Link>
         
+        <button className="flex flex-col items-center gap-1" onClick={handleLike}>
+            <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
+                <Heart className={cn("h-7 w-7 transition-colors", isLiked && "fill-primary text-primary")} />
+            </div>
+            <span className="text-xs font-semibold">{formatCount(likeCount)}</span>
+        </button>
+
         <button className="flex flex-col items-center gap-1" onClick={handleSaveVideo}>
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
-                <Bookmark className={cn("h-7 w-7 transition-colors", isSaved && "fill-primary text-primary")} />
+                <Bookmark className={cn("h-7 w-7 transition-colors", isSaved && "fill-yellow-400 text-yellow-400")} />
             </div>
-            <span className="text-xs font-semibold">{isSaved ? (video.likes + 1).toLocaleString() : video.likes.toLocaleString()}</span>
+            <span className="text-xs font-semibold">Save</span>
         </button>
         
         <Sheet>
