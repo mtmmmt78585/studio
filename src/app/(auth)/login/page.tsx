@@ -52,11 +52,10 @@ export default function LoginPage() {
 
       <main className="flex-1 flex flex-col p-8">
         <div className="flex items-center border-b border-muted pb-2">
-            <div className="flex items-center gap-2 pr-4">
+            <div className="flex items-center gap-2 pr-2">
                 <Smartphone className="h-5 w-5 text-muted-foreground" />
                 <span className="font-semibold">+91</span>
             </div>
-            <Separator orientation="vertical" className="h-6 bg-primary" />
             <Input
                 id="phone"
                 type="tel"
@@ -68,10 +67,9 @@ export default function LoginPage() {
             />
         </div>
         <div className="flex items-center border-b border-muted pb-2 mt-4">
-            <div className="flex items-center gap-2 pr-4">
+            <div className="flex items-center gap-2 pr-2">
                 <KeyRound className="h-5 w-5 text-muted-foreground" />
             </div>
-            <Separator orientation="vertical" className="h-6 bg-primary" />
             <Input
                 id="password"
                 type="password"
@@ -79,7 +77,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-4"
+                className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2"
             />
         </div>
 
