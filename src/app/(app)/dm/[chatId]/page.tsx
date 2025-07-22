@@ -5,7 +5,7 @@ import { chats, mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck, Camera } from "lucide-react";
+import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck, Camera, IndianRupee } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useRouter, useParams } from "next/navigation";
@@ -76,15 +76,20 @@ export default function ChatDetailPage() {
                     ))}
                 </div>
                 <footer className="p-2 flex items-center gap-2">
-                    <div className="relative flex-1">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2">
-                            <Smile className="text-muted-foreground"/>
-                        </div>
-                        <Input placeholder="Message" className="pl-10 pr-24 h-12 rounded-full bg-background shadow-md" />
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                            <Button variant="ghost" size="icon" className="rounded-full"><Paperclip className="text-muted-foreground"/></Button>
-                            <Button variant="ghost" size="icon" className="rounded-full"><Camera className="text-muted-foreground"/></Button>
-                        </div>
+                    <div className="flex-1 flex items-center bg-background rounded-full p-1 shadow-md">
+                        <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground">
+                            <Smile />
+                        </Button>
+                        <Input placeholder="Message" className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground">
+                            <Paperclip />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground">
+                            <IndianRupee />
+                        </Button>
+                         <Button variant="ghost" size="icon" className="rounded-full text-muted-foreground">
+                            <Camera />
+                        </Button>
                     </div>
                     <Button size="icon" className="rounded-full h-12 w-12 bg-green-600 hover:bg-green-700">
                         <Mic className="h-6 w-6"/>
