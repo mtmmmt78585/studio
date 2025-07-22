@@ -257,7 +257,7 @@ export default function LoginPage() {
         </Button>
 
         <div className="text-center mt-4">
-          <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+          <Link href="/forgot-password" className="text-sm text-destructive hover:underline">
             Forgot Password?
           </Link>
         </div>

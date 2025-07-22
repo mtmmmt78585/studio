@@ -18,7 +18,7 @@ body {
     --popover: 255 100% 100%;
     --popover-foreground: 0 0% 10%;
 
-    --primary: 347 95% 58%; /* Vibrant Pink */
+    --primary: 217 91% 60%; /* Sky Blue */
     --primary-foreground: 0 0% 100%; /* White */
 
     --secondary: 220 80% 60%; /* Soft Blue */
@@ -35,7 +35,7 @@ body {
 
     --border: 0 0% 90%; 
     --input: 0 0% 90%;
-    --ring: 347 95% 58%; 
+    --ring: 217 91% 60%; 
 
     --radius: 0.5rem;
   }
@@ -50,7 +50,7 @@ body {
     --popover: 0 0% 5%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 347 95% 58%; /* Vibrant Pink */
+    --primary: 217 91% 60%; /* Sky Blue */
     --primary-foreground: 0 0% 10%;
 
     --secondary: 217 91% 60%;
@@ -67,7 +67,7 @@ body {
 
     --border: 0 0% 15%; 
     --input: 0 0% 15%;
-    --ring: 347 95% 58%;
+    --ring: 217 91% 60%;
   }
 }
 
