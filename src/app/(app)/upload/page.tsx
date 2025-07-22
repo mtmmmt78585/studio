@@ -108,60 +108,61 @@ export default function UploadPage() {
   };
   
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState(true);
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
   const [currentDeviceIndex, setCurrentDeviceIndex] = useState(0);
   const [isMirrored, setIsMirrored] = useState(true);
 
   useEffect(() => {
+    let stream: MediaStream;
+
     const getCameraPermission = async () => {
       if (!navigator.mediaDevices?.getUserMedia) {
         setHasCameraPermission(false);
         return;
       }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        setHasCameraPermission(true);
 
+      try {
+        // Only get the list of devices first, without starting a stream yet
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoInputs = devices.filter((d) => d.kind === 'videoinput');
+        
+        if (videoInputs.length === 0) {
+            setHasCameraPermission(false);
+            return;
+        }
+
         setVideoDevices(videoInputs);
         const frontCameraIndex = videoInputs.findIndex((d) =>
           d.label.toLowerCase().includes('front')
         );
         setCurrentDeviceIndex(frontCameraIndex !== -1 ? frontCameraIndex : 0);
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-        // We need to stop the initial stream after we have the devices
-        stream.getTracks().forEach(track => track.stop());
+        setHasCameraPermission(true);
 
       } catch (error) {
-        console.error('Error accessing camera:', error);
+        console.error('Error enumerating devices:', error);
         setHasCameraPermission(false);
-        if (error instanceof Error && error.name === 'NotAllowedError') {
-          toast({
-            variant: 'destructive',
-            title: 'Camera Access Denied',
-            description:
-              'Please enable camera permissions in your browser settings to use this app.',
-          });
-        }
       }
     };
 
     getCameraPermission();
-  }, [toast]);
+
+    return () => {
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    if (!hasCameraPermission || videoDevices.length === 0) return;
+    if (hasCameraPermission === false || videoDevices.length === 0) return;
 
     let isCancelled = false;
     let stream: MediaStream;
 
     const startStream = async () => {
       const currentDeviceId = videoDevices[currentDeviceIndex]?.deviceId;
+      // We must have a deviceId to continue
       if (!currentDeviceId) return;
 
       const constraints = { video: { deviceId: { exact: currentDeviceId } } };
@@ -173,6 +174,13 @@ export default function UploadPage() {
       } catch (err) {
         console.error('Error switching camera', err);
         setHasCameraPermission(false);
+        if (err instanceof Error && err.name === 'NotAllowedError') {
+             toast({
+                variant: 'destructive',
+                title: 'Camera Access Denied',
+                description: 'Please enable camera permissions in your browser settings to use this app.',
+            });
+        }
       }
     };
 
@@ -184,7 +192,7 @@ export default function UploadPage() {
         stream.getTracks().forEach((track) => track.stop());
       }
     };
-  }, [currentDeviceIndex, hasCameraPermission, videoDevices]);
+  }, [currentDeviceIndex, hasCameraPermission, videoDevices, toast]);
 
   const switchCamera = () => {
     if(videoDevices.length > 1) {
@@ -360,7 +368,7 @@ export default function UploadPage() {
                         <FlipHorizontal />
                     </Button>
                 </div>
-                 {!hasCameraPermission && (
+                 {(hasCameraPermission === false) && (
                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-4">
                         <Alert variant="destructive">
                             <Camera className="h-4 w-4" />
@@ -371,6 +379,11 @@ export default function UploadPage() {
                         </Alert>
                     </div>
                 )}
+                 {(hasCameraPermission === null) && (
+                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
+                         <Skeleton className="w-full h-full" />
+                     </div>
+                 )}
             </Card>
 
              <div className="flex items-center gap-4">
