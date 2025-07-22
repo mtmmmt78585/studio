@@ -10,11 +10,17 @@ import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const VoiceMessagePlayer = ({ message }: { message: any }) => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const waveform = Array.from({ length: 30 }).map(() => Math.random() * 0.8 + 0.2);
+    const [waveform, setWaveform] = useState<number[]>([]);
+
+    useEffect(() => {
+        // Generate waveform only on the client
+        setWaveform(Array.from({ length: 30 }).map(() => Math.random() * 0.8 + 0.2));
+    }, []);
+
 
     return (
         <div className="flex items-center gap-2">
@@ -26,7 +32,7 @@ const VoiceMessagePlayer = ({ message }: { message: any }) => {
                 {isPlaying ? <Pause className="h-6 w-6 text-white bg-blue-500 rounded-full p-1" /> : <Play className="h-6 w-6 text-blue-500" />}
             </button>
             <div className="flex items-center gap-0.5 h-6">
-                 {waveform.map((h, i) => (
+                 {waveform.length > 0 && waveform.map((h, i) => (
                     <div key={i} className="w-0.5 bg-muted-foreground/50 rounded-full" style={{ height: `${h * 100}%` }}/>
                  ))}
                  <div className="w-2 h-2 rounded-full bg-blue-500 ml-1" />
