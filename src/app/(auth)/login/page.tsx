@@ -1,3 +1,4 @@
+
 // src/app/(auth)/login/page.tsx
 'use client';
 
@@ -164,8 +165,8 @@ export default function LoginPage() {
                             <HelpInfoItem icon={IndianRupee} title="Monetization Criteria">
                                 <p>Yappzy supports and pays real creators. Here's how to qualify:</p>
                                 <ul className="list-disc list-inside space-y-1">
-                                    <li>✅ 10,000 followers</li>
-                                    <li>✅ 5 million total valid views (from Shorts or Long videos)</li>
+                                    <li>10,000 followers</li>
+                                    <li>5 million total valid views (from Shorts or Long videos)</li>
                                 </ul>
                                 <p>Once qualified:</p>
                                  <ul className="list-disc list-inside space-y-1">
