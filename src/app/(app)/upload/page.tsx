@@ -332,16 +332,16 @@ export default function UploadPage() {
             <div className="flex items-center justify-center pb-8">
                 <button
                     className={cn(
-                        "w-20 h-20 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
+                        "w-16 h-16 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
                         isRecording && "animate-pulse"
                     )}
                     disabled={!hasCameraPermission}
                     onClick={handleRecordButtonClick}
                 >
-                    <div className={cn("w-[70px] h-[70px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
-                        isRecording && "w-16 h-16"
+                    <div className={cn("w-[58px] h-[58px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
+                        isRecording && "w-12 h-12"
                     )}>
-                        {isRecording && <div className="w-8 h-8 bg-red-700 rounded-lg" />}
+                        {isRecording && <div className="w-6 h-6 bg-red-700 rounded-lg" />}
                     </div>
                 </button>
             </div>
