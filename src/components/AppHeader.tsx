@@ -6,7 +6,7 @@ import { Logo } from "@/components/Logo";
 export function AppHeader() {
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b bg-background/95 px-4 backdrop-blur-sm md:px-6">
-      <Link href="/" aria-label="Home">
+      <Link href="/feed" aria-label="Home">
         <Logo className="text-2xl" />
       </Link>
       <div className="flex items-center gap-2">

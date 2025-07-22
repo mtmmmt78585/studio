@@ -30,7 +30,7 @@ export default function LoginPage() {
     setIsLoading(true);
     // Simulate verifying OTP
     setTimeout(() => {
-        router.push('/');
+        router.push('/feed');
     }, 1500);
   }
 
