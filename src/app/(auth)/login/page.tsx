@@ -47,7 +47,7 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 const HelpInfoItem = ({ icon, title, children, iconClassName }: { icon: React.ElementType, title: string, children: React.ReactNode, iconClassName?: string }) => (
     <div className="flex items-start gap-4">
-        {React.createElement(icon, { className: `h-6 w-6 text-primary flex-shrink-0 mt-1 ${iconClassName}` })}
+        {React.createElement(icon, { className: `h-6 w-6 flex-shrink-0 mt-1 ${iconClassName}` })}
         <div>
             <h3 className="font-semibold text-foreground">{title}</h3>
             <div className="text-muted-foreground text-sm space-y-2">{children}</div>
@@ -178,7 +178,7 @@ export default function LoginPage() {
 
                             <HelpInfoItem icon={Shield} title="Security & Admin Controls" iconClassName="text-green-500">
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Protected by Indian laws (<span className="text-accent">IT Act 2000</span> & <span className="text-accent">Digital Data Protection Act 2023</span>)</li>
+                                    <li>Protected by Indian laws (<span className="text-accent">IT Act 2000</span> &amp; <span className="text-accent">Digital Data Protection Act 2023</span>)</li>
                                     <li>Real-time monitoring by AI agents and admin control panel</li>
                                     <li>Fake views, bots, or fraudulent activity are strictly blocked</li>
                                     <li>Live bug tracking and automatic system fixes</li>
