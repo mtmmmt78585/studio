@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Music, Settings2, Video, FileUp, X, Camera, Sparkles } from "lucide-react";
+import { Music, Settings2, Video, FileUp, X, Camera, Sparkles, SwitchCamera, FlipHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -70,33 +70,102 @@ export default function UploadPage() {
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(true);
+  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
+  const [currentDeviceIndex, setCurrentDeviceIndex] = useState(0);
+  const [isMirrored, setIsMirrored] = useState(true);
+
 
   useEffect(() => {
-    const getCameraPermission = async () => {
+    const getDevicesAndSetStream = async () => {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setHasCameraPermission(false);
         return;
       }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({video: true});
-        setHasCameraPermission(true);
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
+      try {
+        // Get initial stream to prompt for permissions
+        const initialStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter(device => device.kind === 'videoinput');
+        setVideoDevices(videoInputs);
+
+        // Find front camera ('user' facing) and set it as default
+        const frontCameraIndex = videoInputs.findIndex(d => d.label.toLowerCase().includes('front'));
+        const initialIndex = frontCameraIndex !== -1 ? frontCameraIndex : 0;
+        setCurrentDeviceIndex(initialIndex);
+        
+        // Stop initial stream, we'll get a new one with the specific device
+        initialStream.getTracks().forEach(track => track.stop());
+
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Camera Access Denied',
-          description: 'Please enable camera permissions in your browser settings to use this app.',
-        });
+        if (error instanceof Error && error.name === "NotAllowedError") {
+            toast({
+              variant: 'destructive',
+              title: 'Camera Access Denied',
+              description: 'Please enable camera permissions in your browser settings to use this app.',
+            });
+        }
       }
     };
 
-    getCameraPermission();
+    getDevicesAndSetStream();
   }, [toast]);
+
+  useEffect(() => {
+    if (!hasCameraPermission || videoDevices.length === 0) {
+      return;
+    }
+    
+    let isCancelled = false;
+    
+    const startStream = async () => {
+        const currentDeviceId = videoDevices[currentDeviceIndex]?.deviceId;
+        if (!currentDeviceId) return;
+
+        // Stop previous stream if it exists
+        if (videoRef.current?.srcObject) {
+            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+        }
+
+        const constraints: MediaStreamConstraints = {
+            video: { deviceId: { exact: currentDeviceId } }
+        };
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            if (!isCancelled && videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+        } catch(error) {
+            console.error('Error switching camera:', error);
+            setHasCameraPermission(false);
+        }
+    };
+    
+    startStream();
+    
+    return () => {
+        isCancelled = true;
+        if (videoRef.current?.srcObject) {
+            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+        }
+    };
+  }, [currentDeviceIndex, videoDevices, hasCameraPermission]);
+
+
+  const switchCamera = () => {
+    if(videoDevices.length > 1) {
+        setCurrentDeviceIndex(prevIndex => (prevIndex + 1) % videoDevices.length);
+        setIsMirrored(videoDevices[(currentDeviceIndex + 1) % videoDevices.length].label.toLowerCase().includes('front') || videoDevices.length === 1);
+    }
+  };
+  
+  const toggleMirror = () => {
+      setIsMirrored(prev => !prev);
+  }
 
 
   if (videoFile) {
@@ -167,10 +236,18 @@ export default function UploadPage() {
                 <p className="text-muted-foreground">What will you share today?</p>
             </div>
 
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden relative">
                 <CardContent className="p-0">
-                     <video ref={videoRef} className="w-full aspect-[9/16] object-cover bg-black" autoPlay muted playsInline />
+                     <video ref={videoRef} className={cn("w-full aspect-[9/16] object-cover bg-black", isMirrored && "scale-x-[-1]")} autoPlay muted playsInline />
                 </CardContent>
+                 <div className="absolute top-4 right-4 flex flex-col gap-4">
+                    <Button size="icon" variant="ghost" className="bg-black/30 text-white hover:bg-black/50" onClick={switchCamera} disabled={videoDevices.length < 2}>
+                        <SwitchCamera />
+                    </Button>
+                     <Button size="icon" variant="ghost" className="bg-black/30 text-white hover:bg-black/50" onClick={toggleMirror}>
+                        <FlipHorizontal />
+                    </Button>
+                </div>
             </Card>
 
             { !hasCameraPermission && (
@@ -223,3 +300,5 @@ export default function UploadPage() {
     </div>
   );
 }
+
+    
