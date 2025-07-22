@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { UploadCloud, Music, Settings2, Video, FileUp, X, Camera } from "lucide-react";
+import { Music, Settings2, Video, FileUp, X, Camera, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +11,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { effects } from "@/lib/data";
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -19,6 +23,7 @@ export default function UploadPage() {
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
   const { toast } = useToast();
+  const [selectedEffect, setSelectedEffect] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -54,6 +59,7 @@ export default function UploadPage() {
           setVideoFile(null); // Reset after upload
           setCaption("");
           setTags("");
+          setSelectedEffect(null);
           return 100;
         }
         return prev + 10;
@@ -80,11 +86,16 @@ export default function UploadPage() {
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
       }
     };
 
     getCameraPermission();
-  }, []);
+  }, [toast]);
 
 
   if (videoFile) {
@@ -93,12 +104,12 @@ export default function UploadPage() {
             <div className="w-full max-w-md space-y-4">
                 <Card>
                     <CardContent className="p-2">
-                        <video src={URL.createObjectURL(videoFile)} controls className="w-full rounded-md aspect-video" />
+                        <video key={selectedEffect} src={URL.createObjectURL(videoFile)} controls className="w-full rounded-md aspect-video" />
                     </CardContent>
                 </Card>
                  <div className="flex justify-between items-center">
                     <p className="text-sm font-medium truncate">{videoFile.name}</p>
-                    <Button variant="ghost" size="icon" onClick={() => setVideoFile(null)}><X className="h-5 w-5"/></Button>
+                    <Button variant="ghost" size="icon" onClick={() => { setVideoFile(null); setSelectedEffect(null); }}><X className="h-5 w-5"/></Button>
                  </div>
                  
                  {isUploading && <Progress value={uploadProgress} className="w-full" />}
@@ -115,7 +126,27 @@ export default function UploadPage() {
 
                 <div className="flex justify-between items-center">
                     <Button variant="outline" disabled={isUploading}><Music className="mr-2 h-4 w-4"/> Add Music</Button>
-                    <Button variant="outline" disabled={isUploading}><Settings2 className="mr-2 h-4 w-4"/> Effects</Button>
+                    <Sheet>
+                      <SheetTrigger asChild>
+                         <Button variant="outline" disabled={isUploading}><Settings2 className="mr-2 h-4 w-4"/> Effects</Button>
+                      </SheetTrigger>
+                      <SheetContent side="bottom" className="bg-background/90 backdrop-blur-sm">
+                        <SheetHeader>
+                          <SheetTitle className="text-primary font-headline">Premium Effects</SheetTitle>
+                        </SheetHeader>
+                        <div className="grid grid-cols-4 gap-4 py-4">
+                          {effects.map((effect) => (
+                            <div key={effect.id} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => setSelectedEffect(effect.id)}>
+                              <div className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 ${selectedEffect === effect.id ? 'border-primary' : 'border-transparent'}`}>
+                                <Image src={effect.thumbnailUrl} alt={effect.name} fill className="object-cover" />
+                              </div>
+                              <p className="text-xs text-center truncate w-16">{effect.name}</p>
+                              {effect.isPremium && <Badge variant="default" className="text-xs px-1 py-0 h-4 bg-primary/80">PRO</Badge>}
+                            </div>
+                          ))}
+                        </div>
+                      </SheetContent>
+                    </Sheet>
                 </div>
 
                 <Button onClick={handleUpload} disabled={isUploading} className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold">
@@ -162,11 +193,33 @@ export default function UploadPage() {
                 <Button className="w-20 h-20 rounded-full bg-primary shadow-glow flex items-center justify-center" disabled={!hasCameraPermission}>
                     <Video className="h-8 w-8 text-primary-foreground"/>
                 </Button>
-                 <Button variant="outline" className="flex-1 text-lg py-6" disabled={!hasCameraPermission}>
-                    <Settings2 className="mr-2 h-5 w-5"/> Effects
-                </Button>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button variant="outline" className="flex-1 text-lg py-6">
+                        <Sparkles className="mr-2 h-5 w-5"/> Effects
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent side="bottom" className="bg-background/90 backdrop-blur-sm">
+                    <SheetHeader>
+                      <SheetTitle className="text-primary font-headline">Premium Effects</SheetTitle>
+                    </SheetHeader>
+                    <div className="grid grid-cols-4 gap-4 py-4">
+                      {effects.map((effect) => (
+                        <div key={effect.id} className="flex flex-col items-center gap-2">
+                          <div className="relative w-16 h-16 rounded-lg overflow-hidden border-2 border-transparent">
+                            <Image src={effect.thumbnailUrl} alt={effect.name} fill className="object-cover" />
+                          </div>
+                          <p className="text-xs text-center truncate w-16">{effect.name}</p>
+                          {effect.isPremium && <Badge variant="default" className="text-xs px-1 py-0 h-4 bg-primary/80">PRO</Badge>}
+                        </div>
+                      ))}
+                    </div>
+                  </SheetContent>
+                </Sheet>
             </div>
         </div>
     </div>
   );
 }
+
+    
