@@ -34,6 +34,14 @@ export function VideoPost({ video }: VideoPostProps) {
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
   }
+  
+  const copyLinkToClipboard = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast({
+      title: "Link Copied!",
+      description: "The video link is in your clipboard.",
+    });
+  }
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -45,18 +53,12 @@ export function VideoPost({ video }: VideoPostProps) {
         });
       } catch (error) {
         console.error('Error sharing:', error);
-        toast({
-            variant: "destructive",
-            title: "Could not share",
-            description: "There was an error trying to share this video.",
-        })
+        // Fallback to clipboard if share fails (e.g., permission denied)
+        copyLinkToClipboard();
       }
     } else {
-        toast({
-            title: "Link Copied!",
-            description: "Sharing is not supported on this browser, but the link is in your clipboard.",
-        })
-        navigator.clipboard.writeText(window.location.href);
+      // Fallback for browsers that don't support navigator.share
+      copyLinkToClipboard();
     }
   };
   
