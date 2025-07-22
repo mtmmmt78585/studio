@@ -47,12 +47,19 @@ const ToggleAction = ({ id, checked, onCheckedChange }: { id: string, checked: b
 );
 
 const ProfilePostTile = ({ index }: { index: number }) => {
-    const [likeCount, setLikeCount] = useState(0);
+    const [viewCount, setViewCount] = useState(0);
 
     useEffect(() => {
-        // Generate like count on the client side to avoid hydration errors
-        setLikeCount(Math.floor(Math.random() * 5000) + 100);
+        // Generate view count on the client side to avoid hydration errors
+        setViewCount(Math.floor(Math.random() * 100000) + 100);
     }, []);
+
+    const formatViews = (num: number) => {
+        if (num >= 10000) {
+            return (num / 1000).toFixed(1) + 'k';
+        }
+        return num.toLocaleString();
+    }
 
     return (
         <div className="aspect-video bg-card relative">
@@ -63,10 +70,10 @@ const ProfilePostTile = ({ index }: { index: number }) => {
                 className="object-cover"
                 data-ai-hint="user content"
             />
-            {likeCount > 0 && (
+            {viewCount > 0 && (
                 <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
-                    <Heart className="h-3 w-3" />
-                    <span>{likeCount}</span>
+                    <Eye className="h-3 w-3" />
+                    <span>{formatViews(viewCount)}</span>
                 </div>
             )}
         </div>
@@ -308,3 +315,4 @@ export default function ProfilePage() {
     </div>
   );
 }
+
