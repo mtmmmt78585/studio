@@ -177,7 +177,7 @@ export default function LoginPage() {
 
                             <HelpInfoItem icon={Shield} title="Security & Admin Controls">
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Protected by Indian laws (<span className="text-destructive">IT Act 2000 & Digital Data Protection Act 2023</span>)</li>
+                                    <li>Protected by Indian laws (<span className="text-accent">IT Act 2000</span> & <span className="text-accent">Digital Data Protection Act 2023</span>)</li>
                                     <li>Real-time monitoring by AI agents and admin control panel</li>
                                     <li>Fake views, bots, or fraudulent activity are strictly blocked</li>
                                     <li>Live bug tracking and automatic system fixes</li>
