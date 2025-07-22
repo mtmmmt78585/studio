@@ -40,12 +40,13 @@ export default function UploadPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
+  const [activeTab, setActiveTab] = useState("camera");
 
   const getCameraPermission = useCallback(async () => {
     try {
         const videoConstraints = {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             frameRate: { ideal: 30 },
             facingMode: 'user'
         };
@@ -74,7 +75,9 @@ export default function UploadPage() {
   }, [toast]);
 
   useEffect(() => {
-    getCameraPermission();
+    if (activeTab === "camera") {
+        getCameraPermission();
+    }
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
@@ -82,7 +85,7 @@ export default function UploadPage() {
       }
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [getCameraPermission]);
+  }, [activeTab, getCameraPermission]);
   
   const startRecording = () => {
     if (videoRef.current?.srcObject && hasCameraPermission) {
@@ -216,38 +219,7 @@ export default function UploadPage() {
 
   return (
     <div className="h-full w-full flex flex-col bg-black text-white relative">
-      {/* Camera View */}
-      <div className="relative flex-1 w-full h-full">
-        <video 
-            ref={videoRef} 
-            className={cn("w-full h-full object-cover", isMirrored && "scale-x-[-1]")} 
-            autoPlay 
-            muted 
-            playsInline 
-        />
-        {!hasCameraPermission && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/70 p-4">
-                <Alert variant="destructive" className="w-full max-w-sm">
-                <AlertTitle>Camera Access Required</AlertTitle>
-                <AlertDescription>
-                    Please allow camera access in your browser settings to use this feature.
-                </AlertDescription>
-                </Alert>
-            </div>
-        )}
-      </div>
-
-       {/* Recording Indicator */}
-      {isRecording && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-11/12 space-y-2">
-            <Progress value={recordingProgress} className="h-1 bg-red-500/50" />
-            <div className="text-center">
-                <p className="text-sm font-mono bg-black/30 px-2 py-0.5 rounded-full inline-block">{formatTime(recordingTime)}</p>
-            </div>
-        </div>
-      )}
-
-      {/* Top Controls Overlay */}
+       {/* Top Controls Overlay */}
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
         <Button variant="ghost" size="icon" className="bg-black/30 rounded-full" onClick={() => router.back()}>
             <X className="h-6 w-6"/>
@@ -300,52 +272,85 @@ export default function UploadPage() {
               <Sparkles />
             </button>
       </div>
-      
-      {/* Bottom Controls Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/50 to-transparent pt-12">
-        {selectedSong && (
-            <div className="bg-black/50 backdrop-blur-sm py-1 px-3 rounded-full text-center text-xs mb-4 w-max mx-auto">
-                <p>🎵 {selectedSong.title} - {selectedSong.artist}</p>
-            </div>
-        )}
-        <div className="flex items-end justify-around">
-             <div className="flex flex-col items-center gap-1">
-                 <Button variant="ghost" className="h-12 w-12 rounded-lg bg-black/30" onClick={() => fileInputRef.current?.click()}>
-                    <GalleryHorizontal/>
-                 </Button>
-                 <span className="text-xs font-medium">Add</span>
-            </div>
 
-             <button
-                className={cn(
-                    "w-20 h-20 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
-                    isRecording && "animate-pulse"
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col justify-end">
+        <TabsContent value="camera" className="flex-1 relative w-full h-full m-0">
+            {/* Camera View */}
+            <div className="relative flex-1 w-full h-full">
+                <video 
+                    ref={videoRef} 
+                    className={cn("w-full h-full object-cover", isMirrored && "scale-x-[-1]")} 
+                    autoPlay 
+                    muted 
+                    playsInline 
+                />
+                {!hasCameraPermission && activeTab === 'camera' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/70 p-4">
+                        <Alert variant="destructive" className="w-full max-w-sm">
+                        <AlertTitle>Camera Access Required</AlertTitle>
+                        <AlertDescription>
+                            Please allow camera access in your browser settings to use this feature.
+                        </AlertDescription>
+                        </Alert>
+                    </div>
                 )}
-                disabled={!hasCameraPermission}
-                onClick={handleRecordButtonClick}
-            >
-                <div className={cn("w-[70px] h-[70px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
-                    isRecording && "w-16 h-16"
-                )}>
-                    {isRecording && <div className="w-8 h-8 bg-red-700 rounded-lg" />}
-                </div>
-            </button>
-
-            <div className="flex flex-col items-center gap-1">
-                 <Button variant="ghost" className="h-12 w-12 rounded-lg bg-black/30">
-                    <Sparkles />
-                 </Button>
-                 <span className="text-xs font-medium">Effects</span>
             </div>
+
+            {/* Recording Indicator */}
+            {isRecording && (
+                <div className="absolute top-20 left-1/2 -translate-x-1/2 z-20 w-11/12 space-y-2">
+                    <Progress value={recordingProgress} className="h-1 bg-red-500/50" />
+                    <div className="text-center">
+                        <p className="text-sm font-mono bg-black/30 px-2 py-0.5 rounded-full inline-block">{formatTime(recordingTime)}</p>
+                    </div>
+                </div>
+            )}
+        </TabsContent>
+        <TabsContent value="gallery" className="flex-1 bg-card/50 m-0">
+             <div className="flex flex-col items-center justify-center h-full">
+                 <p className="text-muted-foreground">Gallery Coming Soon</p>
+             </div>
+        </TabsContent>
+        
+        {/* Bottom Controls Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/50 to-transparent pt-12">
+            {selectedSong && (
+                <div className="bg-black/50 backdrop-blur-sm py-1 px-3 rounded-full text-center text-xs mb-4 w-max mx-auto">
+                    <p>🎵 {selectedSong.title} - {selectedSong.artist}</p>
+                </div>
+            )}
+            <div className="flex items-end justify-center relative">
+                 <TabsList className="grid grid-cols-2 w-max mx-auto bg-black/30 border border-white/20 text-white mb-4">
+                    <TabsTrigger value="camera" className="data-[state=active]:bg-white/20 data-[state=active]:text-white">Camera</TabsTrigger>
+                    <TabsTrigger value="gallery" className="data-[state=active]:bg-white/20 data-[state=active]:text-white" onClick={() => fileInputRef.current?.click()}>Gallery</TabsTrigger>
+                </TabsList>
+            </div>
+            
+            <div className="flex items-center justify-center pb-8">
+                <button
+                    className={cn(
+                        "w-20 h-20 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
+                        isRecording && "animate-pulse"
+                    )}
+                    disabled={!hasCameraPermission}
+                    onClick={handleRecordButtonClick}
+                >
+                    <div className={cn("w-[70px] h-[70px] rounded-full bg-red-500 transition-all flex items-center justify-center", 
+                        isRecording && "w-16 h-16"
+                    )}>
+                        {isRecording && <div className="w-8 h-8 bg-red-700 rounded-lg" />}
+                    </div>
+                </button>
+            </div>
+            <input
+                type="file"
+                ref={fileInputRef}
+                className="hidden"
+                accept="video/*"
+                onChange={handleFileSelect}
+            />
         </div>
-         <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept="video/*"
-            onChange={handleFileSelect}
-        />
-      </div>
+      </Tabs>
     </div>
   );
 }
