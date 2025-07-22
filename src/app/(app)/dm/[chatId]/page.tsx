@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 
-export default function ChatDetailPage({ params }: { params: { chatId: string } }) {
+export default function ChatDetailPage() {
     const router = useRouter();
-    const selectedChat = chats.find(c => c.id === params.chatId);
+    const params = useParams();
+    const chatId = params.chatId as string;
+    const selectedChat = chats.find(c => c.id === chatId);
 
     if (!selectedChat) {
         return (
