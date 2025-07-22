@@ -69,11 +69,7 @@ export default function LoginPage() {
         <div className="flex items-start space-x-3 mt-6 text-xs text-muted-foreground">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} className="mt-0.5" />
             <label htmlFor="terms">
-                I have read and agreed to the following policies: 
-                <Link href="#" className="text-secondary"> Kuaishou Software License and Service Agreement</Link>, 
-                <Link href="#" className="text-secondary"> Basic Privacy Policy</Link>, 
-                <Link href="#" className="text-secondary"> Child protection agreement</Link> and 
-                <Link href="#" className="text-secondary"> Data protection policy for users under 18</Link>
+                I proudly accept all terms of Yappzy — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the IT Act 2000 & Digital Personal Data Protection Act 2023. Jai Hind!
             </label>
         </div>
 
