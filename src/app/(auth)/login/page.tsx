@@ -1,3 +1,4 @@
+
 // src/app/(auth)/login/page.tsx
 'use client';
 
@@ -44,9 +45,9 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-const HelpInfoItem = ({ icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
+const HelpInfoItem = ({ icon, title, children, iconClassName }: { icon: React.ElementType, title: string, children: React.ReactNode, iconClassName?: string }) => (
     <div className="flex items-start gap-4">
-        {React.createElement(icon, { className: "h-6 w-6 text-primary flex-shrink-0 mt-1" })}
+        {React.createElement(icon, { className: `h-6 w-6 text-primary flex-shrink-0 mt-1 ${iconClassName}` })}
         <div>
             <h3 className="font-semibold text-foreground">{title}</h3>
             <div className="text-muted-foreground text-sm space-y-2">{children}</div>
@@ -183,7 +184,7 @@ export default function LoginPage() {
                                     <li>Live bug tracking and automatic system fixes</li>
                                  </ul>
                             </HelpInfoItem>
-                             <HelpInfoItem icon={Award} title="Built for Bharat">
+                             <HelpInfoItem icon={Award} title="Built for Bharat" iconClassName="text-yellow-400">
                                  <p>Yappzy is more than an app — it’s part of the Digital India mission. We believe in empowering local talent, building India-first technology, and giving every voice a stage.</p>
                             </HelpInfoItem>
                             
@@ -197,7 +198,7 @@ export default function LoginPage() {
                             </HelpInfoItem>
                         </div>
                         
-                         <div className="text-center font-bold text-lg text-destructive">
+                         <div className="text-center font-bold text-lg text-primary">
                             <p>Create. Share. Earn. Repeat.</p>
                         </div>
 
