@@ -78,12 +78,10 @@ export default function SupportPage() {
                     </form>
 
                     <div className="mt-8 text-sm text-muted-foreground">
-                        <p>You can also email us directly at <a href="mailto:support@yappzy.com" className="text-accent underline">support@yappzy.com</a></p>
+                        <p>You can also email us directly at <a href="mailto:support.yappzy@gmail.com" className="text-accent underline">support.yappzy@gmail.com</a></p>
                     </div>
                 </div>
             </main>
         </div>
     );
 }
-
-    
