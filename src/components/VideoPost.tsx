@@ -8,8 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -19,7 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { chats, mainUser } from "@/lib/data";
+import { mainUser } from "@/lib/data";
 import { Input } from "@/components/ui/input";
 
 interface VideoPostProps {
@@ -27,7 +26,7 @@ interface VideoPostProps {
 }
 
 export function VideoPost({ video }: VideoPostProps) {
-  const [isLiked, setIsLiked] = useState(false);
+  const [isLiked, setIsLiked] =useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [comments, setComments] = useState<Comment[]>(video.comments);
   const [newComment, setNewComment] = useState("");
@@ -168,14 +167,9 @@ export function VideoPost({ video }: VideoPostProps) {
       {/* Footer Info */}
       <div className="absolute bottom-16 left-4 right-16 text-white">
         <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 border-2 border-white">
-                <AvatarImage src={video.user.avatar} />
-                <AvatarFallback>{video.user.username.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <p className="font-bold text-sm">{video.user.username}</p>
-            <Button variant={isFollowing ? "outline" : "default"} size="sm" className={cn("h-6 px-3 text-xs", isFollowing ? 'border-accent bg-transparent text-accent' : 'bg-accent text-accent-foreground')} onClick={handleFollow}>
-              {isFollowing ? 'Following' : 'Follow'}
-            </Button>
+            <Link href={`/profile?id=${video.user.id}`}>
+                <p className="font-bold text-sm">@{video.user.username}</p>
+            </Link>
         </div>
         <p className="mt-2 text-sm">{video.caption}</p>
         <div className="flex items-center gap-2 mt-2">
@@ -186,6 +180,18 @@ export function VideoPost({ video }: VideoPostProps) {
 
       {/* Side Actions */}
       <div className="absolute bottom-16 right-2 flex flex-col items-center gap-4 text-white">
+        <Link href={`/profile?id=${video.user.id}`} className="relative">
+            <Avatar className="h-12 w-12 border-2 border-white">
+                <AvatarImage src={video.user.avatar} />
+                <AvatarFallback>{video.user.username.charAt(0)}</AvatarFallback>
+            </Avatar>
+            {!isFollowing && (
+                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                    <PlusCircle className="h-5 w-5 text-primary-foreground" strokeWidth={3}/>
+                 </div>
+            )}
+        </Link>
+        
         <button className="flex flex-col items-center gap-1" onClick={handleLike}>
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
                 <Heart className={cn("h-7 w-7 transition-colors", isLiked && "fill-secondary text-secondary")} />
@@ -244,43 +250,21 @@ export function VideoPost({ video }: VideoPostProps) {
                 </div>
             </SheetContent>
         </Sheet>
-
-        <button className="flex flex-col items-center gap-1" onClick={handleShareExternal}>
+        
+        <button className="flex flex-col items-center gap-1" onClick={handleSaveVideo}>
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
-                <Send className="h-7 w-7" />
+                <Bookmark className="h-7 w-7" />
             </div>
-            <span className="text-xs font-semibold">{video.shares.toLocaleString()}</span>
+            <span className="text-xs font-semibold">Save</span>
         </button>
 
 
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <button className="flex flex-col items-center gap-1">
-                    <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
-                        <MoreVertical className="h-7 w-7" />
-                    </div>
-                </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-background/80 backdrop-blur-sm border-border/50 text-foreground w-48">
-                <DropdownMenuItem onClick={handleSaveVideo} className="cursor-pointer">
-                    <Bookmark className="mr-2 h-4 w-4" />
-                    <span>Save Video</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-border/50"/>
-                <DropdownMenuItem asChild>
-                    <Link href={`/profile?id=${video.user.id}`} className="flex items-center w-full cursor-pointer">
-                        <User className="mr-2 h-4 w-4" /> 
-                        <span>View Profile</span> 
-                        <ArrowRight className="ml-auto h-4 w-4" />
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-border/50"/>
-                 <DropdownMenuItem className="text-red-400 focus:bg-red-500/20 focus:text-red-300 cursor-pointer" onClick={handleReport}>
-                    <Flag className="mr-2 h-4 w-4" /> 
-                    <span>Report</span>
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <button className="flex flex-col items-center gap-1" onClick={handleShareExternal}>
+            <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
+                <Share2 className="h-7 w-7" />
+            </div>
+            <span className="text-xs font-semibold">{video.shares.toLocaleString()}</span>
+        </button>
       </div>
     </div>
   );
