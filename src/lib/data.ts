@@ -42,10 +42,22 @@ export type Story = {
   viewed: boolean;
 };
 
+export type Message = {
+    id: string;
+    text?: string;
+    type: 'text' | 'voice';
+    audio?: {
+        url: string;
+        duration: string;
+    };
+    sender: 'me' | 'them';
+    timestamp: string;
+};
+
 export type Chat = {
     id: string;
     user: User;
-    messages: { id: string; text: string; sender: 'me' | 'them'; timestamp: string }[];
+    messages: Message[];
     lastMessage: string;
     lastMessageTime: string;
     unreadCount: number;
@@ -77,5 +89,3 @@ export type Song = {
 
 // Re-exporting the data so other files don't need to change their imports.
 export { mainUser, users, stories, chats, effects, notifications, generateVideos, songs };
-
-    

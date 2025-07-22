@@ -5,11 +5,36 @@ import { chats, mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck, Camera, IndianRupee } from "lucide-react";
+import { ArrowLeft, MoreVertical, Video, Phone, Smile, Paperclip, Mic, CheckCheck, Camera, IndianRupee, Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
+import React, { useState } from "react";
+
+const VoiceMessagePlayer = ({ message }: { message: any }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const waveform = Array.from({ length: 30 }).map(() => Math.random() * 0.8 + 0.2);
+
+    return (
+        <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8">
+                <AvatarImage src={message.sender === 'me' ? mainUser.avatar : chats.find(c => c.messages.some(m => m.id === message.id))?.user.avatar} />
+                <AvatarFallback>{message.sender.slice(0,2)}</AvatarFallback>
+            </Avatar>
+            <button onClick={() => setIsPlaying(!isPlaying)}>
+                {isPlaying ? <Pause className="h-6 w-6 text-white bg-blue-500 rounded-full p-1" /> : <Play className="h-6 w-6 text-blue-500" />}
+            </button>
+            <div className="flex items-center gap-0.5 h-6">
+                 {waveform.map((h, i) => (
+                    <div key={i} className="w-0.5 bg-muted-foreground/50 rounded-full" style={{ height: `${h * 100}%` }}/>
+                 ))}
+                 <div className="w-2 h-2 rounded-full bg-blue-500 ml-1" />
+            </div>
+             <p className="text-xs text-muted-foreground ml-2">{message.audio.duration}</p>
+        </div>
+    )
+}
 
 export default function ChatDetailPage() {
     const router = useRouter();
@@ -66,7 +91,11 @@ export default function ChatDetailPage() {
                             <div className={cn("max-w-[70%] p-2 px-3 rounded-xl text-sm shadow-md", 
                                 message.sender === 'me' ? 'bg-[#dcf8c6] dark:bg-[#075e54] text-foreground rounded-br-none' : 'bg-background text-foreground rounded-bl-none'
                             )}>
-                                <p className="leading-snug">{message.text}</p>
+                                {message.type === 'text' ? (
+                                    <p className="leading-snug">{message.text}</p>
+                                ) : (
+                                    <VoiceMessagePlayer message={message} />
+                                )}
                                 <div className="flex items-center justify-end gap-1 mt-1">
                                     <p className={cn("text-xs",  message.sender === 'me' ? 'text-muted-foreground/80' : 'text-muted-foreground' )}>{message.timestamp}</p>
                                     {message.sender === 'me' && <CheckCheck className="h-4 w-4 text-blue-500" />}

@@ -1,5 +1,5 @@
 
-import type { User, Comment, Video, Story, Chat, Effect, Notification, Song } from './data';
+import type { User, Comment, Video, Story, Chat, Effect, Notification, Song, Message } from './data';
 
 export const mainUser: User = {
     id: 'user_main',
@@ -43,6 +43,11 @@ const videoUrls: string[] = [
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
+];
+
+const audioUrls = [
+    "http://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg",
+    "http://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs.ogg",
 ];
 
 const audioNames = [
@@ -148,18 +153,20 @@ export const chats: Chat[] = [
         id: 'chat1',
         user: users[1],
         messages: [
-            { id: 'm1', text: 'Hey, love your latest video!', sender: 'them', timestamp: '10:30 AM' },
-            { id: 'm2', text: 'Thanks so much! Glad you liked it.', sender: 'me', timestamp: '10:31 AM' },
+            { id: 'm1', type: 'text', text: 'Hey, love your latest video!', sender: 'them', timestamp: '10:30 AM' },
+            { id: 'm2', type: 'text', text: 'Thanks so much! Glad you liked it.', sender: 'me', timestamp: '10:31 AM' },
+            { id: 'm-voice-1', type: 'voice', audio: { url: audioUrls[0], duration: '0:07'}, sender: 'them', timestamp: '11:44 AM' },
+            { id: 'm-voice-2', type: 'voice', audio: { url: audioUrls[1], duration: '0:02'}, sender: 'me', timestamp: '11:45 AM' },
         ],
-        lastMessage: 'Thanks so much! Glad you liked it.',
-        lastMessageTime: '10:31 AM',
+        lastMessage: 'Voice message',
+        lastMessageTime: '11:45 AM',
         unreadCount: 0,
     },
     {
         id: 'chat2',
         user: users[3],
         messages: [
-            { id: 'm3', text: 'Got a collab idea for you!', sender: 'them', timestamp: 'Yesterday' },
+            { id: 'm3', type: 'text', text: 'Got a collab idea for you!', sender: 'them', timestamp: 'Yesterday' },
         ],
         lastMessage: 'Got a collab idea for you!',
         lastMessageTime: 'Yesterday',
@@ -169,7 +176,7 @@ export const chats: Chat[] = [
         id: 'chat3',
         user: users[4],
         messages: [
-            { id: 'm4', text: 'That art piece was amazing', sender: 'them', timestamp: '2 days ago' },
+            { id: 'm4', type: 'text', text: 'That art piece was amazing', sender: 'them', timestamp: '2 days ago' },
         ],
         lastMessage: 'That art piece was amazing',
         lastMessageTime: '2d',
@@ -273,5 +280,3 @@ export const songs: Song[] = Array.from({ length: 2000 }).map((_, i) => {
     duration: `${durationMinutes}:${durationSeconds}`,
   }
 });
-
-    
