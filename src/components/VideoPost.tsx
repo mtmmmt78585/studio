@@ -26,7 +26,7 @@ interface VideoPostProps {
 }
 
 export function VideoPost({ video }: VideoPostProps) {
-  const [isLiked, setIsLiked] =useState(false);
+  const [isSaved, setIsSaved] =useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [comments, setComments] = useState<Comment[]>(video.comments);
   const [newComment, setNewComment] = useState("");
@@ -72,10 +72,6 @@ export function VideoPost({ video }: VideoPostProps) {
     };
   }, []);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-  };
-
   const handleFollow = () => {
     setIsFollowing(!isFollowing);
      toast({
@@ -116,8 +112,9 @@ export function VideoPost({ video }: VideoPostProps) {
   }
   
   const handleSaveVideo = () => {
+    setIsSaved(!isSaved);
     toast({
-        title: "Video Saved",
+        title: isSaved ? "Video Unsaved" : "Video Saved",
         description: `You can find this video in your saved items.`
     })
   }
@@ -192,11 +189,11 @@ export function VideoPost({ video }: VideoPostProps) {
             )}
         </Link>
         
-        <button className="flex flex-col items-center gap-1" onClick={handleLike}>
+        <button className="flex flex-col items-center gap-1" onClick={handleSaveVideo}>
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
-                <Heart className={cn("h-7 w-7 transition-colors", isLiked && "fill-secondary text-secondary")} />
+                <Bookmark className={cn("h-7 w-7 transition-colors", isSaved && "fill-primary text-primary")} />
             </div>
-            <span className="text-xs font-semibold">{isLiked ? (video.likes + 1).toLocaleString() : video.likes.toLocaleString()}</span>
+            <span className="text-xs font-semibold">{isSaved ? (video.likes + 1).toLocaleString() : video.likes.toLocaleString()}</span>
         </button>
         
         <Sheet>
@@ -251,20 +248,13 @@ export function VideoPost({ video }: VideoPostProps) {
             </SheetContent>
         </Sheet>
         
-        <button className="flex flex-col items-center gap-1" onClick={handleSaveVideo}>
-            <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
-                <Bookmark className="h-7 w-7" />
-            </div>
-            <span className="text-xs font-semibold">Save</span>
-        </button>
-
-
         <button className="flex flex-col items-center gap-1" onClick={handleShareExternal}>
             <div className="bg-black/20 p-2.5 rounded-full backdrop-blur-sm">
                 <Share2 className="h-7 w-7" />
             </div>
             <span className="text-xs font-semibold">{video.shares.toLocaleString()}</span>
         </button>
+
       </div>
     </div>
   );
