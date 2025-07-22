@@ -8,7 +8,7 @@ import { Grid3x3, Bookmark, Heart, UserPlus, Eye, Menu, Camera, Plus, ChevronDow
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -45,6 +45,33 @@ const NavAction = () => <ChevronRight className="h-5 w-5 text-muted-foreground" 
 const ToggleAction = ({ id, checked, onCheckedChange }: { id: string, checked: boolean, onCheckedChange: (checked: boolean) => void }) => (
     <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
 );
+
+const ProfilePostTile = ({ index }: { index: number }) => {
+    const [likeCount, setLikeCount] = useState(0);
+
+    useEffect(() => {
+        // Generate like count on the client side to avoid hydration errors
+        setLikeCount(Math.floor(Math.random() * 5000) + 100);
+    }, []);
+
+    return (
+        <div className="aspect-video bg-card relative">
+            <Image
+                src={`https://placehold.co/300x500.png?text=Post${index + 1}`}
+                alt={`User post ${index}`}
+                fill
+                className="object-cover"
+                data-ai-hint="user content"
+            />
+            {likeCount > 0 && (
+                <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
+                    <Heart className="h-3 w-3" />
+                    <span>{likeCount}</span>
+                </div>
+            )}
+        </div>
+    );
+};
 
 
 export default function ProfilePage() {
@@ -251,19 +278,7 @@ export default function ProfilePage() {
             <TabsContent value="posts" className="mt-0">
                  <div className="grid grid-cols-3 gap-0.5">
                     {Array.from({ length: mainUser.uploads }).map((_, i) => (
-                        <div key={i} className="aspect-video bg-card relative">
-                            <Image
-                                src={`https://placehold.co/300x500.png?text=Post${i+1}`}
-                                alt={`User post ${i}`}
-                                fill
-                                className="object-cover"
-                                data-ai-hint="user content"
-                            />
-                             <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
-                                <Heart className="h-3 w-3" />
-                                <span>{Math.floor(Math.random() * 5000) + 100}</span>
-                            </div>
-                        </div>
+                        <ProfilePostTile key={i} index={i} />
                     ))}
                 </div>
                  {mainUser.uploads === 0 && (
@@ -293,5 +308,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    
