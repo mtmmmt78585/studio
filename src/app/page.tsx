@@ -26,7 +26,7 @@ export default function SplashPage() {
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen bg-background text-white transition-opacity duration-1000 ${isFading ? 'opacity-0' : 'opacity-100'}`}>
       <div className="flex flex-col items-center justify-center animate-pulse">
-        <Logo className="text-6xl drop-shadow-[0_0_15px_rgba(255,0,127,0.7)]" />
+        <Logo text="YAPPZY" className="text-6xl drop-shadow-[0_0_15px_rgba(255,0,127,0.7)]" />
         <p className="text-sm text-secondary mt-4 tracking-widest">Made in India 🇮🇳</p>
       </div>
     </div>

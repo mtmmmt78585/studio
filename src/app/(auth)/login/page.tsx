@@ -32,7 +32,7 @@ export default function LoginPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
       <div className="w-full max-w-sm mx-auto">
         <div className="text-center mb-8">
-          <Logo className="text-4xl justify-center" />
+          <Logo text="YAPPZY" className="text-4xl justify-center" />
           <p className="text-muted-foreground mt-2">
             Welcome back to the future of content.
           </p>
