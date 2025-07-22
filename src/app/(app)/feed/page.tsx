@@ -10,7 +10,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { StoryCarousel } from "@/components/StoryCarousel";
-import { StoryViewer } from "@/components/StoryViewer";
+import dynamic from "next/dynamic";
+
+const StoryViewer = dynamic(() => import('@/components/StoryViewer').then(mod => mod.StoryViewer));
+
 
 export default function FeedPage() {
   const [videos, setVideos] = useState<Video[]>([]);

@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import dynamic from 'next/dynamic';
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 const SettingsSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
@@ -46,11 +48,10 @@ const ToggleAction = ({ id, checked, onCheckedChange }: { id: string, checked: b
     <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
 );
 
-const ProfilePostTile = ({ index }: { index: number }) => {
+const ProfilePostTile = React.memo(function ProfilePostTile({ index }: { index: number }) {
     const [viewCount, setViewCount] = useState(0);
 
     useEffect(() => {
-        // Generate view count on the client side to avoid hydration errors
         setViewCount(Math.floor(Math.random() * 100000) + 100);
     }, []);
 
@@ -70,15 +71,111 @@ const ProfilePostTile = ({ index }: { index: number }) => {
                 className="object-cover"
                 data-ai-hint="user content"
             />
-            {viewCount > 0 && (
+            {viewCount > 0 ? (
                 <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
                     <Eye className="h-3 w-3" />
                     <span>{formatViews(viewCount)}</span>
                 </div>
+            ) : (
+                <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/30 text-white text-xs px-1 rounded">
+                    <Skeleton className="h-3 w-8" />
+                </div>
             )}
         </div>
     );
-};
+});
+
+
+const SettingsContent = dynamic(() => Promise.resolve(({ settings, handleToggle, handleSelectChange, handleAction, handleLogout, router }: any) => (
+    <ScrollArea className="flex-1 -mx-6 px-6">
+        <div className="space-y-8 pb-8">
+            <SettingsSection title="Account">
+                <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => router.push('/profile')} />
+                <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password", "Functionality to change password will be added soon.")} />
+            </SettingsSection>
+
+            <SettingsSection title="Privacy & Security">
+                <SettingsItem icon={Shield} title="Private Account" action={<ToggleAction id="privateAccount" checked={settings.privateAccount} onCheckedChange={handleToggle('privateAccount')}/>} />
+                <SettingsItem icon={UserX} title="Blocked Users" subtitle="2 users" action={<NavAction />} onClick={() => handleAction("Blocked Users")} />
+                <SettingsItem icon={Lock} title="Two-Factor Authentication" subtitle={settings.twoFactorAuth ? "On" : "Off"} action={<ToggleAction id="twoFactorAuth" checked={settings.twoFactorAuth} onCheckedChange={handleToggle('twoFactorAuth')} />} />
+            </SettingsSection>
+            
+            <SettingsSection title="Content & Display">
+                <SettingsItem icon={Palette} title="App Theme" action={
+                    <Select value={settings.appTheme} onValueChange={handleSelectChange('appTheme')}>
+                        <SelectTrigger className="w-[120px] bg-background">
+                        <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                        <SelectItem value="dark">Dark</SelectItem>
+                        <SelectItem value="light">Light</SelectItem>
+                        <SelectItem value="premium">Premium</SelectItem>
+                        </SelectContent>
+                    </Select>
+                }/>
+                <SettingsItem icon={VolumeX} title="Mute All Sounds" action={<ToggleAction id="muteSounds" checked={settings.muteSounds} onCheckedChange={handleToggle('muteSounds')}/>} />
+                    <SettingsItem icon={Languages} title="Language" action={
+                        <Select value={settings.language} onValueChange={handleSelectChange('language')}>
+                        <SelectTrigger className="w-[120px] bg-background">
+                        <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="es">Español</SelectItem>
+                        <SelectItem value="hi">हिन्दी</SelectItem>
+                        </SelectContent>
+                    </Select>
+                }/>
+                <SettingsItem icon={Bot} title="AI Content Suggestions" action={<ToggleAction id="aiSuggestions" checked={settings.aiSuggestions} onCheckedChange={handleToggle('aiSuggestions')} />} />
+            </SettingsSection>
+
+
+            <SettingsSection title="Notifications">
+                <SettingsItem icon={Bell} title="Push Notifications" action={<ToggleAction id="pushNotifications" checked={settings.pushNotifications} onCheckedChange={handleToggle('pushNotifications')} />} />
+                <SettingsItem icon={BadgePercent} title="Ad Notifications" action={<ToggleAction id="adNotifications" checked={settings.adNotifications} onCheckedChange={handleToggle('adNotifications')} />} />
+            </SettingsSection>
+            
+            <SettingsSection title="Wallet & Ads">
+                    <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} onClick={() => router.push('/profile')}/>
+                    <SettingsItem icon={BadgePercent} title="Ad Preferences" action={<NavAction />} onClick={() => handleAction("Ad Preferences")} />
+            </SettingsSection>
+
+            <SettingsSection title="History & Data">
+                <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Watch History Cleared", "Your watch history has been cleared.")}>Clear</Button>} />
+                <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Search History Cleared", "Your search history has been cleared.")}>Clear</Button>} />
+                <SettingsItem icon={Trash2} title="Clear Cache" subtitle="128 MB" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Cache Cleared", "128 MB of data was freed.")}>Clear</Button>} />
+            </SettingsSection>
+            
+            <SettingsSection title="Connections">
+                <SettingsItem icon={Link2} title="Linked Accounts" action={<NavAction />} onClick={() => handleAction("Linked Accounts")} />
+            </SettingsSection>
+
+            <SettingsSection title="Support & About">
+                <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => handleAction("Report a Problem")} />
+                <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => handleAction("Help Center / FAQ")} />
+                <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => handleAction("Terms & Privacy Policy")} />
+            </SettingsSection>
+            
+            <SettingsSection title="Advanced">
+                <SettingsItem icon={FlaskConical} title="Experimental Features" subtitle="Access beta features" action={<ToggleAction id="experimentalFeatures" checked={settings.experimentalFeatures} onCheckedChange={handleToggle('experimentalFeatures')} />} />
+            </SettingsSection>
+
+            <div className="text-center pt-4">
+                <Button variant="destructive" className="w-full max-w-sm shadow-glow" onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4"/>
+                    Log Out
+                </Button>
+            </div>
+
+            <div className="text-center text-xs text-muted-foreground pt-4">
+                <p>Yappzy v1.0.0</p>
+                <p>Made with ❤️ in India</p>
+            </div>
+        </div>
+    </ScrollArea>
+)), {
+    loading: () => <div className="flex-1 flex items-center justify-center"><p>Loading settings...</p></div>
+});
 
 
 export default function ProfilePage() {
@@ -143,92 +240,14 @@ export default function ProfilePage() {
                 <SheetHeader>
                     <SheetTitle className="font-headline text-2xl">Settings</SheetTitle>
                 </SheetHeader>
-                <ScrollArea className="flex-1 -mx-6 px-6">
-                    <div className="space-y-8 pb-8">
-                       <SettingsSection title="Account">
-                        <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => router.push('/profile')} />
-                        <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password", "Functionality to change password will be added soon.")} />
-                      </SettingsSection>
-
-                      <SettingsSection title="Privacy & Security">
-                        <SettingsItem icon={Shield} title="Private Account" action={<ToggleAction id="privateAccount" checked={settings.privateAccount} onCheckedChange={handleToggle('privateAccount')}/>} />
-                        <SettingsItem icon={UserX} title="Blocked Users" subtitle="2 users" action={<NavAction />} onClick={() => handleAction("Blocked Users")} />
-                        <SettingsItem icon={Lock} title="Two-Factor Authentication" subtitle={settings.twoFactorAuth ? "On" : "Off"} action={<ToggleAction id="twoFactorAuth" checked={settings.twoFactorAuth} onCheckedChange={handleToggle('twoFactorAuth')} />} />
-                      </SettingsSection>
-                      
-                      <SettingsSection title="Content & Display">
-                        <SettingsItem icon={Palette} title="App Theme" action={
-                            <Select value={settings.appTheme} onValueChange={handleSelectChange('appTheme')}>
-                              <SelectTrigger className="w-[120px] bg-background">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="dark">Dark</SelectItem>
-                                <SelectItem value="light">Light</SelectItem>
-                                <SelectItem value="premium">Premium</SelectItem>
-                              </SelectContent>
-                            </Select>
-                        }/>
-                        <SettingsItem icon={VolumeX} title="Mute All Sounds" action={<ToggleAction id="muteSounds" checked={settings.muteSounds} onCheckedChange={handleToggle('muteSounds')}/>} />
-                         <SettingsItem icon={Languages} title="Language" action={
-                             <Select value={settings.language} onValueChange={handleSelectChange('language')}>
-                              <SelectTrigger className="w-[120px] bg-background">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="en">English</SelectItem>
-                                <SelectItem value="es">Español</SelectItem>
-                                <SelectItem value="hi">हिन्दी</SelectItem>
-                              </SelectContent>
-                            </Select>
-                        }/>
-                        <SettingsItem icon={Bot} title="AI Content Suggestions" action={<ToggleAction id="aiSuggestions" checked={settings.aiSuggestions} onCheckedChange={handleToggle('aiSuggestions')} />} />
-                      </SettingsSection>
-
-
-                      <SettingsSection title="Notifications">
-                        <SettingsItem icon={Bell} title="Push Notifications" action={<ToggleAction id="pushNotifications" checked={settings.pushNotifications} onCheckedChange={handleToggle('pushNotifications')} />} />
-                        <SettingsItem icon={BadgePercent} title="Ad Notifications" action={<ToggleAction id="adNotifications" checked={settings.adNotifications} onCheckedChange={handleToggle('adNotifications')} />} />
-                      </SettingsSection>
-                      
-                      <SettingsSection title="Wallet & Ads">
-                         <SettingsItem icon={Wallet} title="Earnings & Wallet" subtitle="$1,234.56" action={<NavAction />} onClick={() => router.push('/profile')}/>
-                         <SettingsItem icon={BadgePercent} title="Ad Preferences" action={<NavAction />} onClick={() => handleAction("Ad Preferences")} />
-                      </SettingsSection>
-
-                      <SettingsSection title="History & Data">
-                        <SettingsItem icon={History} title="Watch History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Watch History Cleared", "Your watch history has been cleared.")}>Clear</Button>} />
-                        <SettingsItem icon={Search} title="Search History" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Search History Cleared", "Your search history has been cleared.")}>Clear</Button>} />
-                        <SettingsItem icon={Trash2} title="Clear Cache" subtitle="128 MB" action={<Button variant="secondary" size="sm" onClick={() => handleAction("Cache Cleared", "128 MB of data was freed.")}>Clear</Button>} />
-                      </SettingsSection>
-                      
-                       <SettingsSection title="Connections">
-                        <SettingsItem icon={Link2} title="Linked Accounts" action={<NavAction />} onClick={() => handleAction("Linked Accounts")} />
-                      </SettingsSection>
-
-                      <SettingsSection title="Support & About">
-                        <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => handleAction("Report a Problem")} />
-                        <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => handleAction("Help Center / FAQ")} />
-                        <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => handleAction("Terms & Privacy Policy")} />
-                      </SettingsSection>
-                      
-                       <SettingsSection title="Advanced">
-                        <SettingsItem icon={FlaskConical} title="Experimental Features" subtitle="Access beta features" action={<ToggleAction id="experimentalFeatures" checked={settings.experimentalFeatures} onCheckedChange={handleToggle('experimentalFeatures')} />} />
-                      </SettingsSection>
-
-                       <div className="text-center pt-4">
-                        <Button variant="destructive" className="w-full max-w-sm shadow-glow" onClick={handleLogout}>
-                            <LogOut className="mr-2 h-4 w-4"/>
-                            Log Out
-                        </Button>
-                      </div>
-
-                       <div className="text-center text-xs text-muted-foreground pt-4">
-                          <p>Yappzy v1.0.0</p>
-                          <p>Made with ❤️ in India</p>
-                        </div>
-                    </div>
-                </ScrollArea>
+                <SettingsContent 
+                    settings={settings} 
+                    handleToggle={handleToggle} 
+                    handleSelectChange={handleSelectChange} 
+                    handleAction={handleAction} 
+                    handleLogout={handleLogout} 
+                    router={router} 
+                />
             </SheetContent>
           </Sheet>
         </div>
@@ -315,4 +334,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-

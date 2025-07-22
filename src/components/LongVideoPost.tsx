@@ -12,12 +12,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import React from "react";
 
 interface LongVideoPostProps {
   video: Video;
 }
 
-export function LongVideoPost({ video }: LongVideoPostProps) {
+export const LongVideoPost = React.memo(function LongVideoPost({ video }: LongVideoPostProps) {
 
   const formatCount = (count: number) => {
     if (count >= 1000000) return `${(count / 1000000).toFixed(1)}M`;
@@ -41,6 +42,7 @@ export function LongVideoPost({ video }: LongVideoPostProps) {
             fill
             className="object-cover"
             data-ai-hint="video content"
+            priority
           />
         </Link>
         <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-md">
@@ -73,4 +75,4 @@ export function LongVideoPost({ video }: LongVideoPostProps) {
       </div>
     </div>
   );
-}
+});
