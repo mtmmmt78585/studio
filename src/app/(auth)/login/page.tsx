@@ -1,4 +1,3 @@
-
 // src/app/(auth)/login/page.tsx
 'use client';
 
@@ -194,7 +193,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="text-center text-muted-foreground text-xs">
-                             <p>Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
+                             <p className="text-primary">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
                         </div>
                     </div>
                 </ScrollArea>
@@ -235,7 +234,7 @@ export default function LoginPage() {
         <div className="flex items-start space-x-3 mt-6 text-xs text-muted-foreground">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} className="mt-0.5" />
             <label htmlFor="terms">
-                I proudly accept all <span className="text-secondary">terms of Yappzy</span> — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the <span className="text-secondary">IT Act 2000</span> & <span className="text-secondary">Digital Personal Data Protection Act 2023</span>. Jai Hind!
+                I proudly accept all <span className="text-primary">terms of Yappzy</span> — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the <span className="text-primary">IT Act 2000</span> & <span className="text-primary">Digital Personal Data Protection Act 2023</span>. Jai Hind!
             </label>
         </div>
 
