@@ -15,6 +15,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { effects } from "@/lib/data";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
@@ -99,12 +100,13 @@ export default function UploadPage() {
 
 
   if (videoFile) {
+    const effectClass = selectedEffect ? `filter-${selectedEffect}` : "";
     return (
         <div className="h-full flex flex-col items-center justify-center p-4 bg-card text-white">
             <div className="w-full max-w-md space-y-4">
                 <Card>
                     <CardContent className="p-2">
-                        <video key={selectedEffect} src={URL.createObjectURL(videoFile)} controls className="w-full rounded-md aspect-video" />
+                        <video key={selectedEffect} src={URL.createObjectURL(videoFile)} controls className={cn("w-full rounded-md aspect-video", effectClass)} />
                     </CardContent>
                 </Card>
                  <div className="flex justify-between items-center">
@@ -134,7 +136,7 @@ export default function UploadPage() {
                         <SheetHeader>
                           <SheetTitle className="text-primary font-headline">Premium Effects</SheetTitle>
                         </SheetHeader>
-                        <div className="grid grid-cols-4 gap-4 py-4">
+                        <div className="grid grid-cols-4 gap-4 py-4 h-[50vh] overflow-y-auto">
                           {effects.map((effect) => (
                             <div key={effect.id} className="flex flex-col items-center gap-2 cursor-pointer" onClick={() => setSelectedEffect(effect.id)}>
                               <div className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 ${selectedEffect === effect.id ? 'border-primary' : 'border-transparent'}`}>
@@ -203,7 +205,7 @@ export default function UploadPage() {
                     <SheetHeader>
                       <SheetTitle className="text-primary font-headline">Premium Effects</SheetTitle>
                     </SheetHeader>
-                    <div className="grid grid-cols-4 gap-4 py-4">
+                    <div className="grid grid-cols-4 gap-4 py-4 h-[50vh] overflow-y-auto">
                       {effects.map((effect) => (
                         <div key={effect.id} className="flex flex-col items-center gap-2">
                           <div className="relative w-16 h-16 rounded-lg overflow-hidden border-2 border-transparent">
@@ -221,5 +223,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    

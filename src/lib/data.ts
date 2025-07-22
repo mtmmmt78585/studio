@@ -199,14 +199,13 @@ const effectNames = [
     "Anaglyph", "3D", "Stereo", "Glitchwave", "Vaporwave", "Synthwave", "Retrowave", "Outrun",
     "Ghosting", "Motion Blur", "Zoom Blur", "Radial Blur", "Soft Focus", "Sharpen", "Clarity", "HDR",
     "Golden Hour", "Twilight", "Midnight", "Daydream", "Fantasy", "Mystic", "Enchanted", "Surreal"
-];
+].slice(0, 100); // Using 100 for now to keep it manageable, can be expanded.
 
+const allEffects = Array.from({ length: 10 }, () => effectNames).flat();
 
-export const effects: Effect[] = effectNames.map((name, index) => ({
+export const effects: Effect[] = allEffects.map((name, index) => ({
     id: name.toLowerCase().replace(/\s/g, '_'),
     name: name,
     thumbnailUrl: `https://placehold.co/100x100.png?text=${name.charAt(0)}`,
     isPremium: true,
 }));
-
-    
