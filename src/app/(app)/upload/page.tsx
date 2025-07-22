@@ -23,7 +23,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(isUploading);
+  const [isUploading, setIsUploading] = useState(false);
   const [description, setDescription] = useState("");
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
@@ -112,37 +112,26 @@ export default function UploadPage() {
   const [isMirrored, setIsMirrored] = useState(true);
 
   useEffect(() => {
-    let stream: MediaStream;
     const getCameraPermission = async () => {
       try {
-        if (!navigator.mediaDevices?.getUserMedia) {
-           throw new Error("Camera not supported");
-        }
-        stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({video: true});
         setHasCameraPermission(true);
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        if (error instanceof Error && error.name === 'NotAllowedError') {
-            toast({
-              variant: 'destructive',
-              title: 'Camera Access Denied',
-              description: 'Please enable camera permissions in your browser settings to use this feature.',
-            });
-        }
+        toast({
+          variant: 'destructive',
+          title: 'Camera Access Denied',
+          description: 'Please enable camera permissions in your browser settings to use this app.',
+        });
       }
     };
 
     getCameraPermission();
-
-    return () => {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    };
   }, [toast]);
   
   const toggleMirror = () => {
@@ -310,22 +299,17 @@ export default function UploadPage() {
                         <FlipHorizontal />
                     </Button>
                 </div>
-                {hasCameraPermission === null && (
-                     <div className="absolute inset-0 bg-black/80 flex items-center justify-center">
-                         <Skeleton className="w-full h-full" />
-                     </div>
-                 )}
-                {hasCameraPermission === false && (
-                    <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-4">
-                        <Alert variant="destructive">
-                            <Camera className="h-4 w-4" />
-                            <AlertTitle>Camera Access Required</AlertTitle>
-                            <AlertDescription>
-                                Please allow camera access to record video. You can still upload from your gallery.
-                            </AlertDescription>
-                        </Alert>
-                    </div>
-                )}
+                <video ref={videoRef} className="w-full aspect-video rounded-md" autoPlay muted />
+
+                { !(hasCameraPermission) && (
+                    <Alert variant="destructive">
+                              <AlertTitle>Camera Access Required</AlertTitle>
+                              <AlertDescription>
+                                Please allow camera access to use this feature.
+                              </AlertDescription>
+                      </Alert>
+                )
+                }
             </Card>
 
              <div className="flex items-center gap-4">
@@ -368,5 +352,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
