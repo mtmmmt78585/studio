@@ -21,6 +21,7 @@ const WeiboIcon = (props: React.SVGProps<SVGSVGElement>) => (
 
 export default function LoginPage() {
   const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function LoginPage() {
     setIsLoading(true);
     // Simulate API login
     setTimeout(() => {
-      console.log('Logging in with:', { phone });
+      console.log('Logging in with:', { phone, password });
       router.push('/feed');
     }, 1500);
   };
@@ -52,7 +53,7 @@ export default function LoginPage() {
       <main className="flex-1 flex flex-col p-8">
         <div className="flex items-center border-b border-muted pb-2">
             <div className="flex items-center gap-2 pr-4">
-                <KeyRound className="h-5 w-5 text-muted-foreground" />
+                <Smartphone className="h-5 w-5 text-muted-foreground" />
                 <span className="font-semibold">+91</span>
             </div>
             <Separator orientation="vertical" className="h-6 bg-primary" />
@@ -66,6 +67,21 @@ export default function LoginPage() {
                 className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2"
             />
         </div>
+        <div className="flex items-center border-b border-muted pb-2 mt-4">
+            <div className="flex items-center gap-2 pr-4">
+                <KeyRound className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <Separator orientation="vertical" className="h-6 bg-primary" />
+            <Input
+                id="password"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-4"
+            />
+        </div>
 
         <div className="flex items-start space-x-3 mt-6 text-xs text-muted-foreground">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} className="mt-0.5" />
@@ -77,21 +93,22 @@ export default function LoginPage() {
         <Button
             onClick={handleLogin}
             className="w-full mt-8 rounded-full h-12 text-base font-semibold"
-            disabled={isLoading || !agreed || !phone}
+            disabled={isLoading || !agreed || !phone || !password}
         >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Authentication and login
         </Button>
 
+        <div className="text-center mt-4">
+          <Link href="/forgot-password" className="text-sm text-primary hover:underline">
+            Forgot Password?
+          </Link>
+        </div>
+
         <div className="mt-12 text-center">
             <p className="text-sm text-muted-foreground">Other login methods</p>
             <div className="flex justify-center items-center gap-6 mt-4">
-                 <Button variant="outline" className="rounded-full h-11 w-auto px-6" asChild>
-                    <Link href="/forgot-password">
-                        <KeyRound className="mr-2 h-4 w-4" /> Password
-                    </Link>
-                </Button>
-                <Button variant="outline" size="icon" className="rounded-full h-11 w-11">
+                 <Button variant="outline" size="icon" className="rounded-full h-11 w-11">
                     <Smartphone className="h-5 w-5" />
                 </Button>
                 <Button variant="outline" size="icon" className="rounded-full h-11 w-11">
