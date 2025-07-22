@@ -36,7 +36,9 @@ const sampleComments: Comment[] = [
     { id: 'comment4', user: users[5], text: 'I wish I was there!', timestamp: '15m ago' },
 ];
 
-const videoUrls: string[] = [];
+const videoUrls: string[] = [
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+];
 
 const audioNames = [
     "Original Audio", "Summer Vibes - Upbeat", "Lofi Chill - Relaxing", "80s Throwback - Energetic",

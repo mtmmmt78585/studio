@@ -25,7 +25,7 @@ export function BottomNav() {
           if (item.href === "/upload") {
             return (
                <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 text-xs -mt-2">
-                 <div className="bg-primary text-primary-foreground p-3 rounded-xl">
+                 <div className="bg-primary text-primary-foreground p-3 rounded-2xl">
                     <item.icon className="h-6 w-6" strokeWidth={2.5}/>
                  </div>
               </Link>
