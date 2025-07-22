@@ -52,6 +52,7 @@ export default function LoginPage() {
       <main className="flex-1 flex flex-col p-8">
         <div className="flex items-center border-b border-muted pb-2">
             <div className="flex items-center gap-2 pr-4">
+                <KeyRound className="h-5 w-5 text-muted-foreground" />
                 <span className="font-semibold">+91</span>
             </div>
             <Separator orientation="vertical" className="h-6 bg-primary" />
@@ -62,7 +63,7 @@ export default function LoginPage() {
                 value={phone}
                 onChange={e => setPhone(e.target.value)}
                 required
-                className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="border-0 text-lg flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 pl-2"
             />
         </div>
 
