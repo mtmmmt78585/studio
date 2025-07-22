@@ -162,7 +162,7 @@ export default function UploadPage() {
                 <Button className="w-20 h-20 rounded-full bg-primary shadow-glow flex items-center justify-center" disabled={!hasCameraPermission}>
                     <Video className="h-8 w-8 text-primary-foreground"/>
                 </Button>
-                 <Button variant="outline" className="flex-1 text-lg py-6" disabled={!hasCameramission}>
+                 <Button variant="outline" className="flex-1 text-lg py-6" disabled={!hasCameraPermission}>
                     <Settings2 className="mr-2 h-5 w-5"/> Effects
                 </Button>
             </div>
