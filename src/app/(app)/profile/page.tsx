@@ -91,7 +91,7 @@ const SettingsContent = dynamic(() => Promise.resolve(({ settings, handleToggle,
         <div className="space-y-8 pb-8">
             <SettingsSection title="Account">
                 <SettingsItem icon={User} title="Edit Profile" action={<NavAction />} onClick={() => router.push('/profile')} />
-                <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => handleAction("Change Password", "Functionality to change password will be added soon.")} />
+                <SettingsItem icon={Lock} title="Change Password" action={<NavAction />} onClick={() => router.push('/forgot-password')} />
             </SettingsSection>
 
             <SettingsSection title="Privacy & Security">

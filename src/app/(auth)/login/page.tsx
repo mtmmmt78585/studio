@@ -85,8 +85,10 @@ export default function LoginPage() {
         <div className="mt-12 text-center">
             <p className="text-sm text-muted-foreground">Other login methods</p>
             <div className="flex justify-center items-center gap-6 mt-4">
-                 <Button variant="outline" className="rounded-full h-11 w-auto px-6">
-                    <KeyRound className="mr-2 h-4 w-4" /> Password
+                 <Button variant="outline" className="rounded-full h-11 w-auto px-6" asChild>
+                    <Link href="/forgot-password">
+                        <KeyRound className="mr-2 h-4 w-4" /> Password
+                    </Link>
                 </Button>
                 <Button variant="outline" size="icon" className="rounded-full h-11 w-11">
                     <Smartphone className="h-5 w-5" />
