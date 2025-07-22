@@ -139,7 +139,7 @@ export default function LoginPage() {
                     <div className="space-y-6 pb-8">
                          <div className="text-center bg-card p-4 rounded-lg">
                             <p className="text-muted-foreground">For any assistance, contact our Support Team:</p>
-                            <a href="mailto:support@yappzy.com" className="font-semibold text-destructive hover:underline">
+                            <a href="mailto:support@yappzy.com" className="font-semibold text-accent hover:underline">
                                 support@yappzy.com
                             </a>
                         </div>
@@ -169,9 +169,9 @@ export default function LoginPage() {
                                 </ul>
                                 <p>Once qualified:</p>
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>You’ll become a <span className="text-destructive">Monetized Creator</span>.</li>
-                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-destructive">wallet</span>.</li>
-                                    <li>You’ll unlock exclusive tools, analytics, and a <span className="text-destructive">verified badge</span>.</li>
+                                    <li>You’ll become a <span className="text-accent">Monetized Creator</span>.</li>
+                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your <span className="text-accent">wallet</span>.</li>
+                                    <li>You’ll unlock exclusive tools, analytics, and a <span className="text-accent">verified badge</span>.</li>
                                  </ul>
                             </HelpInfoItem>
 
@@ -190,9 +190,9 @@ export default function LoginPage() {
                              <HelpInfoItem icon={HelpCircle} title="Need Help?">
                                 <p>If you face any issue:</p>
                                  <ul className="list-disc list-inside space-y-1">
-                                    <li>Visit <span className="text-destructive">Settings > Help</span></li>
-                                    <li>Contact our <span className="text-destructive">Support Team</span></li>
-                                    <li>Browse the <span className="text-destructive">in-app FAQs</span> for quick answers</li>
+                                    <li>Visit <span className="text-accent">Settings > Help</span></li>
+                                    <li>Contact our <span className="text-accent">Support Team</span></li>
+                                    <li>Browse the <span className="text-accent">in-app FAQs</span> for quick answers</li>
                                  </ul>
                             </HelpInfoItem>
                         </div>
@@ -202,7 +202,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="text-center text-muted-foreground text-xs">
-                             <p className="text-destructive">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
+                             <p className="text-accent">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
                         </div>
                     </div>
                 </ScrollArea>
