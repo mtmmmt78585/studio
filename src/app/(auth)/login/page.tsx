@@ -152,7 +152,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="space-y-4">
-                            <HelpInfoItem icon={Rocket} title="What You Can Do on Yappzy">
+                            <HelpInfoItem icon={Rocket} title="What You Can Do on Yappzy" iconClassName="text-foreground">
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>Upload short or long videos — both are supported!</li>
                                     <li>Discover content through a smart, mood-based feed powered by AI.</li>
@@ -162,7 +162,7 @@ export default function LoginPage() {
                                 </ul>
                             </HelpInfoItem>
 
-                            <HelpInfoItem icon={IndianRupee} title="Monetization Criteria">
+                            <HelpInfoItem icon={IndianRupee} title="Monetization Criteria" iconClassName="text-green-500">
                                 <p>Yappzy supports and pays real creators. Here's how to qualify:</p>
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>10,000 followers</li>
@@ -188,7 +188,7 @@ export default function LoginPage() {
                                  <p>Yappzy is more than an app — it’s part of the Digital India mission. We believe in empowering local talent, building India-first technology, and giving every voice a stage.</p>
                             </HelpInfoItem>
                             
-                             <HelpInfoItem icon={HelpCircle} title="Need Help?">
+                             <HelpInfoItem icon={HelpCircle} title="Need Help?" iconClassName="text-foreground">
                                 <p>If you face any issue:</p>
                                  <ul className="list-disc list-inside space-y-1">
                                     <li>Visit <span className="text-accent">Settings > Help</span></li>
@@ -203,7 +203,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="text-center text-muted-foreground text-xs">
-                             <p className="text-accent">Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
+                             <p><span className="text-accent">Let’s build the future of Indian entertainment, together. Jai Hind</span> 🇮🇳</p>
                         </div>
                     </div>
                 </ScrollArea>
@@ -244,7 +244,7 @@ export default function LoginPage() {
         <div className="flex items-start space-x-3 mt-6 text-xs text-muted-foreground">
             <Checkbox id="terms" checked={agreed} onCheckedChange={(checked) => setAgreed(checked as boolean)} className="mt-0.5" />
             <label htmlFor="terms">
-                I proudly accept all <span className="text-accent">terms of Yappzy</span> — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the <span className="text-accent">IT Act 2000</span> & <span className="text-accent">Digital Personal Data Protection Act 2023</span>. Jai Hind!
+                I proudly accept all <span className="text-accent">terms of Yappzy</span> — a Made in India app, committed to user safety, child protection, and data privacy under Indian laws including the <span className="text-accent">IT Act 2000</span> &amp; <span className="text-accent">Digital Personal Data Protection Act 2023</span>. Jai Hind!
             </label>
         </div>
 
