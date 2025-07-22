@@ -3,7 +3,7 @@
 import { mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, MoreVertical, Grid3x3, Clapperboard, DollarSign } from "lucide-react";
+import { CheckCircle, Grid3x3, Clapperboard, DollarSign, Settings } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -52,7 +52,7 @@ export default function ProfilePage() {
         <div className="flex gap-2">
             <Button className="flex-1">Edit Profile</Button>
             <Button variant="secondary" className="flex-1">Share Profile</Button>
-            <Button variant="secondary" size="icon"><MoreVertical className="h-4 w-4"/></Button>
+            <Button variant="secondary" size="icon"><Settings className="h-4 w-4"/></Button>
         </div>
       </div>
         <Tabs defaultValue="posts" className="w-full">
