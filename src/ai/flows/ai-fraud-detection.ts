@@ -1,4 +1,3 @@
-// src/ai/flows/ai-fraud-detection.ts
 'use server';
 /**
  * @fileOverview AI-powered fraud detection flow to identify and block fake views for fair monetization.

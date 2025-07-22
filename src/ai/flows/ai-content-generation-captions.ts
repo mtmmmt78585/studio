@@ -1,4 +1,4 @@
-// use server'
+'use server';
 
 /**
  * @fileOverview AI-powered content generation for video captions and tags.
