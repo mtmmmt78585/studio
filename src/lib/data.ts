@@ -13,7 +13,7 @@ export type User = {
 };
 
 export type Comment = {
-  id: string;
+  id:string;
   user: User;
   text: string;
   timestamp: string;
@@ -30,6 +30,9 @@ export type Video = {
   comments: Comment[];
   shares: number;
   category: 'funny' | 'romance' | 'love' | 'sad' | 'cartoon' | 'tech';
+  duration: number; // Duration in seconds
+  viewCount: number;
+  uploadTimestamp: string;
 };
 
 export type Story = {

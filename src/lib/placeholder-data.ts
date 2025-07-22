@@ -20,6 +20,8 @@ export const users: User[] = [
   { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/10B981/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, uploads: 15, isVerified: true },
   { id: 'user5', username: 'TravelJunkie', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TJ', followers: 450000, following: 300, totalViews: 45_000_000, uploads: 200, isVerified: true },
   { id: 'user6', username: 'FoodLover', avatar: 'https://placehold.co/100x100/EF4444/FFFFFF.png?text=FL', followers: 75000, following: 500, totalViews: 8_000_000, uploads: 75, isVerified: false },
+  { id: 'user7', username: 'Junoverse', avatar: 'https://placehold.co/100x100/8B5CF6/FFFFFF.png?text=JU', followers: 14000, following: 10, totalViews: 250_000, uploads: 5, isVerified: true },
+  { id: 'user8', username: 'Shivanshu Agrawal', avatar: 'https://placehold.co/100x100/F59E0B/FFFFFF.png?text=SA', followers: 689000, following: 25, totalViews: 7_000_000, uploads: 30, isVerified: true },
 ];
 
 
@@ -38,7 +40,9 @@ const sampleComments: Comment[] = [
 ];
 
 const videoUrls: string[] = [
-    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4"
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
 ];
 
 const audioNames = [
@@ -49,43 +53,57 @@ const audioNames = [
 const categories: Video['category'][] = ['funny', 'romance', 'love', 'sad', 'cartoon', 'tech'];
 
 const captionTemplates = {
-    funny: [
-        "This is peak comedy 😂", "I can't stop laughing!", "Wait for the end... 🤣",
-        "Funny because it's true.", "My sense of humor is broken."
-    ],
-    romance: [
-        "Couple goals right here. ❤️", "This is what love looks like.", "My heart just melted.",
-        "So sweet and romantic.", "Tag your special someone."
-    ],
-    love: [
-        "All you need is love.", "Spreading a little bit of love today.", "Love this moment.",
-        "Love wins, always.", "This is pure love."
-    ],
-    sad: [
-        "Right in the feels... 😢", "It's okay to not be okay.", "This is heartbreaking.",
-        "Sending virtual hugs.", "Sometimes, you just need a good cry."
-    ],
-    cartoon: [
-        "Childhood memories unlocked!", "The best cartoons ever.", "Animation magic.",
-        "Just a little throwback.", "Cartoons are not just for kids."
-    ],
-    tech: [
-        "The future is now! 🤖", "Latest tech unboxing.", "This gadget is a game-changer.",
-        "Coding my life away... 💻", "Tech tips you need to know."
-    ],
+    funny: [ "This is peak comedy 😂", "I can't stop laughing!", "Wait for the end... 🤣", "Funny because it's true.", "My sense of humor is broken." ],
+    romance: [ "Couple goals right here. ❤️", "This is what love looks like.", "My heart just melted.", "So sweet and romantic.", "Tag your special someone." ],
+    love: [ "All you need is love.", "Spreading a little bit of love today.", "Love this moment.", "Love wins, always.", "This is pure love." ],
+    sad: [ "Right in the feels... 😢", "It's okay to not be okay.", "This is heartbreaking.", "Sending virtual hugs.", "Sometimes, you just need a good cry." ],
+    cartoon: [ "Childhood memories unlocked!", "The best cartoons ever.", "Animation magic.", "Just a little throwback.", "Cartoons are not just for kids." ],
+    tech: [ "The future is now! 🤖", "Latest tech unboxing.", "This gadget is a game-changer.", "Coding my life away... 💻", "Tech tips you need to know." ],
 };
 
 
 export const generateVideos = (count: number): Video[] => {
     if (videoUrls.length === 0) return [];
     
-    const generatedVideos: Video[] = [];
+    const generatedVideos: Video[] = [
+         {
+            id: `video_veo_3`,
+            user: users[7],
+            videoUrl: videoUrls[1],
+            thumbnailUrl: `https://placehold.co/600x400.png`,
+            caption: "Google VEO 3 NEW UPDATE Changed EVERYTHING",
+            audioName: "Original Audio",
+            likes: Math.floor(Math.random() * 250000),
+            comments: [],
+            shares: Math.floor(Math.random() * 2500),
+            category: 'tech',
+            duration: 1041, // 17:21
+            viewCount: 14000,
+            uploadTimestamp: "4 days ago",
+        },
+        {
+            id: `video_indian_temple`,
+            user: users[8],
+            videoUrl: videoUrls[2],
+            thumbnailUrl: `https://placehold.co/600x400.png`,
+            caption: "The Indian Temple That Scientists Can't Explain",
+            audioName: "Mystical India - Sounds",
+            likes: Math.floor(Math.random() * 250000),
+            comments: [],
+            shares: Math.floor(Math.random() * 2500),
+            category: 'tech',
+            duration: 842, // 14:02
+            viewCount: 689000,
+            uploadTimestamp: "2 weeks ago",
+        }
+    ];
     
     for (let i = 0; i < count; i++) {
         const category = categories[i % categories.length];
         const user = users[i % users.length];
         const caption = captionTemplates[category][Math.floor(Math.random() * captionTemplates[category].length)];
         const audioName = audioNames[Math.floor(Math.random() * audioNames.length)];
+        const duration = Math.random() > 0.3 ? Math.floor(Math.random() * 840) + 120 : Math.floor(Math.random() * 55) + 5; // 70% long, 30% short
         
         const videoUrl = videoUrls[i % videoUrls.length];
 
@@ -95,13 +113,16 @@ export const generateVideos = (count: number): Video[] => {
             id: `video_${Date.now()}_${i}`,
             user,
             videoUrl,
-            thumbnailUrl: `https://placehold.co/400x700.png?text=Vid${i+1}`,
+            thumbnailUrl: `https://placehold.co/600x400.png`,
             caption,
             audioName,
             likes: Math.floor(Math.random() * 250000),
             comments,
             shares: Math.floor(Math.random() * 2500),
             category,
+            duration,
+            viewCount: Math.floor(Math.random() * 1000000),
+            uploadTimestamp: `${Math.floor(Math.random() * 10) + 1} days ago`
         });
     }
     return generatedVideos;

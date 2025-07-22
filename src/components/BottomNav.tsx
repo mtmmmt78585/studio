@@ -7,7 +7,7 @@ import { Home, Search, PlusSquare, User, Bell, MessageSquare } from "lucide-reac
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/feed", icon: Home, label: "Home" },
+  { href: "/feed", icon: Home, label: "Feed" },
   { href: "/explore", icon: Search, label: "Explore" },
   { href: "/upload", icon: PlusSquare, label: "Upload" },
   { href: "/dm", icon: MessageSquare, label: "Messages" },
@@ -25,7 +25,7 @@ export function BottomNav() {
           if (item.href === "/upload") {
             return (
                <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 text-xs -mt-2">
-                 <div className="bg-primary text-primary-foreground p-3 rounded-2xl">
+                 <div className="bg-primary text-primary-foreground p-3 rounded-full">
                     <item.icon className="h-6 w-6" strokeWidth={2.5}/>
                  </div>
               </Link>
