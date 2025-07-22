@@ -2,7 +2,7 @@
 "use client";
 
 import type { Video, Comment } from "@/lib/data";
-import { Heart, MessageCircle, Send, MoreVertical, Music, User, Flag, ArrowRight, Link as LinkIcon, Share2, PlusCircle, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, Send, MoreVertical, Music, User, Flag, ArrowRight, Link as LinkIcon, Share2, PlusCircle, Trash2, Bookmark } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -15,6 +15,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { chats, mainUser } from "@/lib/data";
@@ -70,6 +71,13 @@ export function VideoPost({ video }: VideoPostProps) {
     toast({
         title: "Report Submitted",
         description: `Thanks for helping keep Pixgram safe. We'll review this video.`,
+    })
+  }
+  
+  const handleSaveVideo = () => {
+    toast({
+        title: "Video Saved",
+        description: `You can find this video in your saved items.`
     })
   }
 
@@ -251,15 +259,23 @@ export function VideoPost({ video }: VideoPostProps) {
                     </div>
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-background/80 backdrop-blur-sm border-primary/20 text-white">
+            <DropdownMenuContent className="bg-background/80 backdrop-blur-sm border-primary/20 text-white w-48">
+                <DropdownMenuItem onClick={handleSaveVideo} className="cursor-pointer">
+                    <Bookmark className="mr-2 h-4 w-4" />
+                    <span>Save Video</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-primary/20"/>
                 <DropdownMenuItem asChild>
-                    <Link href={`/profile?id=${video.user.id}`} className="flex items-center gap-2 cursor-pointer">
-                        <User /> View Profile <ArrowRight className="ml-auto" />
+                    <Link href={`/profile?id=${video.user.id}`} className="flex items-center w-full cursor-pointer">
+                        <User className="mr-2 h-4 w-4" /> 
+                        <span>View Profile</span> 
+                        <ArrowRight className="ml-auto h-4 w-4" />
                     </Link>
                 </DropdownMenuItem>
-                <Separator className="bg-primary/20"/>
-                 <DropdownMenuItem className="text-red-400 focus:bg-red-500/20 focus:text-red-300" onClick={handleReport}>
-                    <Flag /> Report
+                <DropdownMenuSeparator className="bg-primary/20"/>
+                 <DropdownMenuItem className="text-red-400 focus:bg-red-500/20 focus:text-red-300 cursor-pointer" onClick={handleReport}>
+                    <Flag className="mr-2 h-4 w-4" /> 
+                    <span>Report</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
