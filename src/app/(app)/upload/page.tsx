@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Music, Settings2, Video, FileUp, X, Camera, Sparkles, SwitchCamera, FlipHorizontal } from "lucide-react";
+import { Music, Settings2, Video, FileUp, X, Camera, Sparkles, SwitchCamera, FlipHorizontal, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,15 +16,20 @@ import { effects } from "@/lib/data";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { generateCaptionsAndTags, type GenerateCaptionsAndTagsOutput } from "@/ai/flows/ai-content-generation-captions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UploadPage() {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [description, setDescription] = useState("");
   const [caption, setCaption] = useState("");
   const [tags, setTags] = useState("");
   const { toast } = useToast();
   const [selectedEffect, setSelectedEffect] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [aiSuggestions, setAiSuggestions] = useState<GenerateCaptionsAndTagsOutput | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -40,6 +45,25 @@ export default function UploadPage() {
       setVideoFile(file);
     }
   };
+
+  const handleGenerateSuggestions = async () => {
+      if (!description) return;
+      setIsGenerating(true);
+      setAiSuggestions(null);
+      try {
+          const result = await generateCaptionsAndTags({ videoDescription: description });
+          setAiSuggestions(result);
+      } catch (error) {
+          console.error("Error generating suggestions:", error);
+          toast({
+              variant: "destructive",
+              title: "AI Suggestion Failed",
+              description: "Could not generate suggestions. Please try again."
+          });
+      } finally {
+          setIsGenerating(false);
+      }
+  }
 
   const handleUpload = () => {
     if (!videoFile) return;
@@ -60,6 +84,8 @@ export default function UploadPage() {
           setVideoFile(null); // Reset after upload
           setCaption("");
           setTags("");
+          setDescription("");
+          setAiSuggestions(null);
           setSelectedEffect(null);
           return 100;
         }
@@ -170,9 +196,9 @@ export default function UploadPage() {
 
 
   if (videoFile) {
-    const effectClass = selectedEffect ? `filter-${selectedEffect.split('_')[0]}` : "";
+    const effectClass = selectedEffect ? `filter-${selectedEffect.split(/_[0-9]+/)[0]}` : "";
     return (
-        <div className="h-full flex flex-col items-center justify-center p-4 bg-card text-white">
+        <div className="h-full flex flex-col items-center justify-center p-4 bg-card text-white overflow-y-auto">
             <div className="w-full max-w-md space-y-4">
                 <Card>
                     <CardContent className="p-2">
@@ -186,6 +212,47 @@ export default function UploadPage() {
                  
                  {isUploading && <Progress value={uploadProgress} className="w-full" />}
                 
+                <div className="space-y-2">
+                    <Label htmlFor="description">Video Description</Label>
+                    <Textarea id="description" placeholder="Describe your video for the AI..." value={description} onChange={e => setDescription(e.target.value)} disabled={isUploading || isGenerating} />
+                    <Button onClick={handleGenerateSuggestions} disabled={isUploading || isGenerating || !description} className="w-full" size="sm">
+                        <Bot className="mr-2 h-4 w-4"/>
+                        {isGenerating ? "Generating..." : "Generate Captions & Tags"}
+                    </Button>
+                </div>
+                
+                {isGenerating && (
+                    <div className="space-y-2">
+                        <Skeleton className="h-6 w-1/3" />
+                        <Skeleton className="h-4 w-full" />
+                        <Skeleton className="h-4 w-2/3" />
+                         <Skeleton className="h-6 w-1/4 mt-2" />
+                        <Skeleton className="h-4 w-full" />
+                    </div>
+                )}
+
+                {aiSuggestions && (
+                    <div className="space-y-4 text-sm p-3 border rounded-md">
+                        <div>
+                            <h4 className="font-bold mb-2">Suggested Captions:</h4>
+                            <div className="space-y-2">
+                            {aiSuggestions.captions.map((c, i) => (
+                                <button key={i} onClick={() => setCaption(c)} className="w-full text-left p-2 bg-background rounded-md hover:bg-primary/20 text-xs">
+                                    {c}
+                                </button>
+                            ))}
+                            </div>
+                        </div>
+                        <div>
+                            <h4 className="font-bold mb-2">Suggested Tags:</h4>
+                             <button onClick={() => setTags(aiSuggestions.tags.join(', '))} className="w-full text-left p-2 bg-background rounded-md hover:bg-primary/20 text-xs">
+                                {aiSuggestions.tags.join(', ')}
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+
                 <div className="space-y-2">
                     <Label htmlFor="caption">Caption</Label>
                     <Textarea id="caption" placeholder="Write a catchy caption..." value={caption} onChange={e => setCaption(e.target.value)} disabled={isUploading} />
@@ -221,7 +288,7 @@ export default function UploadPage() {
                     </Sheet>
                 </div>
 
-                <Button onClick={handleUpload} disabled={isUploading} className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold">
+                <Button onClick={handleUpload} disabled={isUploading || !caption} className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-bold">
                     {isUploading ? `Uploading... ${uploadProgress}%` : "Post Now"}
                 </Button>
             </div>
