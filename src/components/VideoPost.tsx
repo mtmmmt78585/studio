@@ -5,7 +5,7 @@ import type { Video, Comment } from "@/lib/data";
 import { Heart, MessageCircle, Send, MoreVertical, Music, User, Flag, ArrowRight, Link as LinkIcon, Share2, PlusCircle, Trash2, Bookmark } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
@@ -31,6 +31,35 @@ export function VideoPost({ video }: VideoPostProps) {
   const [comments, setComments] = useState<Comment[]>(video.comments);
   const [newComment, setNewComment] = useState("");
   const { toast } = useToast();
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          videoElement.play().catch(error => {
+            console.error("Video play failed:", error);
+            // Autoplay was prevented.
+          });
+        } else {
+          videoElement.pause();
+          videoElement.currentTime = 0;
+        }
+      },
+      {
+        threshold: 0.5, // Play when at least 50% of the video is visible
+      }
+    );
+
+    observer.observe(videoElement);
+
+    return () => {
+      observer.unobserve(videoElement);
+    };
+  }, []);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -114,11 +143,12 @@ export function VideoPost({ video }: VideoPostProps) {
   return (
     <div className="relative h-full w-full bg-black">
       <video
+        ref={videoRef}
         className="h-full w-full object-cover"
         src={video.videoUrl}
         loop
-        autoPlay
         playsInline
+        muted // Start muted, unmute via custom controls or on interaction
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
       
