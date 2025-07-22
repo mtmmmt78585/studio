@@ -59,7 +59,6 @@ const videoUrls = [
     'https://videos.pexels.com/video-files/5752103/5752103-hd_1080_1920_30fps.mp4',
     'https://videos.pexels.com/video-files/8470412/8443314-hd_1080_1920_25fps.mp4',
     'https://videos.pexels.com/video-files/5699439/5699439-hd_1080_1920_25fps.mp4',
-    'https://videos.pexels.com/video-files/5699439/5699439-hd_1080_1920_25fps.mp4',
     'https://videos.pexels.com/video-files/4769280/4769280-hd_1080_1920_25fps.mp4',
     'https://videos.pexels.com/video-files/6438063/6438063-hd_1080_1920_25fps.mp4',
     'https://videos.pexels.com/video-files/5699342/5699342-hd_1080_1920_25fps.mp4',
@@ -104,20 +103,18 @@ const captionTemplates = {
 
 export const generateVideos = (count: number): Video[] => {
     const generatedVideos: Video[] = [];
-    const usedVideoUrls = new Set<string>();
+    let lastVideoUrl = '';
 
     for (let i = 0; i < count; i++) {
         const category = categories[i % categories.length];
         const user = users[i % users.length];
         const caption = captionTemplates[category][Math.floor(Math.random() * captionTemplates[category].length)];
         
-        // Ensure a unique video URL if possible
-        let videoUrl = videoUrls[i % videoUrls.length];
-        if (usedVideoUrls.has(videoUrl)) {
-             // If we've exhausted the unique URLs, just cycle through them
-            videoUrl = videoUrls[(i + Math.floor(Math.random() * videoUrls.length)) % videoUrls.length];
-        }
-        usedVideoUrls.add(videoUrl);
+        let videoUrl;
+        do {
+            videoUrl = videoUrls[Math.floor(Math.random() * videoUrls.length)];
+        } while (videoUrl === lastVideoUrl);
+        lastVideoUrl = videoUrl;
 
         const comments = Math.random() > 0.5 ? sampleComments.slice(0, Math.floor(Math.random() * sampleComments.length + 1)) : [];
         
