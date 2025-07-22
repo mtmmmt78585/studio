@@ -1,3 +1,4 @@
+
 // src/app/(auth)/signup/page.tsx
 'use client';
 
@@ -43,7 +44,7 @@ export default function SignupPage() {
           </p>
         </div>
 
-        <div className="bg-card p-8 rounded-2xl border border-border shadow-[0_0_15px_rgba(255,0,127,0.2)]">
+        <div className="bg-card p-8 rounded-2xl border">
           <form onSubmit={handleSignup} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>

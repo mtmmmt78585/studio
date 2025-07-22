@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,26 +9,65 @@ body {
 
 @layer base {
   :root {
-    --background: 240 5% 5%; /* #0d0d0d */
-    --foreground: 0 0% 98%;
-    --card: 240 5% 10%; /* #1a1a1a */
+    --background: 0 0% 5%; /* Jet Black #0D0D0D */
+    --foreground: 0 0% 98%; /* Near White */
+
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 5% 5%;
+
+    --popover: 0 0% 5%;
     --popover-foreground: 0 0% 98%;
-    --primary: 330 100% 50%; /* #ff007f */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 173 100% 50%; /* #00ffe7 */
-    --secondary-foreground: 240 5% 5%;
-    --muted: 240 5% 10%;
+
+    --primary: 51 100% 50%; /* Royal Gold #FFD700 */
+    --primary-foreground: 0 0% 5%; /* Jet Black for text on gold */
+
+    --secondary: 217 91% 60%; /* Soft Blue #3B82F6 */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 173 100% 50%; /* Using secondary for accent */
-    --accent-foreground: 240 5% 5%;
+
+    --accent: 145 77% 40%; /* Emerald Green #10B981 */
+    --accent-foreground: 0 0% 98%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 90%; /* Platinum Grey #E5E5E5 (lightened for visibility) */
+    --input: 0 0% 15%;
+    --ring: 51 100% 50%; /* Royal Gold */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 51 100% 50%;
+    --primary-foreground: 0 0% 5%;
+
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 145 77% 40%;
+    --accent-foreground: 0 0% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5% 15%;
-    --input: 240 5% 15%;
-    --ring: 330 100% 50%;
-    --radius: 0.5rem;
+
+    --border: 0 0% 15%; /* Platinum Grey adjusted for dark mode */
+    --input: 0 0% 15%;
+    --ring: 51 100% 50%;
   }
 }
 
@@ -38,31 +78,13 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-  .filter-cyberpunk {
-    filter: sepia(0.5) contrast(1.5) brightness(0.9) hue-rotate(-20deg);
-  }
-  .filter-glitch {
-    filter: sepia(0.2) contrast(1.2) brightness(1.1) hue-rotate(10deg);
-  }
-  .filter-retro {
-     filter: sepia(0.8) contrast(0.8) brightness(1.2) saturate(1.5);
-  }
-  .filter-neon {
-    filter: contrast(2) brightness(1.5) saturate(2);
-  }
-  .filter-vintage {
-     filter: sepia(0.6) contrast(0.9) brightness(1.1);
-  }
-  .filter-noir {
-    filter: grayscale(1) contrast(1.5) brightness(0.9);
-  }
-  .filter-dreamy {
-     filter: brightness(1.1) contrast(1.1) saturate(1.2) blur(0.5px);
-  }
 }
 
 @layer utilities {
   .shadow-glow {
-    box-shadow: 0 0 15px hsl(var(--primary) / 0.7);
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.5);
+  }
+  .animate-text-glow {
+     animation: text-glow 2s ease-in-out infinite;
   }
 }

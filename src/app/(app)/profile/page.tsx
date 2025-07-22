@@ -1,3 +1,4 @@
+
 "use client";
 
 import { mainUser } from "@/lib/data";
@@ -46,15 +47,15 @@ export default function ProfilePage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="font-bold">{mainUser.username}</h1>
-            {mainUser.isVerified && <CheckCircle className="h-4 w-4 text-accent" fill="hsl(var(--background))" />}
+            {mainUser.isVerified && <CheckCircle className="h-4 w-4 text-primary" fill="hsl(var(--background))" />}
           </div>
           <p className="text-sm text-muted-foreground">App Developer | Building cool stuff with code.</p>
         </div>
         <div className="flex gap-2">
             <Button className="flex-1">Edit Profile</Button>
-            <Button variant="secondary" className="flex-1">Share Profile</Button>
+            <Button variant="outline" className="flex-1">Share Profile</Button>
             <Link href="/settings" className="shrink-0">
-              <Button variant="secondary" size="icon"><Settings className="h-4 w-4"/></Button>
+              <Button variant="outline" size="icon"><Settings className="h-4 w-4"/></Button>
             </Link>
         </div>
       </div>
@@ -63,7 +64,7 @@ export default function ProfilePage() {
                 <TabsTrigger value="posts"><Grid3x3 className="h-5 w-5" /></TabsTrigger>
                 <TabsTrigger value="videos"><Clapperboard className="h-5 w-5" /></TabsTrigger>
                 <TabsTrigger value="earnings" disabled={!mainUser.isVerified}>
-                  <DollarSign className={`h-5 w-5 ${mainUser.isVerified ? 'text-accent' : ''}`} />
+                  <DollarSign className={`h-5 w-5 ${mainUser.isVerified ? 'text-primary' : ''}`} />
                 </TabsTrigger>
             </TabsList>
             <TabsContent value="posts">
@@ -87,7 +88,7 @@ export default function ProfilePage() {
             <TabsContent value="earnings">
                 <Card className="m-2">
                     <CardHeader>
-                        <CardTitle className="text-accent font-headline">Creator Earnings</CardTitle>
+                        <CardTitle className="text-primary font-headline">Creator Earnings</CardTitle>
                         <CardDescription>Your estimated revenue for the last 6 months.</CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -96,13 +97,13 @@ export default function ProfilePage() {
                             <BarChart data={earningsData}>
                                 <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} />
                                 <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `$${value/1000}k`} />
-                                <Bar dataKey="earnings" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="earnings" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                             </BarChart>
                         </ResponsiveContainer>
                         </div>
                         <div className="mt-4 text-center">
                             <p className="text-muted-foreground">This Month's Total</p>
-                            <p className="text-3xl font-bold text-accent">${earningsData[earningsData.length - 1].earnings.toLocaleString()}</p>
+                            <p className="text-3xl font-bold text-primary">${earningsData[earningsData.length - 1].earnings.toLocaleString()}</p>
                         </div>
                     </CardContent>
                 </Card>

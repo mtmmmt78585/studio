@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -23,7 +24,7 @@ export function BottomNav() {
           const isActive = pathname === item.href;
           return (
             <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 text-xs">
-              <item.icon className={cn("h-6 w-6", isActive ? "text-primary" : "text-muted-foreground")} strokeWidth={isActive ? 2.5 : 2} />
+              <item.icon className={cn("h-6 w-6 text-muted-foreground", isActive && "text-primary")} strokeWidth={isActive ? 2.5 : 2} />
               <span className="sr-only">{item.label}</span>
             </Link>
           );

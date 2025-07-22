@@ -1,4 +1,4 @@
-// src/lib/data.ts
+
 import { mainUser, users, stories, chats, effects, notifications, generateVideos, songs } from './placeholder-data';
 
 export type User = {
@@ -24,6 +24,7 @@ export type Video = {
   videoUrl: string;
   thumbnailUrl: string;
   caption: string;
+  audioName: string;
   likes: number;
   comments: Comment[];
   shares: number;

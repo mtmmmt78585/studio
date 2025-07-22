@@ -1,12 +1,10 @@
 
-// src/lib/placeholder-data.ts
-
 import type { User, Comment, Video, Story, Chat, Effect, Notification, Song } from './data';
 
 export const mainUser: User = {
     id: 'user_main',
     username: 'CodeNinja',
-    avatar: 'https://placehold.co/100x100/FFD700/000000.png?text=CN',
+    avatar: 'https://placehold.co/100x100/FFD700/0D0D0D.png?text=CN',
     followers: 125000,
     following: 150,
     totalViews: 15_700_000,
@@ -15,10 +13,10 @@ export const mainUser: User = {
 
 export const users: User[] = [
   mainUser,
-  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100/A855F7/FFFFFF.png?text=TG', followers: 50200, following: 200, totalViews: 5_200_000, isVerified: true },
+  { id: 'user1', username: 'TechGoddess', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TG', followers: 50200, following: 200, totalViews: 5_200_000, isVerified: true },
   { id: 'user2', username: 'DanceMachine', avatar: 'https://placehold.co/100x100/EC4899/FFFFFF.png?text=DM', followers: 1.2 * 1000000, following: 1200, totalViews: 120_000_000, isVerified: false },
   { id: 'user3', username: 'FunnyDude', avatar: 'https://placehold.co/100x100/F97316/FFFFFF.png?text=FD', followers: 89000, following: 50, totalViews: 9_800_000, isVerified: false },
-  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/22C55E/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, isVerified: true },
+  { id: 'user4', username: 'ArtisticSoul', avatar: 'https://placehold.co/100x100/10B981/FFFFFF.png?text=AS', followers: 250000, following: 1, totalViews: 28_000_000, isVerified: true },
   { id: 'user5', username: 'TravelJunkie', avatar: 'https://placehold.co/100x100/3B82F6/FFFFFF.png?text=TJ', followers: 450000, following: 300, totalViews: 45_000_000, isVerified: true },
   { id: 'user6', username: 'FoodLover', avatar: 'https://placehold.co/100x100/EF4444/FFFFFF.png?text=FL', followers: 75000, following: 500, totalViews: 8_000_000, isVerified: false },
 ];
@@ -39,15 +37,19 @@ const sampleComments: Comment[] = [
 ];
 
 const videoUrls = [
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
-    'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-shelves-with-different-products-in-a-supermarket-50 shelves-with-products-in-a-supermarket.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-woman-doing-her-make-up-4848-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-woman-in-a-floral-dress-walking-in-a-field-of- poppies-45920-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-woman-walking-on-a-beach-at-sunset-4760-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-white-cat-with-blue-eyes-5421-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-a-summer-dress-45948-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-blond-man-listening-to-music-with-headphones-4593-large.mp4'
 ];
 
+const audioNames = [
+    "Original Audio", "Summer Vibes - Upbeat", "Lofi Chill - Relaxing", "80s Throwback - Energetic",
+    "Acoustic Mood - Calm", "Workout Pump - High-Energy", "Funny Sound FX - Comedic"
+];
 
 const categories: Video['category'][] = ['funny', 'romance', 'love', 'sad', 'cartoon', 'tech'];
 
@@ -87,6 +89,7 @@ export const generateVideos = (count: number): Video[] => {
         const category = categories[i % categories.length];
         const user = users[i % users.length];
         const caption = captionTemplates[category][Math.floor(Math.random() * captionTemplates[category].length)];
+        const audioName = audioNames[Math.floor(Math.random() * audioNames.length)];
         
         let videoUrl;
         do {
@@ -102,6 +105,7 @@ export const generateVideos = (count: number): Video[] => {
             videoUrl,
             thumbnailUrl: `https://placehold.co/400x700.png?text=Vid${i+1}`,
             caption,
+            audioName,
             likes: Math.floor(Math.random() * 250000),
             comments,
             shares: Math.floor(Math.random() * 2500),
@@ -237,7 +241,7 @@ export const songs: Song[] = Array.from({ length: 2000 }).map((_, i) => {
     id: `song_${i}_${title.toLowerCase().replace(/\s/g, '_')}`,
     title: `${title} #${Math.floor(i / songTitles.length) + 1}`,
     artist: artist,
-    coverArtUrl: `https://placehold.co/100x100.png?text=${title.charAt(0)}${title.split(' ')[1] ? title.split(' ')[1].charAt(0) : ''}`,
+    coverArtUrl: `https://placehold.co/100x100/FFD700/0D0D0D.png?text=${title.charAt(0)}${title.split(' ')[1] ? title.split(' ')[1].charAt(0) : ''}`,
     duration: `${durationMinutes}:${durationSeconds}`,
   }
 });
