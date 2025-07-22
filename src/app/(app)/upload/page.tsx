@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Video, Sparkles, SwitchCamera, FlipHorizontal, Music, Library, X, Timer, Clock, Zap, FolderUp } from "lucide-react";
+import { Video, Sparkles, SwitchCamera, FlipHorizontal, Music, Library, X, Timer, Clock, Zap, FolderUp, GalleryHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,17 +15,25 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const MAX_RECORDING_TIME_MS = 15000; // 15 seconds
 
 export default function UploadPage() {
   const { toast } = useToast();
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [isMirrored, setIsMirrored] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
   const [selectedSong, setSelectedSong] = useState<(typeof songs)[0] | null>(null);
+  
+  const [recordingProgress, setRecordingProgress] = useState(0);
+  const [recordingTime, setRecordingTime] = useState(0);
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -60,18 +68,64 @@ export default function UploadPage() {
         const stream = videoRef.current.srcObject as MediaStream;
         stream.getTracks().forEach(track => track.stop());
       }
+      if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [getCameraPermission]);
+  
+  const startRecording = () => {
+    if (videoRef.current?.srcObject && hasCameraPermission) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      const chunks: Blob[] = [];
+      
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        chunks.push(event.data);
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const file = new File([blob], `yappzy-recording-${Date.now()}.webm`, { type: 'video/webm' });
+        setVideoFile(file);
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+      setRecordingTime(0);
+      setRecordingProgress(0);
+
+      timerRef.current = setInterval(() => {
+          setRecordingTime(prevTime => {
+              const newTime = prevTime + 1;
+              setRecordingProgress((newTime * 1000 / MAX_RECORDING_TIME_MS) * 100);
+              if (newTime * 1000 >= MAX_RECORDING_TIME_MS) {
+                  stopRecording();
+              }
+              return newTime;
+          });
+      }, 1000);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      if (timerRef.current) clearInterval(timerRef.current);
+      setRecordingProgress(0);
+    }
+  };
+
+  const handleRecordButtonClick = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+
 
   const toggleMirror = () => setIsMirrored(prev => !prev);
   
-  const handleRecord = () => {
-    setIsRecording(prev => !prev);
-    toast({
-        title: isRecording ? "Recording Stopped" : "Recording Started!",
-        description: isRecording ? "Your video is ready for the next step." : "Capture your moment.",
-    });
-  }
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -108,6 +162,12 @@ export default function UploadPage() {
       });
     }, 200);
   };
+  
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(minutes).padStart(1, '0')}:${String(secs).padStart(2, '0')}`;
+  }
 
   if (videoFile) {
     return (
@@ -119,7 +179,7 @@ export default function UploadPage() {
                  </div>
 
                 <div className="aspect-[9/16] rounded-lg overflow-hidden bg-black flex items-center justify-center">
-                    <video src={URL.createObjectURL(videoFile)} className="w-full h-full object-cover" controls />
+                    <video src={URL.createObjectURL(videoFile)} className="w-full h-full object-cover" controls autoPlay loop/>
                 </div>
 
                 {isUploading && (
@@ -164,6 +224,16 @@ export default function UploadPage() {
             </div>
         )}
       </div>
+
+       {/* Recording Indicator */}
+      {isRecording && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 w-11/12">
+            <Progress value={recordingProgress} className="h-1 bg-red-500/50" />
+            <div className="absolute top-4 left-1/2 -translate-x-1/2">
+                <p className="text-sm font-mono bg-black/30 px-2 py-0.5 rounded-full">{formatTime(recordingTime)}</p>
+            </div>
+        </div>
+      )}
 
       {/* Top Controls Overlay */}
       <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
@@ -218,45 +288,47 @@ export default function UploadPage() {
               <Sparkles />
             </button>
       </div>
-
+      
       {/* Bottom Controls Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col items-center z-10">
+      <Tabs defaultValue="camera" className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/50 to-transparent pt-12">
         {selectedSong && (
-            <div className="bg-black/50 backdrop-blur-sm py-1 px-3 rounded-full text-center text-xs mb-4">
+            <div className="bg-black/50 backdrop-blur-sm py-1 px-3 rounded-full text-center text-xs mb-4 w-max mx-auto">
                 <p>🎵 {selectedSong.title} - {selectedSong.artist}</p>
             </div>
         )}
-        <div className="flex items-center justify-around w-full max-w-xs">
-            <div className="flex flex-col items-center">
-                 <input
-                    type="file"
-                    ref={fileInputRef}
-                    className="hidden"
-                    accept="video/*"
-                    onChange={handleFileSelect}
-                />
-                <Button variant="ghost" className="h-12 w-12 rounded-lg bg-black/30" onClick={() => fileInputRef.current?.click()}>
-                    <FolderUp/>
-                </Button>
-                <span className="text-xs mt-1">Add</span>
-            </div>
-            
-            <button
-                className={cn("w-20 h-20 rounded-full bg-white flex items-center justify-center transition-all ring-4 ring-offset-4 ring-offset-black ring-white", isRecording && "bg-red-500 ring-red-500")}
-                disabled={!hasCameraPermission}
-                onClick={handleRecord}
-            >
-                <div className={cn("w-18 h-18 rounded-full bg-red-500 transition-all", isRecording ? "w-8 h-8 rounded-md" : "w-16 h-16 rounded-full")}></div>
-            </button>
-
-            <div className="flex flex-col items-center">
-                 <Button variant="ghost" className="h-12 w-12 rounded-lg bg-black/30" disabled={!hasCameraPermission}>
-                    <Zap/>
-                </Button>
-                <span className="text-xs mt-1">Effects</span>
-            </div>
+        <div className="flex items-end justify-center">
+            <TabsContent value="camera" className="mt-0">
+                 <button
+                    className={cn(
+                        "w-16 h-16 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
+                        isRecording && "animate-pulse"
+                    )}
+                    disabled={!hasCameraPermission}
+                    onClick={handleRecordButtonClick}
+                >
+                    <div className={cn("w-14 h-14 rounded-full bg-red-500 transition-all flex items-center justify-center", 
+                        isRecording && "w-12 h-12"
+                    )}>
+                        {isRecording && <div className="w-6 h-6 bg-red-700 rounded-md" />}
+                    </div>
+                </button>
+            </TabsContent>
+            <TabsContent value="gallery" className="mt-0">
+                <p className="text-center text-muted-foreground p-8">Select from gallery</p>
+            </TabsContent>
         </div>
-      </div>
+        <TabsList className="grid w-full grid-cols-2 bg-transparent border-none">
+            <TabsTrigger value="gallery" className="text-white" onClick={() => fileInputRef.current?.click()}>Gallery</TabsTrigger>
+            <TabsTrigger value="camera" className="text-white">Camera</TabsTrigger>
+        </TabsList>
+         <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="video/*"
+            onChange={handleFileSelect}
+        />
+      </Tabs>
     </div>
   );
 }
