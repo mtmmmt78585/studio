@@ -5,13 +5,15 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Separator } from '@/components/ui/separator';
-import { Loader2, X, KeyRound, Smartphone, Mail } from 'lucide-react';
+import { Loader2, X, KeyRound, Smartphone, Mail, HelpCircle, FileText, Shield, Award, IndianRupee, Rocket } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { auth } from '@/lib/firebase';
 import { GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Logo } from '@/components/Logo';
 
 // Simple SVG icons as components
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -40,6 +42,16 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
         </defs>
         <path fill="url(#ig-grad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919C8.416 2.175 8.796 2.163 12 2.163zm0 1.44c-3.116 0-3.473.012-4.69.068-2.61.119-3.833 1.32-3.952 3.952-.056 1.217-.067 1.574-.067 4.69s.011 3.473.067 4.69c.119 2.633 1.343 3.833 3.952 3.952 1.217.056 1.574.067 4.69.067s3.473-.011 4.69-.067c2.61-.119 3.833-1.319 3.952-3.952.056-1.217.067-1.574.067-4.69s-.011-3.473-.067-4.69c-.119-2.633-1.343-3.833-3.952-3.952C15.473 3.614 15.116 3.603 12 3.603zm0 2.452c-3.34 0-6.052 2.713-6.052 6.052s2.713 6.052 6.052 6.052 6.052-2.713 6.052-6.052-2.713-6.052-6.052-6.052zm0 9.658c-1.99 0-3.606-1.615-3.606-3.606s1.616-3.606 3.606-3.606 3.606 1.615 3.606 3.606-1.616 3.606-3.606 3.606zm4.616-9.352c-.786 0-1.424-.638-1.424-1.424s.638-1.424 1.424-1.424 1.424.638 1.424 1.424-.638 1.424-1.424 1.424z" />
     </svg>
+);
+
+const HelpInfoItem = ({ icon, title, children }: { icon: React.ElementType, title: string, children: React.ReactNode }) => (
+    <div className="flex items-start gap-4">
+        {React.createElement(icon, { className: "h-6 w-6 text-primary flex-shrink-0 mt-1" })}
+        <div>
+            <h3 className="font-semibold text-foreground">{title}</h3>
+            <div className="text-muted-foreground text-sm space-y-2">{children}</div>
+        </div>
+    </div>
 );
 
 
@@ -112,7 +124,81 @@ export default function LoginPage() {
           <X className="h-6 w-6" />
         </Button>
         <h1 className="text-lg font-semibold">Log in</h1>
-        <Button variant="link" className="text-foreground">Help</Button>
+        <Sheet>
+            <SheetTrigger asChild>
+                <Button variant="link" className="text-foreground">Help</Button>
+            </SheetTrigger>
+            <SheetContent className="flex flex-col">
+                 <SheetHeader>
+                    <SheetTitle className="font-headline text-2xl flex items-center gap-2">
+                        <HelpCircle className="h-6 w-6 text-primary"/>
+                        Help & About
+                    </SheetTitle>
+                </SheetHeader>
+                <ScrollArea className="flex-1 -mx-6 px-6 text-sm">
+                    <div className="space-y-6 pb-8">
+                         <div className="text-center bg-card p-4 rounded-lg">
+                            <p className="text-muted-foreground">For any assistance, contact our Support Team:</p>
+                            <a href="mailto:support@yappzy.com" className="font-semibold text-primary hover:underline">
+                                support@yappzy.com
+                            </a>
+                        </div>
+                        
+                        <div className="prose prose-sm dark:prose-invert text-muted-foreground">
+                            <p className="font-semibold text-foreground">Welcome to Yappzy!</p>
+                            <p>Yappzy is a proudly Made-in-India short and long video platform, designed for creators and users who want more than just likes — they want to grow, earn, and make an impact.</p>
+                            <p>Whether you're a creator, viewer, or just exploring, Yappzy is built to deliver a seamless, secure, and exciting video experience.</p>
+                        </div>
+
+                        <div className="space-y-4">
+                            <HelpInfoItem icon={Rocket} title="What You Can Do on Yappzy">
+                                <ul className="list-disc list-inside space-y-1">
+                                    <li>Upload short or long videos — both are supported!</li>
+                                    <li>Discover content through a smart, mood-based feed powered by AI.</li>
+                                    <li>Like, comment, share, and follow your favorite creators.</li>
+                                    <li>Use advanced filters and effects to make your content stand out.</li>
+                                    <li>Let Yappzy’s intelligent system match your mood with viral videos.</li>
+                                </ul>
+                            </HelpInfoItem>
+
+                            <HelpInfoItem icon={IndianRupee} title="Monetization Criteria">
+                                <p>Yappzy supports and pays real creators. Here's how to qualify:</p>
+                                <ul className="list-disc list-inside space-y-1">
+                                    <li>✅ 10,000 followers</li>
+                                    <li>✅ 5 million total valid views (from Shorts or Long videos)</li>
+                                </ul>
+                                <p>Once qualified:</p>
+                                 <ul className="list-disc list-inside space-y-1">
+                                    <li>You’ll become a Monetized Creator.</li>
+                                    <li>You’ll receive monthly payouts (by the 7th or 8th) directly to your wallet.</li>
+                                    <li>You’ll unlock exclusive tools, analytics, and a verified badge.</li>
+                                </ul>
+                            </HelpInfoItem>
+
+                            <HelpInfoItem icon={Shield} title="Security & Admin Controls">
+                                 <ul className="list-disc list-inside space-y-1">
+                                    <li>Protected by Indian laws (IT Act 2000 & Digital Data Protection Act 2023)</li>
+                                    <li>Real-time monitoring by AI agents and admin control panel</li>
+                                    <li>Fake views, bots, or fraudulent activity are strictly blocked</li>
+                                    <li>Live bug tracking and automatic system fixes</li>
+                                 </ul>
+                            </HelpInfoItem>
+                             <HelpInfoItem icon={Award} title="Built for Bharat">
+                                 <p>Yappzy is more than an app — it’s part of the Digital India mission. We believe in empowering local talent, building India-first technology, and giving every voice a stage.</p>
+                            </HelpInfoItem>
+                        </div>
+                        
+                         <div className="text-center font-bold text-lg text-primary">
+                            <p>Create. Share. Earn. Repeat.</p>
+                        </div>
+
+                        <div className="text-center text-muted-foreground text-xs">
+                             <p>Let’s build the future of Indian entertainment, together. Jai Hind 🇮🇳</p>
+                        </div>
+                    </div>
+                </ScrollArea>
+            </SheetContent>
+        </Sheet>
       </header>
 
       <main className="flex-1 flex flex-col p-8">
