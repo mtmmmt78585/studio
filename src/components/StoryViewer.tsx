@@ -5,7 +5,6 @@ import { useState, useEffect, useRef } from 'react';
 import type { Story } from '@/lib/data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { X, ChevronLeft, ChevronRight, Heart, Send } from 'lucide-react';
-import { Progress } from '@/components/ui/progress';
 import Image from 'next/image';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
@@ -25,9 +24,16 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
   const { toast } = useToast();
   const [isLiked, setIsLiked] = useState(false);
   const [replyText, setReplyText] = useState("");
+  const [isPaused, setIsPaused] = useState(false);
 
   const goToNextStory = () => {
-    setCurrentStoryIndex((prev) => (prev < stories.length - 1 ? prev + 1 : prev));
+    setCurrentStoryIndex((prev) => {
+        if (prev < stories.length - 1) {
+            return prev + 1;
+        }
+        onClose(); // Close if it's the last story
+        return prev;
+    });
   };
 
   const goToPrevStory = () => {
@@ -38,51 +44,41 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
     setProgress(0);
     setIsLiked(false);
     setReplyText("");
-    const storyDuration = 5000; // 5 seconds per story
+  }, [currentStoryIndex]);
 
-    const startTime = Date.now();
-    
+  useEffect(() => {
+    if (isPaused) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+
+    const storyDuration = 5000; // 5 seconds
+    const interval = 50; // update every 50ms
+    const steps = storyDuration / interval;
+    const progressIncrement = 100 / steps;
+
     timerRef.current = setInterval(() => {
-      const elapsedTime = Date.now() - startTime;
-      const newProgress = (elapsedTime / storyDuration) * 100;
-      
-      if (newProgress >= 100) {
-        if (currentStoryIndex < stories.length - 1) {
+      setProgress(p => {
+        if (p >= 100) {
           goToNextStory();
-        } else {
-          onClose();
+          return 100;
         }
-      } else {
-        setProgress(newProgress);
-      }
-    }, 50);
+        return p + progressIncrement;
+      });
+    }, interval);
 
     return () => {
-      if(timerRef.current) {
-        clearInterval(timerRef.current)
-      }
+      if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentStoryIndex, stories.length, onClose]);
+  }, [currentStoryIndex, stories.length, onClose, isPaused]);
 
 
   const handleInteractionStart = () => {
-      if(timerRef.current) {
-        clearInterval(timerRef.current)
-      }
+      setIsPaused(true);
   };
   
   const handleInteractionEnd = () => {
-    // This is a simplified resume. A more robust implementation would recalculate progress.
-    const storyDuration = 5000;
-    const remainingTime = storyDuration * (1 - progress / 100);
-
-    timerRef.current = setTimeout(() => {
-         if (currentStoryIndex < stories.length - 1) {
-          goToNextStory();
-        } else {
-          onClose();
-        }
-    }, remainingTime);
+    setIsPaused(false);
   };
   
   const handleSendReply = () => {
@@ -93,14 +89,17 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
       });
       setReplyText("");
   }
+  
+  const handleShare = () => {
+      toast({
+          title: "Coming Soon!",
+          description: "Sharing stories will be available in a future update."
+      })
+  }
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
-      <div className="relative w-full h-full max-w-md max-h-[95vh] rounded-lg overflow-hidden bg-card" 
-           onMouseDown={handleInteractionStart} 
-           onMouseUp={handleInteractionEnd} 
-           onTouchStart={handleInteractionStart} 
-           onTouchEnd={handleInteractionEnd}>
+      <div className="relative w-full h-full max-w-md max-h-[95vh] rounded-lg overflow-hidden bg-card" >
         
         {/* Story Image */}
         <Image
@@ -114,12 +113,16 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />
 
         {/* Header */}
-        <div className="absolute top-0 left-0 right-0 p-4">
+        <div className="absolute top-0 left-0 right-0 p-4"
+             onMouseDown={handleInteractionStart} 
+             onMouseUp={handleInteractionEnd} 
+             onTouchStart={handleInteractionStart} 
+             onTouchEnd={handleInteractionEnd} >
           <div className="flex items-center gap-2 mb-2">
             {stories.map((s, index) => (
               <div key={s.id} className="flex-1 h-1 bg-white/30 rounded-full">
                 <div 
-                    className="h-1 bg-primary rounded-full"
+                    className="h-1 bg-primary rounded-full transition-all duration-50 ease-linear"
                     style={{ width: `${index < currentStoryIndex ? 100 : (index === currentStoryIndex ? progress : 0)}%` }}
                 />
               </div>
@@ -156,7 +159,7 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
              <Button variant="ghost" size="icon" className="text-white" onClick={() => setIsLiked(p => !p)}>
                 <Heart className={cn("h-7 w-7", isLiked && "fill-red-500 text-red-500")} />
             </Button>
-            <Button variant="ghost" size="icon" className="text-white" onClick={handleSendReply}>
+            <Button variant="ghost" size="icon" className="text-white" onClick={handleShare}>
                 <Send className="h-7 w-7" />
             </Button>
         </div>
