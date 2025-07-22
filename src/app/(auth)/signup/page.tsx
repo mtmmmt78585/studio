@@ -1,4 +1,4 @@
-// src/app/(auth)/login/page.tsx
+// src/app/(auth)/signup/page.tsx
 'use client';
 
 import {useState} from 'react';
@@ -10,20 +10,25 @@ import {Loader2} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 import Link from 'next/link';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords don't match!");
+      return;
+    }
     setIsLoading(true);
-    // Simulate Firebase login
+    // Simulate Firebase signup
     setTimeout(() => {
       // In a real app, you would use Firebase Auth here
-      // For example: signInWithEmailAndPassword(auth, email, password)
-      console.log('Logging in with:', {phone, password});
+      // For example: createUserWithEmailAndPassword(auth, email, password)
+      console.log('Creating account with:', {phone, password});
       router.push('/feed');
     }, 1500);
   };
@@ -34,12 +39,12 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Logo className="text-4xl justify-center" />
           <p className="text-muted-foreground mt-2">
-            Welcome back to the future of content.
+            Join the future of content.
           </p>
         </div>
 
         <div className="bg-card p-8 rounded-2xl border border-border shadow-[0_0_15px_rgba(255,0,127,0.2)]">
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
               <Input
@@ -64,24 +69,33 @@ export default function LoginPage() {
                 className="bg-background"
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Input
+                id="confirm-password"
+                type="password"
+                placeholder="********"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                required
+                className="bg-background"
+              />
+            </div>
             <Button
               type="submit"
               className="w-full font-bold shadow-glow"
               disabled={isLoading}
             >
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Login
+              Create Account
             </Button>
           </form>
         </div>
         <p className="text-center text-sm text-muted-foreground mt-6">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-primary hover:underline">
-            Sign up
+          Already have an account?{' '}
+          <Link href="/login" className="text-primary hover:underline">
+            Log in
           </Link>
-        </p>
-        <p className="text-center text-xs text-muted-foreground mt-8">
-          By continuing, you agree to our Terms of Service and Privacy Policy.
         </p>
       </div>
     </div>
