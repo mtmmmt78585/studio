@@ -1,3 +1,5 @@
+"use client";
+
 import { mainUser } from "@/lib/data";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
