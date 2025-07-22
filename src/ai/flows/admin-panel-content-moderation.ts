@@ -34,7 +34,7 @@ const moderateContentPrompt = ai.definePrompt({
   name: 'moderateContentPrompt',
   input: {schema: ModerateContentInputSchema},
   output: {schema: ModerateContentOutputSchema},
-  prompt: `You are an AI content moderator for Pixgram, a short video social media app.
+  prompt: `You are an AI content moderator for Yappzy, a short video social media app.
 
   Your task is to analyze the given content and determine if it violates the community guidelines.
   You should also perform sentiment analysis to detect potentially harmful or negative content.

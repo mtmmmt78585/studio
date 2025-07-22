@@ -110,7 +110,7 @@ export function VideoPost({ video }: VideoPostProps) {
   const handleReport = () => {
     toast({
         title: "Report Submitted",
-        description: `Thanks for helping keep Pixgram safe. We'll review this video.`,
+        description: `Thanks for helping keep Yappzy safe. We'll review this video.`,
     })
   }
   

@@ -196,7 +196,7 @@ export default function SettingsPage() {
       </div>
 
        <div className="text-center text-xs text-muted-foreground pt-4">
-          <p>Pixgram v1.0.0</p>
+          <p>Yappzy v1.0.0</p>
           <p>Made with ❤️ in India</p>
         </div>
     </div>
