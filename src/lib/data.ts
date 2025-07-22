@@ -9,6 +9,13 @@ export type User = {
   isVerified: boolean;
 };
 
+export type Comment = {
+  id: string;
+  user: User;
+  text: string;
+  timestamp: string;
+};
+
 export type Video = {
   id: string;
   user: User;
@@ -16,7 +23,7 @@ export type Video = {
   thumbnailUrl: string;
   caption: string;
   likes: number;
-  comments: number;
+  comments: Comment[];
   shares: number;
   category: 'funny' | 'romance' | 'love' | 'sad' | 'cartoon' | 'tech';
 };
@@ -66,11 +73,18 @@ export const users: User[] = [
 
 
 export const stories: Story[] = users.map((user, i) => ({
-  id: `story${i}`,
+  id: `story${i}_${user.id}`,
   user,
   imageUrl: `https://placehold.co/300x500.png?text=Story${i+1}`,
   viewed: i > 2,
 }));
+
+const sampleComments: Comment[] = [
+    { id: 'comment1', user: users[2], text: 'This is hilarious! 😂', timestamp: '2h ago' },
+    { id: 'comment2', user: users[4], text: 'Wow, such amazing talent!', timestamp: '1h ago' },
+    { id: 'comment3', user: mainUser, text: 'Great content, keep it up!', timestamp: '30m ago' },
+    { id: 'comment4', user: users[5], text: 'I wish I was there!', timestamp: '15m ago' },
+];
 
 export const videos: Video[] = [
   {
@@ -80,7 +94,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'Chill vibes and coding sprints! 🔥 #developer #coding',
     likes: 12300,
-    comments: 456,
+    comments: sampleComments.slice(0, 2),
     shares: 123,
     category: 'tech'
   },
@@ -91,7 +105,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'New dance challenge! Can you do it? 💃 #dance #challenge',
     likes: 45600,
-    comments: 1234,
+    comments: sampleComments,
     shares: 567,
     category: 'funny'
   },
@@ -102,7 +116,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'You won\'t believe what happened next... 😂 #comedy #funny',
     likes: 78900,
-    comments: 2345,
+    comments: [],
     shares: 890,
     category: 'funny'
   },
@@ -113,7 +127,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'A tale of a lonely dragon. #sad #animation',
     likes: 98700,
-    comments: 3456,
+    comments: sampleComments.slice(1, 3),
     shares: 987,
     category: 'sad'
   },
@@ -124,7 +138,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'Future of tech is here! #vfx #scifi',
     likes: 150000,
-    comments: 5678,
+    comments: sampleComments,
     shares: 1500,
     category: 'tech'
   },
@@ -135,7 +149,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'This is so sweet! ❤️ #love #romance',
     likes: 250000,
-    comments: 8910,
+    comments: [],
     shares: 2500,
     category: 'love'
   },
@@ -146,7 +160,7 @@ export const videos: Video[] = [
     thumbnailUrl: 'https://placehold.co/400x700.png',
     caption: 'My new ride! #comedy #cars',
     likes: 50000,
-    comments: 1000,
+    comments: [sampleComments[0]],
     shares: 400,
     category: 'funny'
   }

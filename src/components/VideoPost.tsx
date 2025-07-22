@@ -1,8 +1,8 @@
 // src/components/VideoPost.tsx
 "use client";
 
-import type { Video } from "@/lib/data";
-import { Heart, MessageCircle, Send, MoreVertical, Music, User, Flag, ArrowRight, Link as LinkIcon, Share2, PlusCircle } from "lucide-react";
+import type { Video, Comment } from "@/lib/data";
+import { Heart, MessageCircle, Send, MoreVertical, Music, User, Flag, ArrowRight, Link as LinkIcon, Share2, PlusCircle, Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { chats } from "@/lib/data";
+import { chats, mainUser } from "@/lib/data";
 import { Input } from "@/components/ui/input";
 
 interface VideoPostProps {
@@ -27,6 +27,8 @@ interface VideoPostProps {
 export function VideoPost({ video }: VideoPostProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [comments, setComments] = useState<Comment[]>(video.comments);
+  const [newComment, setNewComment] = useState("");
   const { toast } = useToast();
 
   const handleLike = () => {
@@ -51,14 +53,15 @@ export function VideoPost({ video }: VideoPostProps) {
         await navigator.share({
           title: `Check out this video by ${video.user.username}`,
           text: video.caption,
-          url: window.location.href, // This will share the current page URL
+          url: window.location.href,
         });
       } catch (error) {
-        console.error('Error sharing:', error);
-        // User might have cancelled the share action, so we don't show an error.
+        if (error instanceof Error && error.name !== 'AbortError') {
+            console.error('Error sharing:', error);
+            copyLinkToClipboard();
+        }
       }
     } else {
-      // Fallback for browsers that don't support navigator.share
       copyLinkToClipboard();
     }
   };
@@ -82,6 +85,23 @@ export function VideoPost({ video }: VideoPostProps) {
         title: "Added to your story!",
         description: "For the next 24 hours, your followers can see this video in your story."
       })
+  }
+
+  const handlePostComment = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!newComment.trim()) return;
+      const comment: Comment = {
+          id: `comment_${Date.now()}`,
+          user: mainUser,
+          text: newComment,
+          timestamp: "Just now"
+      }
+      setComments(prev => [comment, ...prev]);
+      setNewComment("");
+  }
+
+  const handleDeleteComment = (commentId: string) => {
+      setComments(prev => prev.filter(c => c.id !== commentId));
   }
 
   return (
@@ -130,15 +150,48 @@ export function VideoPost({ video }: VideoPostProps) {
                     <div className="bg-white/20 p-2.5 rounded-full backdrop-blur-sm">
                         <MessageCircle className="h-7 w-7" />
                     </div>
-                    <span className="text-xs font-semibold">{video.comments.toLocaleString()}</span>
+                    <span className="text-xs font-semibold">{comments.length.toLocaleString()}</span>
                 </button>
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-background/90 backdrop-blur-sm h-3/4 flex flex-col">
                  <SheetHeader>
-                    <SheetTitle className="text-center font-headline">{video.comments.toLocaleString()} Comments</SheetTitle>
+                    <SheetTitle className="text-center font-headline">{comments.length.toLocaleString()} Comments</SheetTitle>
                 </SheetHeader>
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    <p className="text-center text-muted-foreground">Comments are coming soon!</p>
+                    {comments.length > 0 ? comments.map(comment => (
+                        <div key={comment.id} className="flex gap-3 items-start group">
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src={comment.user.avatar}/>
+                                <AvatarFallback>{comment.user.username.slice(0,2)}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1">
+                                <p className="text-xs text-muted-foreground">{comment.user.username} · {comment.timestamp}</p>
+                                <p className="text-sm">{comment.text}</p>
+                            </div>
+                            {(comment.user.id === mainUser.id || video.user.id === mainUser.id) && (
+                                <Button variant="ghost" size="icon" className="h-8 w-8 opacity-0 group-hover:opacity-100" onClick={() => handleDeleteComment(comment.id)}>
+                                    <Trash2 className="h-4 w-4 text-red-500"/>
+                                </Button>
+                            )}
+                        </div>
+                    )) : (
+                        <p className="text-center text-muted-foreground py-8">No comments yet. Be the first!</p>
+                    )}
+                </div>
+                <div className="p-4 border-t border-border">
+                    <form onSubmit={handlePostComment} className="flex gap-2">
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage src={mainUser.avatar}/>
+                            <AvatarFallback>{mainUser.username.slice(0,2)}</AvatarFallback>
+                        </Avatar>
+                        <Input 
+                            placeholder="Add a comment..." 
+                            className="flex-1 bg-card"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <Button type="submit" disabled={!newComment.trim()}>Send</Button>
+                    </form>
                 </div>
             </SheetContent>
         </Sheet>
