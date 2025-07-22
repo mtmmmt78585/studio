@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -269,3 +269,5 @@ export function VideoPost({ video }: VideoPostProps) {
     </div>
   );
 }
+
+    
