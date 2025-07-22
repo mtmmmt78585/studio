@@ -57,10 +57,9 @@ export function VideoPost({ video }: VideoPostProps) {
           url: window.location.href,
         });
       } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-            console.error('Error sharing:', error);
-            copyLinkToClipboard();
-        }
+        // Fallback to copy link if share fails for any reason (e.g., permission denied)
+        console.error('Error sharing:', error);
+        copyLinkToClipboard();
       }
     } else {
       copyLinkToClipboard();
