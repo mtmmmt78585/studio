@@ -2,17 +2,20 @@
 "use client";
 
 import { LongVideoPost } from "@/components/LongVideoPost";
-import { type Video, generateVideos } from "@/lib/data";
+import { type Video, generateVideos, stories, type User } from "@/lib/data";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import Link from "next/link";
 import { Search } from "lucide-react";
+import { StoryCarousel } from "@/components/StoryCarousel";
+import { StoryViewer } from "@/components/StoryViewer";
 
 export default function FeedPage() {
   const [videos, setVideos] = useState<Video[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedStoryUser, setSelectedStoryUser] = useState<User | null>(null);
 
   useEffect(() => {
     const clientVideos = generateVideos(20);
@@ -21,6 +24,14 @@ export default function FeedPage() {
   }, []);
 
   const longVideos = videos.filter(v => v.duration > 60);
+
+  const handleStorySelect = (user: User) => {
+    setSelectedStoryUser(user);
+  };
+
+  const handleCloseViewer = () => {
+    setSelectedStoryUser(null);
+  };
 
   return (
     <div className="h-full flex flex-col">
@@ -31,6 +42,7 @@ export default function FeedPage() {
         </div>
         <Search className="h-6 w-6 text-muted-foreground" />
       </header>
+       <StoryCarousel onStorySelect={handleStorySelect} />
        <Tabs defaultValue="for-you" className="w-full flex-1 flex flex-col">
         <TabsList className="grid w-full grid-cols-2 bg-transparent px-4">
             <TabsTrigger value="for-you">For You</TabsTrigger>
@@ -54,6 +66,9 @@ export default function FeedPage() {
             )}
         </TabsContent>
        </Tabs>
+        {selectedStoryUser && (
+            <StoryViewer stories={stories.filter(s => s.user.id === selectedStoryUser.id)} onClose={handleCloseViewer} />
+        )}
     </div>
   );
 }

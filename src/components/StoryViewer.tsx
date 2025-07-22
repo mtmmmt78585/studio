@@ -97,6 +97,11 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
       })
   }
 
+  if (!story) {
+      onClose();
+      return null;
+  }
+
   return (
     <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
       <div className="relative w-full h-full max-w-md max-h-[95vh] rounded-lg overflow-hidden bg-card" >
@@ -108,6 +113,7 @@ export function StoryViewer({ stories, onClose }: StoryViewerProps) {
             fill
             className="object-cover"
             priority
+            data-ai-hint="social media story"
         />
         
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30" />

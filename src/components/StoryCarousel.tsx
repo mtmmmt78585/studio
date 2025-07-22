@@ -12,7 +12,7 @@ interface StoryCarouselProps {
 
 export function StoryCarousel({ onStorySelect }: StoryCarouselProps) {
   return (
-    <div className="px-4 py-2">
+    <div className="px-4 py-2 border-b">
       <div className="flex space-x-4 overflow-x-auto no-scrollbar">
         {/* Add Story */}
         <Link href="/upload">
