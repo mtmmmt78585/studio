@@ -316,10 +316,10 @@ export default function UploadPage() {
             )}
             
             <div className="flex items-end justify-around pb-8">
-                <div className="w-16 h-16" />
+                <div className="w-16 h-16 flex items-center justify-center" />
                 
-                <div className="flex flex-col items-center">
-                    <button
+                <div className="flex flex-col items-center relative h-24">
+                     <button
                         className={cn(
                             "w-16 h-16 rounded-full bg-transparent flex items-center justify-center transition-all ring-4 ring-white",
                             isRecording && "animate-pulse"
@@ -333,14 +333,20 @@ export default function UploadPage() {
                             {isRecording && <div className="w-6 h-6 bg-red-700 rounded-lg" />}
                         </div>
                     </button>
-                    <div className="flex items-center gap-4 mt-2">
-                        <button 
+                    <div className="absolute bottom-0 w-48 h-8">
+                         <button 
                             onClick={() => setVideoCategory('short')}
-                            className={cn("font-semibold text-sm", videoCategory === 'short' ? 'text-white' : 'text-white/50')}
+                            className={cn(
+                                "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
+                                videoCategory === 'short' ? 'text-white -translate-x-1/2' : 'text-white/50 -translate-x-full scale-90'
+                            )}
                         >Shorts</button>
                          <button 
                             onClick={() => setVideoCategory('video')}
-                            className={cn("font-semibold text-sm", videoCategory === 'video' ? 'text-white' : 'text-white/50')}
+                            className={cn(
+                                "font-semibold text-sm absolute left-1/2 top-1/2 -translate-y-1/2 transition-all duration-300",
+                                videoCategory === 'video' ? 'text-white -translate-x-1/2' : 'text-white/50 translate-x-0 scale-90'
+                            )}
                         >Video</button>
                     </div>
                 </div>
@@ -363,5 +369,3 @@ export default function UploadPage() {
     </div>
   );
 }
-
-    
