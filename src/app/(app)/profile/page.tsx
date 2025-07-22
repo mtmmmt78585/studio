@@ -151,7 +151,7 @@ const SettingsContent = dynamic(() => Promise.resolve(({ settings, handleToggle,
             </SettingsSection>
 
             <SettingsSection title="Support & About">
-                <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => handleAction("Report a Problem")} />
+                <SettingsItem icon={MessageSquareWarning} title="Report a bug" action={<NavAction />} onClick={() => handleAction("Report a bug")} />
                 <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => handleAction("Help Center / FAQ")} />
                 <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => handleAction("Terms & Privacy Policy")} />
             </SettingsSection>

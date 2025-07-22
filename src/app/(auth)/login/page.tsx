@@ -166,8 +166,8 @@ export default function LoginPage() {
                     <div className="space-y-6 pb-8">
                          <div className="text-center bg-card p-4 rounded-lg">
                             <p className="text-muted-foreground">For any assistance, contact our Support Team:</p>
-                            <a href="mailto:support@yappzy.com" className="font-semibold text-accent hover:underline">
-                                <span className="text-accent">support@yappzy.com</span>
+                            <a href="mailto:support.yappzy@gmail.com" className="font-semibold text-accent hover:underline">
+                                <span className="text-accent">support.yappzy@gmail.com</span>
                             </a>
                         </div>
                         
@@ -225,7 +225,7 @@ export default function LoginPage() {
                         </div>
                         
                          <SettingsSection title="Support & About">
-                            <SettingsItem icon={MessageSquareWarning} title="Report a Problem" action={<NavAction />} onClick={() => router.push('/support')} />
+                            <SettingsItem icon={MessageSquareWarning} title="Report a bug" action={<NavAction />} onClick={() => router.push('/support')} />
                             <SettingsItem icon={HelpCircle} title="Help Center / FAQ" action={<NavAction />} onClick={() => router.push('/support')} />
                             <SettingsItem icon={FileText} title="Terms & Privacy Policy" action={<NavAction />} onClick={() => router.push('/terms')} />
                         </SettingsSection>
@@ -322,5 +322,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-    
