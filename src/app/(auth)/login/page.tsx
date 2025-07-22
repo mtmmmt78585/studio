@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Logo } from '@/components/Logo';
+import { cn } from '@/lib/utils';
 
 // Simple SVG icons as components
 const GoogleIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -45,11 +46,11 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
     </svg>
 );
 
-const HelpInfoItem = ({ icon, title, children, iconClassName }: { icon: React.ElementType, title: string, children: React.ReactNode, iconClassName?: string }) => (
+const HelpInfoItem = ({ icon, title, children, iconClassName, titleClassName }: { icon: React.ElementType, title: string, children: React.ReactNode, iconClassName?: string, titleClassName?: string }) => (
     <div className="flex items-start gap-4">
         {React.createElement(icon, { className: `h-6 w-6 flex-shrink-0 mt-1 ${iconClassName}` })}
         <div>
-            <h3 className="font-semibold text-foreground">{title}</h3>
+            <h3 className={cn("font-semibold text-foreground", titleClassName)}>{title}</h3>
             <div className="text-muted-foreground text-sm space-y-2">{children}</div>
         </div>
     </div>
@@ -146,13 +147,13 @@ export default function LoginPage() {
                         </div>
                         
                         <div className="prose prose-sm dark:prose-invert text-muted-foreground">
-                            <p className="font-semibold text-foreground">Welcome to Yappzy!</p>
+                            <p className="font-semibold text-destructive">Welcome to Yappzy!</p>
                             <p>Yappzy is a proudly Made-in-India short and long video platform, designed for creators and users who want more than just likes — they want to grow, earn, and make an impact.</p>
                             <p>Whether you're a creator, viewer, or just exploring, Yappzy is built to deliver a seamless, secure, and exciting video experience.</p>
                         </div>
 
                         <div className="space-y-4">
-                            <HelpInfoItem icon={Rocket} title="What You Can Do on Yappzy" iconClassName="text-foreground">
+                            <HelpInfoItem icon={Rocket} title="What You Can Do on Yappzy" iconClassName="text-foreground" titleClassName="text-destructive">
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>Upload short or long videos — both are supported!</li>
                                     <li>Discover content through a smart, mood-based feed powered by AI.</li>
@@ -162,7 +163,7 @@ export default function LoginPage() {
                                 </ul>
                             </HelpInfoItem>
 
-                            <HelpInfoItem icon={IndianRupee} title="Monetization Criteria" iconClassName="text-green-500">
+                            <HelpInfoItem icon={IndianRupee} title="Monetization Criteria" iconClassName="text-green-500" titleClassName="text-destructive">
                                 <p>Yappzy supports and pays real creators. Here's how to qualify:</p>
                                 <ul className="list-disc list-inside space-y-1">
                                     <li>10,000 followers</li>
@@ -176,7 +177,7 @@ export default function LoginPage() {
                                  </ul>
                             </HelpInfoItem>
 
-                            <HelpInfoItem icon={Shield} title="Security & Admin Controls" iconClassName="text-green-500">
+                            <HelpInfoItem icon={Shield} title="Security & Admin Controls" iconClassName="text-green-500" titleClassName="text-foreground">
                                  <ul className="list-disc list-inside space-y-1">
                                     <li>Protected by Indian laws (<span className="text-accent">IT Act 2000</span> &amp; <span className="text-accent">Digital Data Protection Act 2023</span>)</li>
                                     <li>Real-time monitoring by AI agents and admin control panel</li>
@@ -184,11 +185,11 @@ export default function LoginPage() {
                                     <li>Live bug tracking and automatic system fixes</li>
                                  </ul>
                             </HelpInfoItem>
-                             <HelpInfoItem icon={Award} title="Built for Bharat" iconClassName="text-yellow-400">
+                             <HelpInfoItem icon={Award} title="Built for Bharat" iconClassName="text-yellow-400" titleClassName="text-destructive">
                                  <p>Yappzy is more than an app — it’s part of the Digital India mission. We believe in empowering local talent, building India-first technology, and giving every voice a stage.</p>
                             </HelpInfoItem>
                             
-                             <HelpInfoItem icon={HelpCircle} title="Need Help?" iconClassName="text-foreground">
+                             <HelpInfoItem icon={HelpCircle} title="Need Help?" iconClassName="text-foreground" titleClassName="text-destructive">
                                 <p>If you face any issue:</p>
                                  <ul className="list-disc list-inside space-y-1">
                                     <li>Visit <span className="text-accent">Settings > Help</span></li>
