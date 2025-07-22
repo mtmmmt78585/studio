@@ -36,15 +36,7 @@ const sampleComments: Comment[] = [
     { id: 'comment4', user: users[5], text: 'I wish I was there!', timestamp: '15m ago' },
 ];
 
-const videoUrls = [
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v1.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v2.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v3.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v4.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v5.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v6.mp4",
-    "https://storage.googleapis.com/static.aiforge.studio/demos/videos/v7.mp4",
-];
+const videoUrls: string[] = [];
 
 const audioNames = [
     "Original Audio", "Summer Vibes - Upbeat", "Lofi Chill - Relaxing", "80s Throwback - Energetic",
@@ -82,6 +74,8 @@ const captionTemplates = {
 
 
 export const generateVideos = (count: number): Video[] => {
+    if (videoUrls.length === 0) return [];
+    
     const generatedVideos: Video[] = [];
     let lastVideoUrl = '';
 
