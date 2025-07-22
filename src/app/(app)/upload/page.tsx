@@ -113,93 +113,84 @@ export default function UploadPage() {
   const [currentDeviceIndex, setCurrentDeviceIndex] = useState(0);
   const [isMirrored, setIsMirrored] = useState(true);
 
-
   useEffect(() => {
-    const getDevicesAndSetStream = async () => {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    const getCameraPermission = async () => {
+      if (!navigator.mediaDevices?.getUserMedia) {
         setHasCameraPermission(false);
         return;
       }
-
       try {
-        // Get initial stream to prompt for permissions
-        const initialStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         setHasCameraPermission(true);
 
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputs = devices.filter(device => device.kind === 'videoinput');
+        const videoInputs = devices.filter((d) => d.kind === 'videoinput');
         setVideoDevices(videoInputs);
+        const frontCameraIndex = videoInputs.findIndex((d) =>
+          d.label.toLowerCase().includes('front')
+        );
+        setCurrentDeviceIndex(frontCameraIndex !== -1 ? frontCameraIndex : 0);
 
-        // Find front camera ('user' facing) and set it as default
-        const frontCameraIndex = videoInputs.findIndex(d => d.label.toLowerCase().includes('front'));
-        const initialIndex = frontCameraIndex !== -1 ? frontCameraIndex : 0;
-        setCurrentDeviceIndex(initialIndex);
-        
-        // Stop initial stream, we'll get a new one with the specific device
-        initialStream.getTracks().forEach(track => track.stop());
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        // We need to stop the initial stream after we have the devices
+        stream.getTracks().forEach(track => track.stop());
 
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
-        if (error instanceof Error && error.name === "NotAllowedError") {
-            toast({
-              variant: 'destructive',
-              title: 'Camera Access Denied',
-              description: 'Please enable camera permissions in your browser settings to use this app.',
-            });
+        if (error instanceof Error && error.name === 'NotAllowedError') {
+          toast({
+            variant: 'destructive',
+            title: 'Camera Access Denied',
+            description:
+              'Please enable camera permissions in your browser settings to use this app.',
+          });
         }
       }
     };
 
-    getDevicesAndSetStream();
+    getCameraPermission();
   }, [toast]);
 
   useEffect(() => {
-    if (!hasCameraPermission || videoDevices.length === 0) {
-      return;
-    }
-    
+    if (!hasCameraPermission || videoDevices.length === 0) return;
+
     let isCancelled = false;
-    
+    let stream: MediaStream;
+
     const startStream = async () => {
-        const currentDeviceId = videoDevices[currentDeviceIndex]?.deviceId;
-        if (!currentDeviceId) return;
+      const currentDeviceId = videoDevices[currentDeviceIndex]?.deviceId;
+      if (!currentDeviceId) return;
 
-        // Stop previous stream if it exists
-        if (videoRef.current?.srcObject) {
-            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+      const constraints = { video: { deviceId: { exact: currentDeviceId } } };
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (!isCancelled && videoRef.current) {
+          videoRef.current.srcObject = stream;
         }
-
-        const constraints: MediaStreamConstraints = {
-            video: { deviceId: { exact: currentDeviceId } }
-        };
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            if (!isCancelled && videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        } catch(error) {
-            console.error('Error switching camera:', error);
-            setHasCameraPermission(false);
-        }
+      } catch (err) {
+        console.error('Error switching camera', err);
+        setHasCameraPermission(false);
+      }
     };
-    
+
     startStream();
-    
-    return () => {
-        isCancelled = true;
-        if (videoRef.current?.srcObject) {
-            (videoRef.current.srcObject as MediaStream).getTracks().forEach(track => track.stop());
-        }
-    };
-  }, [currentDeviceIndex, videoDevices, hasCameraPermission]);
 
+    return () => {
+      isCancelled = true;
+      if (stream) {
+        stream.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, [currentDeviceIndex, hasCameraPermission, videoDevices]);
 
   const switchCamera = () => {
     if(videoDevices.length > 1) {
-        setCurrentDeviceIndex(prevIndex => (prevIndex + 1) % videoDevices.length);
-        setIsMirrored(videoDevices[(currentDeviceIndex + 1) % videoDevices.length].label.toLowerCase().includes('front') || videoDevices.length === 1);
+        const nextIndex = (currentDeviceIndex + 1) % videoDevices.length;
+        setCurrentDeviceIndex(nextIndex);
+        setIsMirrored(videoDevices[nextIndex].label.toLowerCase().includes('front') || videoDevices.length === 1);
     }
   };
   
@@ -369,17 +360,18 @@ export default function UploadPage() {
                         <FlipHorizontal />
                     </Button>
                 </div>
+                 {!hasCameraPermission && (
+                    <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-4">
+                        <Alert variant="destructive">
+                            <Camera className="h-4 w-4" />
+                            <AlertTitle>Camera Access Required</AlertTitle>
+                            <AlertDescription>
+                                Please allow camera access to record video. You can still upload from your gallery.
+                            </AlertDescription>
+                        </Alert>
+                    </div>
+                )}
             </Card>
-
-            { !hasCameraPermission && (
-                <Alert variant="destructive">
-                    <Camera className="h-4 w-4" />
-                    <AlertTitle>Camera Access Required</AlertTitle>
-                    <AlertDescription>
-                        Please allow camera access to record video. You can still upload from your gallery.
-                    </AlertDescription>
-                </Alert>
-            )}
 
              <div className="flex items-center gap-4">
                 <label htmlFor="gallery-upload" className="flex-1">
