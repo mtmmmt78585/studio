@@ -15,7 +15,7 @@ export default function FeedPage() {
 
   useEffect(() => {
     // Generate videos on the client side to prevent hydration errors
-    const clientVideos = generateVideos(50);
+    const clientVideos = generateVideos(500);
     setVideos(clientVideos);
     setIsLoading(false);
   }, []);
